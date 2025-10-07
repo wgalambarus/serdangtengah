@@ -12,3 +12,11 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('auth.register');
 });
+
+Route::get('/pelamar', function () {
+    return view('pelamar');
+});
+
+Route::get('/karyawan', function () {
+    return view('karyawan');
+});
