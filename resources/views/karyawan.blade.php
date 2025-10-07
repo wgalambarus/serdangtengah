@@ -53,73 +53,121 @@
 </div>
 
 <div id="modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg p-6 w-[700px] shadow-lg relative">
+  <div class="bg-white rounded-lg p-6 w-[1050px] shadow-lg relative">
     <h2 class="text-2xl font-bold mb-2 text-center">PT NAMA</h2>
 
     <!-- Step 1 -->
-    <form id="formStep1" action="javascript:void(0)" onsubmit="nextStep(1)" class="grid grid-cols-2 gap-4">
-      <p class="text-center text-gray-500 col-span-2 mb-3">Halaman 1</p>
+    <form id="formStep1" action="javascript:void(0)" onsubmit="nextStep(1)" class="grid grid-cols-3 gap-4">
+      <p class="text-center text-gray-500 col-span-3 mb-3">Halaman 1</p>
 
       <!-- isi kolommu nanti di sini -->
+      <input type="text" name="nama_identitas" placeholder="Nama Identitas" class="border p-2 rounded">
+      <select name="status_perkawinan" class="border p-2 rounded">
+          <option value="">Status perkawinan</option>
+          <option value="Laki-laki">Belum menikah</option>
+          <option value="Perempuan">Sudah menikah</option>
+        </select>
+        <input type="text" name="alamat" placeholder="Alamat" class="border p-2 rounded">
+        <input type="text" name="nik" placeholder="NIK" class="border p-2 rounded">
+        <select name="golongan_darah" class="border p-2 rounded">
+          <option value="">Golongan Darah</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="AB">AB</option>
+          <option value="O">O</option>
+        </select>
+        <input type="text" name="npwp" placeholder="NPWP" class="border p-2 rounded">
+        <input type="text" name="agama" placeholder="Agama" class="border p-2 rounded">
+        <input type="text" name="tempat_lahir" placeholder="Tempat Lahir" class="border p-2 rounded">
+        <input type="text" name="tinggi_badan" placeholder="Tinggi Badan" class="border p-2 rounded">
+        <label>KTP<input type="file" name="ktp" accept=".pdf" class="border p-2 rounded w-full"></label>
+        <input type="date" name="tanggal_lahir" placeholder="Tanggal Lahir" class="border p-2 rounded">
+        <select name="jenis_kelamin" placeholder="Jenis Kelamin" class="border p-2 rounded">
+          <option value="">Pilih Jenis Kelamin</option>
+          <option value="Laki-laki">Laki-laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
 
-      <div class="col-span-2 flex justify-end mt-4">
+      <div class="col-span-3 flex justify-end mt-4">
         <button type="button" onclick="closeModal()" class="mr-3 text-gray-500">Batal</button>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Selanjutnya</button>
       </div>
     </form>
 
     <!-- Step 2 -->
-    <form id="formStep2" action="javascript:void(0)" onsubmit="nextStep(2)" class="grid grid-cols-2 gap-4 hidden">
-      <p class="text-center text-gray-500 col-span-2 mb-3">Halaman 2</p>
+    <form id="formStep2" action="javascript:void(0)" onsubmit="nextStep(2)" class="grid grid-cols-3 gap-4 hidden">
+      <p class="text-center text-gray-500 col-span-3 mb-3">Halaman 2</p>
 
       <!-- isi kolommu nanti di sini -->
+      <input type="number" name="nohp" placeholder="No HP" class="border p-2 rounded">
+      <input type="text" name="email" placeholder="Email" class="border p-2 rounded">
+      <input type="text" name="facebook" placeholder="Facebook" class="border p-2 rounded">
+      <input type="text" name="instagram" placeholder="Instagram" class="border p-2 rounded">
+      <input type="text" name="linkedin" placeholder="LinkedIn" class="border p-2 rounded">
+      <input type="text" name="github" placeholder="GitHub" class="border p-2 rounded">
+         
 
-      <div class="col-span-2 flex justify-between mt-4">
+      <div class="col-span-3 flex justify-between mt-4">
         <button type="button" onclick="prevStep(2)" class="text-gray-500">Kembali</button>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Selanjutnya</button>
       </div>
     </form>
 
     <!-- Step 3 -->
-    <form id="formStep3" action="javascript:void(0)" onsubmit="nextStep(3)" class="grid grid-cols-2 gap-4 hidden">
-      <p class="text-center text-gray-500 col-span-2 mb-3">Halaman 3</p>
+    <form id="formStep3" action="javascript:void(0)" onsubmit="nextStep(3)" class="grid grid-cols-3 gap-4 hidden">
+      <p class="text-center text-gray-500 col-span-3 mb-3">Halaman 3</p>
 
       <!-- isi kolommu nanti di sini -->
+      <input type="text" name="jenjang_pendidikan" placeholder="Jenjang Pendidikan" class="border p-2 rounded">
+      <input type="text" name="nama_institusi" placeholder="Nama Institusi" class="border p-2 rounded">
+      <input type="text" name="fakultas" placeholder="Fakultas" class="border p-2 rounded">
+      <input type="text" name="program_studi" placeholder="Program Studi" class="border p-2 rounded">
+      <input type="text" name="tahun_masuk" placeholder="Tahun Masuk" class="border p-2 rounded">
+      <input type="text" name="tahun_keluar" placeholder="Tahun Keluar" class="border p-2 rounded">
+      <input type="text" name="ipk" placeholder="IPK" class="border p-2 rounded">
+      <input type="text" name="judul_skripsi" placeholder="Judul Skripsi (opsional)" class="border p-2 rounded">
 
-      <div class="col-span-2 flex justify-between mt-4">
+      <div class="col-span-3 flex justify-between mt-4">
         <button type="button" onclick="prevStep(3)" class="text-gray-500">Kembali</button>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Selanjutnya</button>
       </div>
     </form>
 
     <!-- Step 4 -->
-    <form id="formStep4" action="javascript:void(0)" onsubmit="nextStep(4)" class="grid grid-cols-2 gap-4 hidden">
-      <p class="text-center text-gray-500 col-span-2 mb-3">Halaman 4</p>
+    <form id="formStep4" action="javascript:void(0)" onsubmit="nextStep(4)" class="grid grid-cols-3 gap-4 hidden">
+      <p class="text-center text-gray-500 col-span-3 mb-3">Halaman 4</p>
 
       <!-- isi kolommu nanti di sini -->
+      <input type="text" name="keahlian" placeholder="Keahlian" class="border p-2 rounded">
+      <input type="text" name="kemampuan_teknis" placeholder="Kemampuan Teknis" class="border p-2 rounded">
+      <input type="text" name="soft_skill" placeholder="Soft Skill" class="border p-2 rounded">
+      <label>Sertifikasi 1<input type="file" name="sertifikasi_1" accept=".pdf" class="border p-2 rounded w-full"></label>
+      <label>Sertifikasi 2<input type="file" name="sertifikasi_2" accept=".pdf" class="border p-2 rounded w-full"></label>
+      <label>Sertifikasi 3<input type="file" name="sertifikasi_3" accept=".pdf" class="border p-2 rounded w-full"></label>
+        
 
-      <div class="col-span-2 flex justify-between mt-4">
+      <div class="col-span-3 flex justify-between mt-4">
         <button type="button" onclick="prevStep(4)" class="text-gray-500">Kembali</button>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Selanjutnya</button>
       </div>
     </form>
 
     <!-- Step 5 -->
-    <form id="formStep5" action="javascript:void(0)" onsubmit="nextStep(5)" class="grid grid-cols-2 gap-4 hidden">
-      <p class="text-center text-gray-500 col-span-2 mb-3">Halaman 5</p>
+    <form id="formStep5" action="javascript:void(0)" onsubmit="nextStep(5)" class="grid grid-cols-3 gap-4 hidden">
+      <p class="text-center text-gray-500 col-span-3 mb-3">Halaman 5</p>
 
        <form id="formStep5" action="javascript:void(0)" class="grid grid-cols-2 gap-4">
-      <p class="text-center text-gray-500 col-span-2 mb-3">Halaman 5 - Pengalaman Organisasi</p>
+      <p class="text-center text-gray-500 col-span-3 mb-3">Halaman 5 - Pengalaman Organisasi</p>
 
       <!-- DAFTAR ORGANISASI -->
-      <div id="orgList" class="col-span-2 space-y-2">
+      <div id="orgList" class="col-span-3 space-y-2">
         <div id="emptyOrg" class="text-center text-gray-500 py-4 border rounded">
           Belum ada data. Tekan tombol + untuk menambahkan.
         </div>
       </div>
 
       <!-- TOMBOL + -->
-      <div class="col-span-2 flex justify-center mt-4">
+      <div class="col-span-3 flex justify-center mt-4">
         <button
           type="button"
           id="addOrgBtn"
@@ -129,10 +177,10 @@
       </div>
 
       <!-- FORM INPUT ORGANISASI -->
-      <div id="orgForm" class="hidden col-span-2 border-t pt-4 grid grid-cols-2 gap-4">
-        <input type="text" id="nama_organisasi" placeholder="Nama Organisasi" class="border p-2 rounded col-span-2" required>
-        <input type="text" id="jabatan" placeholder="Jabatan / Posisi" class="border p-2 rounded col-span-2" required>
-        <input type="text" id="periode" placeholder="Periode (contoh: 2014-2018)" class="border p-2 rounded col-span-2" required>
+      <div id="orgForm" class="hidden col-span-3 border-t pt-4 grid grid-cols-2 gap-4">
+        <input type="text" id="nama_organisasi" placeholder="Nama Organisasi" class="border p-2 rounded col-span-2">
+        <input type="text" id="jabatan" placeholder="Jabatan / Posisi" class="border p-2 rounded col-span-2">
+        <input type="text" id="periode" placeholder="Periode (contoh: 2014-2018)" class="border p-2 rounded col-span-2">
         <input type="text" id="tanggung_jawab" placeholder="Tugas / Tanggung Jawab" class="border p-2 rounded col-span-2">
         <input type="text" id="prestasi" placeholder="Prestasi / Pencapaian" class="border p-2 rounded col-span-2">
         <div class="col-span-2 flex justify-end mt-2">
@@ -141,10 +189,11 @@
         </div>
       </div>
 
-      <div class="col-span-2 flex justify-between mt-4">
+      <div class="col-span-3 flex justify-between mt-4">
         <button type="button" onclick="prevStep(5)" class="text-gray-500">Kembali</button>
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Selanjutnya</button>
       </div>
+      
     </form>
 
     <!-- Step 6 -->
@@ -173,9 +222,9 @@
 
       <!-- FORM INPUT ORGANISASI -->
       <div id="orgForm" class="hidden col-span-2 border-t pt-4 grid grid-cols-2 gap-4">
-        <input type="text" id="nama_organisasi" placeholder="Nama Organisasi" class="border p-2 rounded col-span-2" required>
-        <input type="text" id="jabatan" placeholder="Jabatan / Posisi" class="border p-2 rounded col-span-2" required>
-        <input type="text" id="periode" placeholder="Periode (contoh: 2014-2018)" class="border p-2 rounded col-span-2" required>
+        <input type="text" id="nama_perusahaan" placeholder="Nama Perusahaan" class="border p-2 rounded col-span-2">
+        <input type="text" id="jabatan" placeholder="Jabatan / Posisi" class="border p-2 rounded col-span-2">
+        <input type="text" id="periode" placeholder="Periode (contoh: 2014-2018)" class="border p-2 rounded col-span-2">
         <input type="text" id="tanggung_jawab" placeholder="Tugas / Tanggung Jawab" class="border p-2 rounded col-span-2">
         <input type="text" id="prestasi" placeholder="Prestasi / Pencapaian" class="border p-2 rounded col-span-2">
         <div class="col-span-2 flex justify-end mt-2">
