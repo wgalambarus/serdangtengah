@@ -30,6 +30,12 @@
                     class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
             </div>
 
+            <div class="text-right mb-4">
+            <a href="/resetpass" class="text-sm text-green-600 hover:underline">
+                Lupa Password?
+            </a>
+        </div>
+
             <button type="submit"
                 class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition">
                 Login

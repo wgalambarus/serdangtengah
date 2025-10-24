@@ -20,3 +20,11 @@ Route::get('/pelamar', function () {
 Route::get('/karyawan', function () {
     return view('karyawan');
 });
+
+Route::get('/main', function () {
+    return view('main');
+});
+
+Route::get('/resetpass', function () {
+    return view('resetpass');
+});

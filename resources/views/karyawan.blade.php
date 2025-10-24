@@ -7,8 +7,22 @@
 </head>
 <body class="bg-gray-50">
 <div class="flex min-h-screen">
+
+   {{-- Sidebar --}}
+  <aside class="w-60 bg-white border-r border-gray-200 p-6 flex flex-col">
+    <h2 class="text-xl font-bold mb-6 text-gray-800">SmartRecruiter</h2>
+
+    <nav class="flex flex-col space-y-2">
+      <a href="main" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('dashboard') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Dashboard</a>
+      <a href="/pelamar" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('pelamar.*') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Pelamar</a>
+      <a href="/karyawan" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('karyawan.*') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Karyawan</a>
+      {{-- <a href="{{ route('tambahdata') }}" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('tambahdata') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Tambah Data</a>
+      <a href="{{ route('laporan') }}" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('laporan') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Laporan</a>
+      <a href="{{ route('pengaturan') }}" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('pengaturan') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Pengaturan</a> --}}
+    </nav>
+  </aside>
     {{-- Sidebar --}}
-    <div class="w-56 bg-gray-100 p-4 border-r">
+    {{-- <div class="w-56 bg-gray-100 p-4 border-r">
         <div class="flex flex-col items-center gap-3">
             <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">Logo</div>
             <p class="font-semibold text-lg">PT. Serdang Tengah</p>
@@ -18,7 +32,7 @@
             <a href="/pelamar" class="block">📋 Pelamar</a>
             <a href="/karyawan" class="block font-bold text-green-700">👥 Karyawan</a>
         </div>
-    </div>
+    </div> --}}
 
     {{-- Main Content --}}
     <div class="flex-1 p-8 bg-gray-50">
