@@ -16,7 +16,7 @@
     </div>
 
     <ul class="flex gap-6 text-green-700 font-medium">
-      <li><a href="#" class="hover:text-green-800 border-b-2 border-transparent hover:border-green-700">Home</a></li>
+      <li><a href="#" class="hover:text-green-800 border-b-2 border-transparent hover:border-green-700">Dashboard</a></li>
       <li><a href="#" class="hover:text-green-800 border-b-2 border-transparent hover:border-green-700">Tentang</a></li>
       <li><a href="#" class="hover:text-green-800 border-b-2 border-transparent hover:border-green-700">Layanan</a></li>
       <li><a href="#" class="hover:text-green-800 border-b-2 border-transparent hover:border-green-700">Kontak</a></li>
