@@ -47,6 +47,7 @@
                 <thead class="bg-green-600 text-white">
                     <tr>
                         <th class="p-2">Nama</th>
+                        <th class="p-2">Data Tambahan</th>
                         <th class="p-2">Edit</th>
                         <th class="p-2">Hapus</th>
                     </tr>
@@ -55,7 +56,8 @@
                     {{-- @foreach ($karyawans as $k) --}}
                     <tr class="border-b">
                         {{-- <td class="p-2">{{ $k->nama }}</td> --}}
-                        <td class="p-2 text-blue-600 cursor-pointer">Nama</td>
+                        <td class="p-2">Nama</td>
+                        <td class="p-2 text-blue-600 cursor-pointer" onclick="openDataModal()">Lihat</td>
                         <td class="p-2 text-blue-600 cursor-pointer">Edit</td>
                         <td class="p-2 text-red-600 cursor-pointer">Hapus</td>
                     </tr>
@@ -255,6 +257,35 @@
   </div>
 </div>
 
+<div id="modalData" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-[600px] shadow-lg relative">
+      <h2 class="text-2xl font-bold mb-2 text-center">Detail Data Pelamar</h2>
+      <div class="mt-4 space-y-2 text-gray-700">
+        <p><span class="font-semibold">Nama:</span> Rama Davy Fahrezy</p>
+        <p><span class="font-semibold">Tempat Lahir:</span> Medan</p>
+        <p><span class="font-semibold">Tanggal Lahir:</span> 14 Maret 2002</p>
+        <p><span class="font-semibold">Jenis Kelamin:</span> Laki-laki</p>
+        <p><span class="font-semibold">Alamat:</span> Jl. Serdang Tengah No. 12</p>
+        <p><span class="font-semibold">No HP:</span> 0812-3456-7890</p>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="space-y-2 text-gray-700">
+        <p><span class="font-semibold">Riwayat Hidup:</span> file_riwayat_hidup.pdf</p>
+        <p><span class="font-semibold">Fotokopi Ijazah:</span> file_ijazah.pdf</p>
+        <p><span class="font-semibold">Fotokopi Transkrip Nilai:</span> transkrip.pdf</p>
+        <p><span class="font-semibold">Fotokopi KTP:</span> ktp.pdf</p>
+        <p><span class="font-semibold">Pasfoto:</span> pasfoto.jpg</p>
+        <p><span class="font-semibold">CV:</span> cv_rama.pdf</p>
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button onclick="closeDataModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Tutup</button>
+      </div>
+    </div>
+  </div>
+
 <script>
   const modal = document.getElementById('modal');
   const steps = [
@@ -412,6 +443,14 @@
     alert('Semua data siap dikirim! (nanti bisa dihubungkan ke backend)');
     closeModal();
   }
+
+   // Modal Data tambahan
+    function openDataModal() {
+      modalData.classList.remove('hidden');
+    }
+    function closeDataModal() {
+      modalData.classList.add('hidden');
+    }
 </script>
 
 

@@ -8,30 +8,15 @@
 <body class="bg-gray-50">
   <div class="flex min-h-screen">
     <!-- Sidebar -->
-     {{-- Sidebar --}}
-  <aside class="w-60 bg-white border-r border-gray-200 p-6 flex flex-col">
-    <h2 class="text-xl font-bold mb-6 text-gray-800">SmartRecruiter</h2>
+    <aside class="w-60 bg-white border-r border-gray-200 p-6 flex flex-col">
+      <h2 class="text-xl font-bold mb-6 text-gray-800">SmartRecruiter</h2>
 
-    <nav class="flex flex-col space-y-2">
-      <a href="main" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('dashboard') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Dashboard</a>
-      <a href="/pelamar" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('pelamar.*') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Pelamar</a>
-      <a href="/karyawan" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('karyawan.*') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Karyawan</a>
-      {{-- <a href="{{ route('tambahdata') }}" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('tambahdata') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Tambah Data</a>
-      <a href="{{ route('laporan') }}" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('laporan') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Laporan</a>
-      <a href="{{ route('pengaturan') }}" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white {{ Route::is('pengaturan') ? 'bg-green-700 text-white' : 'text-gray-700' }}">Pengaturan</a> --}}
-    </nav>
-  </aside>
-    {{-- <div class="w-56 bg-gray-100 p-4 border-r">
-      <div class="flex flex-col items-center gap-3">
-        <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">Logo</div>
-        <p class="font-semibold text-lg">PT. Serdang Tengah</p>
-      </div>
-      <div class="mt-8 space-y-3">
-        <a href="#" class="block">🏠 Home</a>
-        <a href="/pelamar" class="block font-bold text-green-700">📋 Pelamar</a>
-        <a href="/karyawan" class="block">👥 Karyawan</a>
-      </div>
-    </div> --}}
+      <nav class="flex flex-col space-y-2">
+        <a href="main" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white text-gray-700">Dashboard</a>
+        <a href="/pelamar" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white bg-green-700 text-white">Pelamar</a>
+        <a href="/karyawan" class="px-4 py-2 rounded-lg font-medium hover:bg-green-700 hover:text-white text-gray-700">Karyawan</a>
+      </nav>
+    </aside>
 
     <!-- Main -->
     <div class="flex-1 p-8">
@@ -45,26 +30,25 @@
           <thead class="bg-green-600 text-white">
             <tr>
               <th class="p-2">Nama</th>
+              <th class="p-2">Data tambahan</th>
               <th class="p-2">Edit</th>
               <th class="p-2">Hapus</th>
             </tr>
           </thead>
           <tbody>
-            {{-- @foreach ($pelamars as $p) --}}
             <tr class="border-b">
-              <td class="p-2">Nama</td>
-              {{-- {{ $p->nama_identitas }} --}}
+              <td class="p-2">Rama Davy</td>
+              <td class="p-2 text-blue-600 cursor-pointer" onclick="openDataModal()">Lihat</td>
               <td class="p-2 text-blue-600 cursor-pointer">Edit</td>
               <td class="p-2 text-red-600 cursor-pointer">Hapus</td>
             </tr>
-            {{-- @endforeach --}}
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- Modal Multi-Step -->
+  <!-- Modal Multi-Step (Tambah Data) -->
   <div id="modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-6 w-[700px] shadow-lg relative">
       <h2 class="text-2xl font-bold mb-2 text-center">PT NAMA</h2>
@@ -91,7 +75,6 @@
 
       <!-- Step 2 -->
       <form id="formStep2" enctype="multipart/form-data" class="grid grid-cols-2 gap-4 hidden">
-         {{-- method="POST" action="{{ route('pelamar.store') }}" --}}
         @csrf
         <input type="hidden" name="nama_identitas">
         <input type="hidden" name="tempat_lahir">
@@ -117,13 +100,49 @@
     </div>
   </div>
 
+  <!-- Modal Data Tambahan -->
+  <div id="modalData" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-[600px] shadow-lg relative">
+      <h2 class="text-2xl font-bold mb-2 text-center">Detail Data Pelamar</h2>
+      <div class="mt-4 space-y-2 text-gray-700">
+        <p><span class="font-semibold">Nama:</span> Rama Davy Fahrezy</p>
+        <p><span class="font-semibold">Tempat Lahir:</span> Medan</p>
+        <p><span class="font-semibold">Tanggal Lahir:</span> 14 Maret 2002</p>
+        <p><span class="font-semibold">Jenis Kelamin:</span> Laki-laki</p>
+        <p><span class="font-semibold">Alamat:</span> Jl. Serdang Tengah No. 12</p>
+        <p><span class="font-semibold">No HP:</span> 0812-3456-7890</p>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="space-y-2 text-gray-700">
+        <p><span class="font-semibold">Riwayat Hidup:</span> file_riwayat_hidup.pdf</p>
+        <p><span class="font-semibold">Fotokopi Ijazah:</span> file_ijazah.pdf</p>
+        <p><span class="font-semibold">Fotokopi Transkrip Nilai:</span> transkrip.pdf</p>
+        <p><span class="font-semibold">Fotokopi KTP:</span> ktp.pdf</p>
+        <p><span class="font-semibold">Pasfoto:</span> pasfoto.jpg</p>
+        <p><span class="font-semibold">CV:</span> cv_rama.pdf</p>
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button onclick="closeDataModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const modal = document.getElementById('modal');
     const step1 = document.getElementById('formStep1');
     const step2 = document.getElementById('formStep2');
+    const modalData = document.getElementById('modalData');
 
-    function openModal() { modal.classList.remove('hidden'); step1.classList.remove('hidden'); step2.classList.add('hidden'); }
+    function openModal() {
+      modal.classList.remove('hidden');
+      step1.classList.remove('hidden');
+      step2.classList.add('hidden');
+    }
     function closeModal() { modal.classList.add('hidden'); }
+
     function nextStep() {
       const formData = new FormData(step1);
       step2.querySelector('[name=nama_identitas]').value = formData.get('nama_identitas');
@@ -138,6 +157,14 @@
     function prevStep() {
       step1.classList.remove('hidden');
       step2.classList.add('hidden');
+    }
+
+    // Modal Data tambahan
+    function openDataModal() {
+      modalData.classList.remove('hidden');
+    }
+    function closeDataModal() {
+      modalData.classList.add('hidden');
     }
   </script>
 </body>
