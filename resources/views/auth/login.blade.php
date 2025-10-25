@@ -1,52 +1,47 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SmartRecruiter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<x-guest-layout>
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-sm">
-        <h1 class="text-center text-2xl font-bold mb-6">
-            <span class="text-black">Smart</span><span class="text-green-600">Recruiter</span>
-        </h1>
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
 
-        <form >
-            {{-- method="POST" action="{{ route('login.post') }}" --}}
-            @csrf
-            <div class="mb-4">
-                <input type="email" name="email" placeholder="Masukkan Email Anda"
-                    value="{{ old('email') }}"
-                    class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
-                @error('email')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <input type="password" name="password" placeholder="Masukkan Password Anda"
-                    class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
-            </div>
-
-            <div class="text-right mb-4">
-            <a href="/resetpass" class="text-sm text-green-600 hover:underline">
-                Lupa Password?
-            </a>
+        <!-- Email Address -->
+        <div>
+            <x-input-label for="email" :value="__('Email')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-            <button type="submit"
-                class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition">
-                Login
-            </button>
+        <!-- Password -->
+        <div class="mt-4">
+            <x-input-label for="password" :value="__('Password')" />
 
-            <p class="text-center text-sm mt-4">
-                Belum punya akun?
-                <a href="/register" class="text-green-600 hover:underline">Register</a>
-            </p>
-        </form>
-    </div>
+            <x-text-input id="password" class="block mt-1 w-full"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password" />
 
-</body>
-</html>
+            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        </div>
+
+        <!-- Remember Me -->
+        <div class="block mt-4">
+            <label for="remember_me" class="inline-flex items-center">
+                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+            </label>
+        </div>
+
+        <div class="flex items-center justify-end mt-4">
+            @if (Route::has('password.request'))
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                    {{ __('Forgot your password?') }}
+                </a>
+            @endif
+
+            <x-primary-button class="ms-3">
+                {{ __('Log in') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
