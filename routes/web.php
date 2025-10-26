@@ -1,28 +1,26 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PelamarController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('main/index');
-});
+// 🏠 Halaman Utama — Bisa diakses semua orang
+Route::view('/', 'main.index')->name('home');
 
-Route::get('/pelamar', function () {
-    return view('main/pelamar');
-})->middleware(['auth', 'verified'])->name('pelamar');
+// 🔒 Semua route berikut hanya untuk user yang login & verified
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::get('/dashboard', function () {
-    return view('main/dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    // Dashboard
+    Route::view('/dashboard', 'main.dashboard')->name('dashboard');
 
-Route::get('/profile', function () {
-    return view('main/profile');
-})->middleware(['auth', 'verified']);
+    // Resource Pelamar (CRUD Pelamar)
+    Route::resource('pelamar', PelamarController::class);
 
-Route::middleware('auth')->group(function () {
+    // Profil User
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 
 require __DIR__.'/auth.php';
