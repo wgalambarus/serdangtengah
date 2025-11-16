@@ -1,90 +1,83 @@
 <x-guest-layout>
-    <!-- Judul Halaman -->
-    <div class="text-center mb-6 py-4">
-        <h2 class="text-3xl font-bold text-gray-800">Register</h2>
-        <p class="text-sm text-gray-500 opacity-80 mt-1">
-            Please register to make your account!
-        </p>
+
+    <!-- Session Status -->
+    <x-auth-session-status class="mb-4" :status="session('status')" />
+
+    <!-- Header dalam card -->
+    <div class="mb-6 text-center">
+        <h2 class="text-2xl font-bold text-gray-800 mb-1">Selamat datang kembali!</h2>
+        <p class="text-gray-600 text-sm">Silakan masuk untuk mengelola sistem</p>
     </div>
 
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('login') }}" class="space-y-5">
         @csrf
 
-        <!-- Name -->
+        <!-- EMAIL -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input
-                id="name"
-                class="block mt-1 w-full"
-                type="text"
-                name="name"
-                :value="old('name')"
-                required
-                autofocus
-                autocomplete="name"
-                placeholder="Enter your full name"
-            />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+            <x-input-label for="email" value="Email" class="font-semibold text-gray-700" />
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
             <x-text-input
                 id="email"
-                class="block mt-1 w-full"
                 type="email"
                 name="email"
                 :value="old('email')"
                 required
+                autofocus
                 autocomplete="username"
-                placeholder="Enter your email address"
+                placeholder="Masukkan email"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg input-focus text-gray-800"
             />
+
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <!-- PASSWORD -->
+        <div>
+            <x-input-label for="password" value="Password" class="font-semibold text-gray-700" />
+
             <x-text-input
                 id="password"
-                class="block mt-1 w-full"
                 type="password"
                 name="password"
                 required
-                autocomplete="new-password"
-                placeholder="Create a password"
+                autocomplete="current-password"
+                placeholder="Masukkan password"
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg input-focus text-gray-800"
             />
+
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input
-                id="password_confirmation"
-                class="block mt-1 w-full"
-                type="password"
-                name="password_confirmation"
-                required
-                autocomplete="new-password"
-                placeholder="Confirm your password"
-            />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <!-- Actions -->
-        <div class="flex items-center justify-end mt-4">
-            <a
-                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                href="{{ route('login') }}"
+        <!-- REMEMBER ME -->
+        <div class="flex items-center gap-2 mt-1">
+            <input
+                id="remember_me"
+                type="checkbox"
+                name="remember"
+                class="w-4 h-4 rounded border-gray-300 text-farm-green-600 focus:ring-farm-green-500"
             >
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+            <label for="remember_me" class="text-sm text-gray-700">Remember me</label>
         </div>
+
+        <!-- BUTTON -->
+        <button
+            type="submit"
+            class="w-full bg-farm-green-600 hover:bg-farm-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+            </svg>
+            Sign In
+        </button>
+
+        <!-- REGISTER LINK OPTIONAL -->
+        @if (Route::has('register'))
+        <div class="mt-4 text-center">
+            <a href="{{ route('register') }}" class="text-sm text-farm-green-700 hover:text-farm-green-800 font-semibold transition-colors">
+                Belum punya akun? Daftar di sini
+            </a>
+        </div>
+        @endif
     </form>
+
 </x-guest-layout>

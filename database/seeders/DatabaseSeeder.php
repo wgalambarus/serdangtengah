@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Employee;
 use App\Models\User;
+
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,16 +15,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Contoh membuat user manual
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $faker = Faker::create();
 
-        // Jalankan seeder lainnya
-        $this->call([
-            PelamarSeeder::class,
-            // Tambahkan seeder lain di sini (misalnya PelamarSeeder, StatistikSeeder, dst)
+        Employee::factory(20000)->create()->each(function($emp) use ($faker){
+            $emp->addresses()->create([
+                'type'         => 'CURRENT',
+                'address_line' => $faker->streetAddress(),
+                'city'         => $faker->city()
+            ]);
+
+            $emp->jobHistory()->create([
+                'status'      => 'Karyawan',
+                'start_date'  => $faker->date(),
+                'unit'        => 'Unit '.$faker->randomNumber(2)
+            ]);
+        });
+        User::create([
+            'name' => 'Admin Medan',
+            'email' => 'admin@gmail.com',
+            'password' => bcrypt('admin123'),
+            'email_verified_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

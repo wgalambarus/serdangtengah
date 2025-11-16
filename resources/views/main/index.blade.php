@@ -1,134 +1,179 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartRecruitment AI</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PT Serdang Tengah Group</title>
+    <meta name="description" content="Sign in to your AgroFarm account">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'farm-green': {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-gradient-overlay {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.75) 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(21, 128, 61, 0.2);
+        }
+        
+        .input-focus:focus {
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-b from-white via-gray-50 to-gray-100 text-gray-800 font-sans antialiased">
-
-  <!-- Header -->
-  <header class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200 shadow-sm">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-8 py-4">
-      <div class="flex items-center space-x-3">
-        <img src="https://cdn-icons-png.flaticon.com/512/1048/1048943.png" class="w-10 h-10" alt="Logo">
-        <h1 class="text-xl lg:text-2xl font-bold tracking-tight">
-          Smart<span class="text-blue-600">Recruitment</span> <span class="text-gray-800">AI</span>
-        </h1>
-      </div>
-      <nav class="flex items-center space-x-3 lg:space-x-4">
-        <a href="/login" class="text-gray-700 font-medium hover:text-blue-600 transition text-sm lg:text-base">
-          Masuk
-        </a>
-        <a href="/register"
-           class="px-4 lg:px-5 py-2 lg:py-2.5 bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 transition text-sm lg:text-base">
-           Daftar
-        </a>
-      </nav>
+<body class="min-h-screen relative overflow-hidden">
+    <!-- Background Image with Overlay -->
+    <div class="fixed inset-0 z-0">
+        <img src="/images/farm-background.jpg" alt="Farm Background" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-overlay"></div>
     </div>
-  </header>
 
-  <!-- Hero Section -->
-  <section class="relative flex items-center justify-center min-h-screen text-center px-6 pt-20">
-    <!-- Background gradient -->
-    <div class="absolute inset-0 bg-gradient-to-b from-blue-50/40 via-white to-gray-50 -z-10"></div>
+    <!-- Login Container -->
+    <main class="relative z-10 min-h-screen flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md animate-fade-in">
+            <!-- Logo Section -->
+            <div class="text-center mb-8">
+                <!-- <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white shadow-lg mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-farm-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                </div> -->
+                <h1 class="text-4xl font-bold text-white mb-2">PT Serdang Tengah Group</h1>
+                <p class="text-farm-green-100 text-md">Sistem Manajemen Karyawan & Pelamar</p>
+            </div>
 
-    <div class="relative z-10 max-w-4xl mx-auto">
-      <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
-        Rekrut <span class="text-blue-600">Kandidat Terbaik</span> <br>
-        dengan <span class="text-gray-700">Kecerdasan Buatan</span>
-      </h2>
+            <!-- Login Form Card -->
+            <div class="glass-effect rounded-2xl p-8 shadow-2xl">
+                <div class="mb-6 text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Selamat datang kembali!</h2>
+                    <p class="text-gray-600 text-sm">Silakan masuk untuk mengelola sistem</p>
+                </div>
 
-      <p class="text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed mb-10 max-w-2xl mx-auto">
-        SmartRecruitment AI membantu perusahaan menemukan talenta terbaik
-        dengan analisis berbasis AI — cepat, akurat, dan efisien.
-        Jadikan proses rekrutmen Anda lebih <span class="font-semibold text-blue-600">cerdas</span> hari ini.
-      </p>
+                <form action="/login" method="POST" class="space-y-5">
+                    <!-- Username Field -->
+                    <div>
+                        <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-farm-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                Username
+                            </div>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            required
+                            placeholder="Masukkan nama pengguna Anda"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none input-focus transition-all duration-200 text-gray-800"
+                        >
+                    </div>
 
-      <div class="flex flex-col sm:flex-row justify-center gap-4 items-center">
-        <a href="/login"
-           class="w-full sm:w-auto px-8 py-3.5 bg-blue-600 text-white rounded-full font-semibold text-base lg:text-lg shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-           Mulai Sekarang
-        </a>
-        <a href="/register"
-           class="w-full sm:w-auto px-8 py-3.5 border-2 border-blue-600 text-blue-600 rounded-full font-semibold text-base lg:text-lg hover:bg-blue-50 transition-all duration-300 transform hover:scale-105">
-           Sudah Punya Akun?
-        </a>
-      </div>
-    </div>
-  </section>
-{{--
-  <!-- Features Section -->
-  <section class="py-16 lg:py-24 bg-white border-t border-gray-200">
-    <div class="max-w-6xl mx-auto px-6 text-center">
-      <h3 class="text-3xl md:text-4xl font-extrabold mb-12 lg:mb-16 text-gray-900">
-        Mengapa <span class="text-blue-600">SmartRecruitment AI?</span>
-      </h3>
+                    <!-- Password Field -->
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-farm-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                Password
+                            </div>
+                        </label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            required
+                            placeholder="Masukkan kata sandi Anda"
+                            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none input-focus transition-all duration-200 text-gray-800"
+                        >
+                    </div>
 
-      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-8 lg:gap-10">
-        <!-- Feature Card 1 -->
-        <div class="p-8 lg:p-10 bg-gradient-to-br from-white to-gray-50 rounded-2xl lg:rounded-3xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="text-blue-600 mb-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <h4 class="text-lg lg:text-xl font-semibold mb-3 text-gray-900">Analisis Cerdas</h4>
-          <p class="text-sm lg:text-base text-gray-600 leading-relaxed">
-            AI kami menilai kompetensi kandidat berdasarkan data dan perilaku, bukan hanya CV.
-          </p>
+                    <!-- Remember Me & Forgot Password -->
+                    <!-- <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input 
+                                type="checkbox" 
+                                name="remember" 
+                                class="w-4 h-4 text-farm-green-600 border-gray-300 rounded focus:ring-farm-green-500"
+                            >
+                            <span class="text-gray-700">Remember me</span>
+                        </label>
+                        <a href="/forgot-password" class="text-farm-green-700 hover:text-farm-green-800 font-medium transition-colors">
+                            Forgot password?
+                        </a>
+                    </div> -->
+
+                    <!-- Login Button -->
+                    <button 
+                        type="submit"
+                        class="w-full bg-farm-green-600 hover:bg-farm-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        </svg>
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Sign Up Link -->
+                <!-- <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Don't have an account? 
+                        <a href="/register" class="text-farm-green-700 hover:text-farm-green-800 font-semibold transition-colors">
+                            Sign up here
+                        </a>
+                    </p>
+                </div>
+            </div> -->
+
+            <!-- Footer -->
+            <div class="mt-8 text-center">
+                <p class="text-farm-green-100 text-sm">
+                    © 2025 PT Serdang Tengah Group. All rights reserved.
+                </p>
+            </div>
         </div>
-
-        <!-- Feature Card 2 -->
-        <div class="p-8 lg:p-10 bg-gradient-to-br from-white to-gray-50 rounded-2xl lg:rounded-3xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
-          <div class="text-blue-600 mb-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <h4 class="text-lg lg:text-xl font-semibold mb-3 text-gray-900">Proses Lebih Cepat</h4>
-          <p class="text-sm lg:text-base text-gray-600 leading-relaxed">
-            Hemat waktu dengan penyaringan otomatis yang mempercepat proses rekrutmen hingga 70%.
-          </p>
-        </div>
-
-        <!-- Feature Card 3 -->
-        <div class="p-8 lg:p-10 bg-gradient-to-br from-white to-gray-50 rounded-2xl lg:rounded-3xl border border-gray-200 shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300 sm:col-span-2 md:col-span-1">
-          <div class="text-blue-600 mb-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 lg:w-14 lg:h-14 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-          </div>
-          <h4 class="text-lg lg:text-xl font-semibold mb-3 text-gray-900">Keputusan Akurat</h4>
-          <p class="text-sm lg:text-base text-gray-600 leading-relaxed">
-            Dukung keputusan HR dengan insight berbasis data untuk hasil rekrutmen yang lebih objektif dan akurat.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="py-16 lg:py-20 bg-gradient-to-br from-blue-600 to-blue-700 text-white text-center">
-    <div class="max-w-4xl mx-auto px-6">
-      <h3 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 leading-tight">
-        Siap Mengubah Cara Anda Merekrut?
-      </h3>
-      <p class="text-blue-100 mb-8 lg:mb-10 text-base lg:text-lg max-w-2xl mx-auto">
-        Bergabunglah bersama ratusan perusahaan yang telah menggunakan AI untuk menemukan talenta terbaik.
-      </p>
-      <a href="#"
-         class="inline-block px-8 lg:px-10 py-3.5 lg:py-4 bg-white text-blue-700 font-semibold text-base lg:text-lg rounded-full shadow-lg hover:bg-gray-100 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-         Coba Gratis Sekarang
-      </a>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="py-8 lg:py-10 text-center text-gray-500 text-sm border-t border-gray-200 bg-gray-50">
-    <p>© 2025 <span class="font-semibold text-gray-700">SmartRecruitment AI</span> — Semua hak dilindungi.</p>
-  </footer> --}}
-
+    </main>
 </body>
 </html>

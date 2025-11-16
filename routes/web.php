@@ -5,7 +5,7 @@ use App\Http\Controllers\PelamarController;
 use Illuminate\Support\Facades\Route;
 
 // 🏠 Halaman Utama — Bisa diakses semua orang
-Route::view('/', 'main.index')->name('home');
+Route::view('/', 'auth.login')->name('home');
 
 // 🔒 Semua route berikut hanya untuk user yang login & verified
 Route::middleware(['auth', 'verified'])->group(function () {
