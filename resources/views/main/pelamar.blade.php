@@ -1,7 +1,7 @@
 {{-- pelamar.blade.php --}}
 @extends('layouts.main', ['currentPage' => 'Pelamar'])
 
-@section('title', 'Pelamar')
+@section('title', 'Manajemen Pelamar')
 
 @section('header-actions')
 <div class="relative w-80">
@@ -9,36 +9,187 @@
 @endsection
 
 @section('content')
-<div class="max-w-6xl mx-auto">
+<div class="flex flex-col lg:flex-row justify-between items-center mb-6 mt-4 gap-4">
 
-  {{-- DAFTAR PELAMAR --}}
-  <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
-    <div class="flex justify-between items-center p-6 border-b border-gray-200">
-      <h2 class="text-lg font-semibold text-gray-800">Daftar Pelamar</h2>
-      <button id="btnTambahPelamar"
-        class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-        + Tambah Pelamar
-      </button>
+    <div>
+        <h2 class="text-2xl font-semibold text-gray-800 tracking-tight">
+            Semua Pelamar ({{ $pelamars->total() }})
+        </h2>
     </div>
 
+    {{-- FILTER + SEARCH + ADD --}}
+    <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+
+        {{-- SEARCH --}}
+        <form method="GET" class="relative">
+            <input type="text" name="search" value="{{ $search }}"
+                placeholder="Cari nama pelamar"
+                class="w-48 lg:w-60 px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg 
+                       focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+            <span class="absolute right-3 top-2.5 text-gray-400 pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-4.35-4.35m0 0A7 7 0 1110.65 6.65a7 7 0 016 9.99z" />
+                </svg>
+            </span>
+        </form>
+
+        {{-- FILTER DROPDOWN BUTTON --}}
+        <div class="relative">
+            <button id="filterBtn"
+                class="flex items-center gap-2 px-4 py-2 border border-gray-300 bg-white rounded-lg 
+                       text-gray-700 hover:bg-gray-50 active:scale-[0.97] transition select-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-600" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 4h18M6 8h12M10 12h4M12 16h0" />
+                </svg>
+                Filters
+            </button>
+
+            {{-- DROPDOWN CONTENT --}}
+            <div id="filterDropdown"
+                class="hidden absolute right-0 mt-2 w-72 bg-white shadow-xl border border-gray-200 rounded-lg overflow-hidden p-4 z-20">
+
+                <form method="GET" class="space-y-4">
+
+                    {{-- TEMPAT LAHIR --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">Tempat Lahir</label>
+                        <input type="text" name="tempat_lahir" value="{{ $tempatLahir }}"
+                            class="w-full px-3 py-2 border rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    {{-- JENIS KELAMIN --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">Jenis Kelamin</label>
+                        <select name="jenis_kelamin"
+                            class="w-full px-3 py-2 border rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500">
+                            <option value="">Semua</option>
+                            <option value="Laki-laki" {{ $jenisKelamin=='Laki-laki'?'selected':'' }}>Laki-laki</option>
+                            <option value="Perempuan" {{ $jenisKelamin=='Perempuan'?'selected':'' }}>Perempuan</option>
+                        </select>
+                    </div>
+
+                    {{-- UMUR --}}
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">Umur</label>
+                        <div class="flex gap-2">
+                            <input type="number" placeholder="Min" name="umur_min" value="{{ $umurMin }}"
+                                class="w-1/2 px-3 py-2 border rounded-lg bg-gray-50 focus:bg-white focus:ring-blue-500">
+                            <input type="number" placeholder="Max" name="umur_max" value="{{ $umurMax }}"
+                                class="w-1/2 px-3 py-2 border rounded-lg bg-gray-50 focus:bg-white focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    {{-- APPLY BUTTON --}}
+                    <button type="submit"
+                        class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        Terapkan Filter
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+        {{-- TOMBOL TAMBAH --}}
+        <button id="btnTambahPelamar"
+            class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-white font-medium shadow-sm 
+                   bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 active:scale-[0.97] transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 4v16m8-8H4" />
+            </svg>
+            Tambah Pelamar
+        </button>
+
+    </div>
+</div>
+
+<div class="max-w-6xl mx-auto">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
+    <div class="flex justify-between items-center p-6 border-b border-gray-200">
+       <h3 class="text-lg font-semibold text-gray-800 tracking-tight">Daftar Pelamar</h3>
+    </div>
+  
     <div class="overflow-x-auto">
       <table class="w-full text-sm text-left text-gray-700">
-        <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
-          <tr>
-            <th class="px-6 py-3">No</th>
-            <th class="px-6 py-3">Nama Lengkap</th>
-            <th class="px-6 py-3">Nomor HP</th>
-            <th class="px-6 py-3">Jenis Kelamin</th>
-            <th class="px-6 py-3 text-right">Aksi</th>
-          </tr>
-        </thead>
+<thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+  <tr>
+    <th class="px-6 py-3">
+      <label class="chk-container">
+        <input type="checkbox" id="selectAll" class="chk-custom">
+      </label>
+    </th>
+
+    {{-- NAMA LENGKAP --}}
+    <th class="px-6 py-3">
+      <button
+        type="button"
+        class="flex items-center gap-1 hover:text-gray-900"
+        onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'nama_lengkap', 'sort_dir' => ($sortBy === 'nama_lengkap' && $sortDir === 'asc') ? 'desc' : 'asc' ])) }}'">
+        Nama Lengkap
+        <!-- Sort Icons (original icons preserved) -->
+        <span class="flex flex-col -mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'nama_lengkap' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l5 7H5l5-7z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'nama_lengkap' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 17l-5-7h10l-5 7z"/></svg>
+        </span>
+      </button>
+    </th>
+
+    {{-- NOMOR HP --}}
+    <th class="px-6 py-3">
+      <button
+        type="button"
+        class="flex items-center gap-1 hover:text-gray-900"
+        onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'nomor_hp', 'sort_dir' => ($sortBy === 'nomor_hp' && $sortDir === 'asc') ? 'desc' : 'asc' ])) }}'">
+        Nomor HP
+        <span class="flex flex-col -mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'nomor_hp' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l5 7H5l5-7z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'nomor_hp' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 17l-5-7h10l-5 7z"/></svg>
+        </span>
+      </button>
+    </th>
+
+    {{-- JENIS KELAMIN --}}
+    <th class="px-6 py-3">
+      <button
+        type="button"
+        class="flex items-center gap-1 hover:text-gray-900"
+        onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'jenis_kelamin', 'sort_dir' => ($sortBy === 'jenis_kelamin' && $sortDir === 'asc') ? 'desc' : 'asc' ])) }}'">
+        Jenis Kelamin
+        <span class="flex flex-col -mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'jenis_kelamin' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l5 7H5l5-7z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'jenis_kelamin' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 17l-5-7h10l-5 7z"/></svg>
+        </span>
+      </button>
+    </th>
+
+    <th class="px-6 py-3 text-right">Aksi</th>
+  </tr>
+</thead>
+
         <tbody id="pelamarTableBody">
           @forelse($pelamars as $index => $pelamar)
           <tr class="{{ $index > 0 ? 'border-t border-gray-100' : '' }}">
-            <td class="px-6 py-4">{{ $index + 1 }}</td>
+            <td class="px-6 py-4">
+              <label class="chk-container">
+                <input type="checkbox" class="chk-custom row-check" value="{{ $pelamar->id }}">
+              </label>
+            </td>
             <td class="px-6 py-4 font-medium">{{ $pelamar->nama_lengkap }}</td>
             <td class="px-6 py-4">{{ $pelamar->nomor_hp ?? '-' }}</td>
-            <td class="px-6 py-4">{{ $pelamar->jenis_kelamin ?? '-' }}</td>
+             <td class="px-6 py-4">
+              <span class="px-2 py-1 text-xs rounded-lg 
+                {{ $pelamar->jenis_kelamin === 'Laki-laki'
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'bg-pink-100 text-pink-700' }}">
+                {{ $pelamar->jenis_kelamin ?? '-' }}
+              </span>
+            </td>
             <td class="px-6 py-4 text-right">
               <button class="text-blue-600 hover:underline mr-3" onclick="showDetailModal({{ $pelamar->id }})">Detail</button>
               <button class="text-red-600 hover:underline" onclick="deletePelamar({{ $pelamar->id }})">Hapus</button>
@@ -54,7 +205,11 @@
     </div>
   </div>
 </div>
-
+    <div class="p-6 border-t border-gray-200">
+      <div class="flex justify-center">
+        {{ $pelamars->links() }}
+      </div>
+    </div>
 {{-- BACKDROP MODAL --}}
 <div id="overlay"
   class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
@@ -264,6 +419,12 @@ const pelamarForm = document.getElementById('pelamarForm');
 let isEditMode = false;
 
 // Real-time validation
+  document.getElementById("selectAll")?.addEventListener("change", function () {
+    document.querySelectorAll(".row-check").forEach(chk => {
+      chk.checked = this.checked;
+    });
+  });
+  
 document.getElementById('nama_lengkap').addEventListener('input', function(e) {
   validateField('nama_lengkap');
 });
@@ -627,6 +788,20 @@ overlay.addEventListener('click', (e) => {
     closeModal();
   }
 });
+
+  document.getElementById('filterBtn').addEventListener('click', () => {
+    const dd = document.getElementById('filterDropdown');
+    dd.classList.toggle('hidden');
+  });
+
+  window.addEventListener('click', (e) => {
+    const btn = document.getElementById('filterBtn');
+    const dd = document.getElementById('filterDropdown');
+
+    if (!btn.contains(e.target) && !dd.contains(e.target)) {
+      dd.classList.add('hidden');
+    }
+  });
 </script>
 
 @endsection

@@ -25,6 +25,12 @@ protected $model = Employee::class;
             'religion'      => $this->faker->randomElement(['Islam','Kristen','Hindu','Budha']),
             'blood_type'    => $this->faker->randomElement(['A','B','AB','O']),
             'national_id'   => $this->faker->unique()->numerify('################'),
+            'npwp'          => $this->faker->unique()->numerify('##.###.###.#-###.###'),
+            'bpjs_tk'     => $this->faker->unique()->numerify('###########'),
+            'bpjs_kes'    => $this->faker->unique()->numerify('###########'),
+            'emergency_name'  => $this->faker->name,
+            'emergency_relation' => $this->faker->randomElement(['Orang Tua','Saudara','Pasangan','Teman']),
+            'emergency_phone'    => $this->faker->phoneNumber,
             'phone'         => $this->faker->phoneNumber,
             'skills'        => json_encode($this->faker->randomElements(['php','laravel','mysql','docker','aws'], 2)),
         ];

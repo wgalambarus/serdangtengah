@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title') | SmartRecruitment</title>
   @vite('resources/css/app.css')
+  @vite('resources/css/style.css')
 </head>
 <body class="bg-gray-50">
   <div class="flex h-screen">

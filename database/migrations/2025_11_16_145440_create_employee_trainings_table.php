@@ -18,6 +18,7 @@ return new class extends Migration
             $table->year('year')->nullable();
             $table->string('location')->nullable();
             $table->string('provider')->nullable();
+            $table->string('certificate_path')->nullable();
             $table->timestamps();
 
 

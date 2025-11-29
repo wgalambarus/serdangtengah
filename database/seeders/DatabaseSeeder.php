@@ -17,17 +17,38 @@ class DatabaseSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        Employee::factory(20000)->create()->each(function($emp) use ($faker){
+        Employee::factory(100)->create()->each(function($emp) use ($faker){
             $emp->addresses()->create([
                 'type'         => 'CURRENT',
                 'address_line' => $faker->streetAddress(),
-                'city'         => $faker->city()
+                'city'         => $faker->city(),
+                'district'     => $faker->citySuffix(),
+                'village'      => $faker->streetName(),
+                'province'     => $faker->state(),
+                'postal_code'  => $faker->postcode(),
+            ]);
+
+            $emp->addresses()->create([
+                'type'         => 'KTP',
+                'address_line' => $faker->streetAddress(),
+                'city'         => $faker->city(),
+                'district'     => $faker->citySuffix(),
+                'village'      => $faker->streetName(),
+                'province'     => $faker->state(),
+                'postal_code'  => $faker->postcode(),
             ]);
 
             $emp->jobHistory()->create([
                 'status'      => 'Karyawan',
                 'start_date'  => $faker->date(),
                 'unit'        => 'Unit '.$faker->randomNumber(2)
+            ]);
+
+            $emp->trainings()->create([
+                'title'       => 'Training '.$faker->word(),
+                'year'        => $faker->year(),
+                'location'    => $faker->city(),
+                'provider'    => $faker->company(),
             ]);
         });
         User::create([

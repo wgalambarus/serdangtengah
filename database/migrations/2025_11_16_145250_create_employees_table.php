@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('birth_place')->nullable();
             $table->date('birth_date')->nullable();
             $table->enum('gender', ['L','P'])->nullable();
+            $table->string('email')->nullable()->unique();
             $table->string('last_education')->nullable();
-            $table->enum('marital_status', ['MENIKAH','DUDA','JANDA','BELUM_MENIKAH'])->nullable();
+            $table->enum('marital_status', ['MENIKAH', 'DUDA', 'JANDA', 'BELUM_MENIKAH'])->nullable();
             $table->string('religion')->nullable();
             $table->string('blood_type', 5)->nullable();
 
@@ -36,7 +37,7 @@ return new class extends Migration
             $table->string('emergency_phone')->nullable();
 
 
-            $table->json('skills')->nullable(); // lightweight JSON for skill keywords
+            $table->json('skills')->nullable();
             $table->timestamps();
         });
     }

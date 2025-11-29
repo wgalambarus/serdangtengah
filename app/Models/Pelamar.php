@@ -18,4 +18,11 @@ class Pelamar extends Model
         'pas_foto',
         'transkrip_nilai'
     ];
+
+    public function jobPositions()
+    {
+        return $this->belongsToMany(JobPosition::class, 'job_position_pelamar')
+        ->withTimestamps();
+    }
+
 }

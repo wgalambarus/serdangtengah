@@ -15,10 +15,11 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->text('requirements')->nullable();
-            $table->text('responsibilities')->nullable();
             $table->string('location')->nullable();
-            $table->enum('status', ['OPEN','CLOSED'])->default('OPEN');
+            $table->decimal('salary', 15, 2)->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

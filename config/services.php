@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'cv_match' => [
+        'url' => env('MATCH_SERVICE_URL', 'http://127.0.0.1:5001/match'),
+        'batch_size' => env('MATCH_BATCH_SIZE', 25),
+        'timeout' => env('MATCH_TIMEOUT', 180),
+    ],
+
 ];

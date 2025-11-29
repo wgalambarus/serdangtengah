@@ -11,12 +11,64 @@ class PelamarController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pelamars = Pelamar::latest()->get();
-        // dd($pelamars);
-        return view('main.pelamar', compact('pelamars'));
+        $search        = $request->input('search');
+        $tempatLahir   = $request->input('tempat_lahir');
+        $jenisKelamin  = $request->input('jenis_kelamin');
+        $umurMin       = $request->input('umur_min');
+        $umurMax       = $request->input('umur_max');
+
+        // Sorting
+        $sortBy   = $request->input('sort_by', 'created_at'); // default
+        $sortDir  = $request->input('sort_dir', 'desc');      // default
+
+        $pelamars = Pelamar::query()
+
+            // --- SEARCH ---
+            ->when($search, function ($query) use ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('nama_lengkap', 'like', "%{$search}%")
+                    ->orWhere('alamat', 'like', "%{$search}%");
+                });
+            })
+
+            // --- FILTER TEMPAT LAHIR ---
+            ->when($tempatLahir, function ($query) use ($tempatLahir) {
+                $query->where('tempat_lahir', 'LIKE', "%{$tempatLahir}%");
+            })
+
+            // --- FILTER JENIS KELAMIN ---
+            ->when($jenisKelamin, function ($query) use ($jenisKelamin) {
+                $query->where('jenis_kelamin', $jenisKelamin);
+            })
+
+            // --- FILTER UMUR ---
+            ->when($umurMin, function ($query) use ($umurMin) {
+                $query->whereRaw("TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) >= ?", [$umurMin]);
+            })
+            ->when($umurMax, function ($query) use ($umurMax) {
+                $query->whereRaw("TIMESTAMPDIFF(YEAR, tanggal_lahir, CURDATE()) <= ?", [$umurMax]);
+            })
+
+            // --- SORTING DINAMIS ---
+            ->orderBy($sortBy, $sortDir)
+
+            ->paginate(10)
+            ->appends($request->all());
+
+        return view('main.pelamar', compact(
+            'pelamars',
+            'search',
+            'tempatLahir',
+            'jenisKelamin',
+            'umurMin',
+            'umurMax',
+            'sortBy',
+            'sortDir'
+        ));
     }
+
 
     /**
      * Show the form for creating a new resource.

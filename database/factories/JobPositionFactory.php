@@ -16,10 +16,12 @@ class JobPositionFactory extends Factory
         return [
             'title'           => $this->faker->jobTitle,
             'description'     => $this->faker->paragraph,
-            'requirements'    => $this->faker->paragraph,
-            'responsibilities'=> $this->faker->paragraph,
             'location'        => $this->faker->city,
-            'status'          => 'OPEN',
+            'salary'          => $this->faker->numberBetween(3000000, 15000000),
+            'start_date'      => $this->faker->date(),
+            'end_date'        => $this->faker->date(),
+            'is_active'       => 1,
+
         ];
     }
 }
