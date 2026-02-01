@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pelamars', function (Blueprint $table) {
+        Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->string('nama_lengkap');
             $table->string('tempat_lahir')->nullable();
@@ -21,9 +21,15 @@ return new class extends Migration
             $table->string('nomor_hp', 20)->nullable();
 
             // Dokumen
-            $table->string('cv')->nullable(); // path file CV
-            $table->string('pas_foto')->nullable(); // path file pas foto
-            $table->string('transkrip_nilai')->nullable(); // path file transkrip
+            $table->string('pas_foto')->nullable();
+            $table->string('ktp')->nullable();
+            $table->string('ijazah')->nullable();
+            $table->string('cv')->nullable();
+            $table->string('transkrip_nilai')->nullable();
+            $table->string('kartu_bpjs')->nullable();
+            $table->string('suket_pengalaman_kerja')->nullable();
+            $table->string('daftar_riwayat_hidup')->nullable();
+
 
             $table->timestamps();
         });
@@ -34,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pelamars');
+        Schema::dropIfExists('applicants');
     }
 };

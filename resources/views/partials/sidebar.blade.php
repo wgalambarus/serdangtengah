@@ -1,8 +1,16 @@
 <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
-  <div class="p-6 border-b border-gray-200">
-    <h1 class="text-xl font-bold text-gray-800">SmartRecruitment</h1>
-  </div>
+  <div class="p-6 border-b border-gray-200 flex items-center gap-3">
+    <img
+      src="{{ asset('favicon.ico') }}"
+      alt="SmartRecruitment Logo"
+      class="w-10 h-10 object-contain"
+    />
 
+    <div class="leading-tight">
+      <h1 class="text-lg font-bold text-gray-800">Serdang Tengah</h1>
+      <p class="text-xs text-gray-500">Sistem Manejemen | HR</p>
+    </div>
+  </div>
   <nav class="p-4 space-y-2">
     @php
       $menus = [

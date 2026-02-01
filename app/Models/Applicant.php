@@ -7,12 +7,30 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Applicant extends Model
 {
-    use HasFactory;
-    protected $fillable = ['full_name','birth_place','birth_date','gender','address','phone','applied_position'];
-    protected $casts = ['birth_date'=>'date'];
-    
-    public function files(){ 
-        return $this->morphMany(File::class, 'owner'); 
+
+    protected $table = 'applicants';
+
+    protected $fillable = [
+        'nama_lengkap',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'alamat',
+        'nomor_hp',
+        'cv',
+        'pas_foto',
+        'transkrip_nilai',
+        'ktp',
+        'ijazah',
+        'kartu_bpjs',
+        'suket_pengalaman_kerja',
+        'daftar_riwayat_hidup'
+    ];
+
+    public function jobPositions()
+    {
+        return $this->belongsToMany(JobPosition::class, 'job_position_pelamar')
+        ->withTimestamps();
     }
 
 }

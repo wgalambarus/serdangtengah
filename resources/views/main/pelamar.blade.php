@@ -13,7 +13,7 @@
 
     <div>
         <h2 class="text-2xl font-semibold text-gray-800 tracking-tight">
-            Semua Pelamar ({{ $pelamars->total() }})
+            Semua Pelamar ({{ $applicants->total() }})
         </h2>
     </div>
 
@@ -173,26 +173,26 @@
 </thead>
 
         <tbody id="pelamarTableBody">
-          @forelse($pelamars as $index => $pelamar)
+          @forelse($applicants as $index => $applicant)
           <tr class="{{ $index > 0 ? 'border-t border-gray-100' : '' }}">
             <td class="px-6 py-4">
               <label class="chk-container">
-                <input type="checkbox" class="chk-custom row-check" value="{{ $pelamar->id }}">
+                <input type="checkbox" class="chk-custom row-check" value="{{ $applicant->id }}">
               </label>
             </td>
-            <td class="px-6 py-4 font-medium">{{ $pelamar->nama_lengkap }}</td>
-            <td class="px-6 py-4">{{ $pelamar->nomor_hp ?? '-' }}</td>
+            <td class="px-6 py-4 font-medium">{{ $applicant->nama_lengkap }}</td>
+            <td class="px-6 py-4">{{ $applicant->nomor_hp ?? '-' }}</td>
              <td class="px-6 py-4">
               <span class="px-2 py-1 text-xs rounded-lg 
-                {{ $pelamar->jenis_kelamin === 'Laki-laki'
+                {{ $applicant->jenis_kelamin === 'Laki-laki'
                     ? 'bg-blue-100 text-blue-700'
                     : 'bg-pink-100 text-pink-700' }}">
-                {{ $pelamar->jenis_kelamin ?? '-' }}
+                {{ $applicant->jenis_kelamin ?? '-' }}
               </span>
             </td>
             <td class="px-6 py-4 text-right">
-              <button class="text-blue-600 hover:underline mr-3" onclick="showDetailModal({{ $pelamar->id }})">Detail</button>
-              <button class="text-red-600 hover:underline" onclick="deletePelamar({{ $pelamar->id }})">Hapus</button>
+              <button class="text-blue-600 hover:underline mr-3" onclick="showDetailModal({{ $applicant->id }})">Detail</button>
+              <button class="text-red-600 hover:underline" onclick="deletePelamar({{ $applicant->id }})">Hapus</button>
             </td>
           </tr>
           @empty
@@ -207,7 +207,7 @@
 </div>
     <div class="p-6 border-t border-gray-200">
       <div class="flex justify-center">
-        {{ $pelamars->links() }}
+        {{ $applicants->links() }}
       </div>
     </div>
 {{-- BACKDROP MODAL --}}
@@ -349,7 +349,30 @@
           <p id="pas_foto_current" class="text-xs text-gray-500 mt-1"></p>
           <p class="text-xs text-red-500 mt-1 hidden" id="error_pas_foto">File harus berformat PDF dan maksimal 2MB</p>
         </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">KTP (.pdf)</label>
+          <input type="file"
+                 name="ktp"
+                 id="ktp"
+                 accept=".pdf"
+                 onchange="validateFile('ktp')"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <p id="ktp_current" class="text-xs text-gray-500 mt-1"></p>
+          <p class="text-xs text-red-500 mt-1 hidden" id="error_ktp">File harus berformat PDF dan maksimal 2MB</p>
+        </div>
 
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Ijazah (.pdf)</label>
+          <input type="file"
+                 name="ijazah"
+                 id="ijazah"
+                 accept=".pdf"
+                 onchange="validateFile('ijazah')"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <p id="ijazah_current" class="text-xs text-gray-500 mt-1"></p>
+          <p class="text-xs text-red-500 mt-1 hidden" id="error_ijazah">File harus berformat PDF dan maksimal 2MB</p>
+        </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Transkrip Nilai (.pdf)</label>
           <input type="file"
@@ -362,6 +385,42 @@
           <p class="text-xs text-red-500 mt-1 hidden" id="error_transkrip_nilai">File harus berformat PDF dan maksimal 2MB</p>
         </div>
 
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Kartu BPJS (.pdf)</label>
+          <input type="file"
+                 name="kartu_bpjs"
+                 id="kartu_bpjs"
+                 accept=".pdf"
+                 onchange="validateFile('kartu_bpjs')"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <p id="kartu_bpjs_current" class="text-xs text-gray-500 mt-1"></p>
+          <p class="text-xs text-red-500 mt-1 hidden" id="error_kartu_bpjs">File harus berformat PDF dan maksimal 2MB</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Surat Keterangan Pengalaman Kerja (.pdf)</label>
+          <input type="file"
+                 name="suket_pengalaman_kerja"
+                 id="suket_pengalaman_kerja"
+                 accept=".pdf"
+                 onchange="validateFile('suket_pengalaman_kerja')"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <p id="suket_pengalaman_kerja_current" class="text-xs text-gray-500 mt-1"></p>
+          <p class="text-xs text-red-500 mt-1 hidden" id="error_suket_pengalaman_kerja">File harus berformat PDF dan maksimal 2MB</p>
+        </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Daftar Riwayat Hidup (.pdf)</label>
+          <input type="file"
+                 name="daftar_riwayat_hidup"
+                 id="daftar_riwayat_hidup"
+                 accept=".pdf"
+                 onchange="validateFile('daftar_riwayat_hidup')"
+                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+          <p id="daftar_riwayat_hidup_current" class="text-xs text-gray-500 mt-1"></p>
+          <p class="text-xs text-red-500 mt-1 hidden" id="error_daftar_riwayat_hidup">File harus berformat PDF dan maksimal 2MB</p>
+        </label>
+      </div>
         <div class="flex justify-between pt-6 border-t border-gray-200">
           <button type="button"
                   onclick="prevStep()"
@@ -658,6 +717,12 @@ function clearFileInfo() {
   document.getElementById('cv_current').textContent = '';
   document.getElementById('pas_foto_current').textContent = '';
   document.getElementById('transkrip_nilai_current').textContent = '';
+  document.getElementById('ktp_current').textContent = '';
+  document.getElementById('ijazah_current').textContent = '';
+  document.getElementById('kartu_bpjs_current').textContent = '';
+  document.getElementById('suket_pengalaman_kerja_current').textContent = '';
+  document.getElementById('daftar_riwayat_hidup_current').textContent = '';
+  
 }
 
 async function handleSubmit(e) {
@@ -667,8 +732,13 @@ async function handleSubmit(e) {
   const cvValid = validateFile('cv');
   const pasFotoValid = validateFile('pas_foto');
   const transkripValid = validateFile('transkrip_nilai');
+  const ktpValid = validateFile('ktp');
+  const ijazahValid = validateFile('ijazah');
+  const kartuBpjsValid = validateFile('kartu_bpjs');
+  const suketPengalamanValid = validateFile('suket_pengalaman_kerja');
+  const daftarRiwayatHidupValid = validateFile('daftar_riwayat_hidup');
 
-  if (!cvValid || !pasFotoValid || !transkripValid) {
+  if (!cvValid || !pasFotoValid || !transkripValid || !ktpValid || !ijazahValid || !kartuBpjsValid || !suketPengalamanValid || !daftarRiwayatHidupValid) {
     alert('Mohon perbaiki file yang diupload');
     return;
   }
@@ -724,7 +794,7 @@ async function showDetailModal(pelamarId) {
       const data = result.data;
 
       document.getElementById('detailNama').textContent = data.nama_lengkap;
-      document.getElementById('detailTTL').textContent = data.tempat_tanggal_lahir || '-';
+      document.getElementById('detailTTL').textContent = data.tempat_lahir + ', ' + data.tanggal_lahir  || '-';
       document.getElementById('detailJenisKelamin').textContent = data.jenis_kelamin || '-';
       document.getElementById('detailHP').textContent = data.nomor_hp || '-';
       document.getElementById('detailAlamat').textContent = data.alamat || '-';
@@ -742,7 +812,27 @@ async function showDetailModal(pelamarId) {
         dokumenDiv.innerHTML += `<p>• Transkrip Nilai: <a href="/storage/${data.transkrip_nilai}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
       }
 
-      if (!data.cv && !data.pas_foto && !data.transkrip_nilai) {
+      if (data.ktp) {
+        dokumenDiv.innerHTML += `<p>• KTP: <a href="/storage/${data.ktp}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.ijazah) {
+        dokumenDiv.innerHTML += `<p>• Ijazah: <a href="/storage/${data.ijazah}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.kartu_bpjs) {
+        dokumenDiv.innerHTML += `<p>• Kartu BPJS: <a href="/storage/${data.kartu_bpjs}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.suket_pengalaman_kerja) {
+        dokumenDiv.innerHTML += `<p>• Surat Keterangan Pengalaman Kerja: <a href="/storage/${data.suket_pengalaman_kerja}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.daftar_riwayat_hidup) {
+        dokumenDiv.innerHTML += `<p>• Daftar Riwayat Hidup: <a href="/storage/${data.daftar_riwayat_hidup}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (!data.cv && !data.pas_foto && !data.transkrip_nilai && !data.ktp && !data.ijazah && !data.kartu_bpjs && !data.suket_pengalaman_kerja && !data.daftar_riwayat_hidup) {
         dokumenDiv.innerHTML = '<p class="text-gray-500">Belum ada dokumen</p>';
       }
 

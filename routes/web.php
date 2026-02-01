@@ -1,24 +1,26 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PelamarController;
+use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeWizardController;
 use App\Http\Controllers\PositionController;
 use Illuminate\Support\Facades\Route;
 
-// 🏠 Halaman Utama — Bisa diakses semua orang
+//  Halaman Utama — Bisa diakses semua orang
 Route::view('/', 'auth.login')->name('home');
 
 
-// 🔒 Semua route berikut hanya untuk user yang login & verified
+//  Semua route berikut hanya untuk user yang login & verified
 Route::middleware(['auth', 'verified'])->group(function () {
 
     // Dashboard
     Route::view('/dashboard', 'main.dashboard')->name('dashboard');
 
     // Resource Pelamar (CRUD Pelamar)
-    Route::resource('pelamar', PelamarController::class);
+    Route::resource('pelamar', ApplicantController::class)
+    ->parameters(['pelamar' => 'applicant']);
+
     Route::resource('/lowongan', PositionController::class);
     Route::get('/lowongan/{id}/applicants', [PositionController::class, 'applicants'])->name('lowongan.applicants');
     Route::put('/lowongan/{id}/disable', [PositionController::class, 'disable'])->name('lowongan.disable');

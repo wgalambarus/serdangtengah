@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pelamar;
+use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class PelamarController extends Controller
+class ApplicantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         $search        = $request->input('search');
@@ -19,11 +17,10 @@ class PelamarController extends Controller
         $umurMin       = $request->input('umur_min');
         $umurMax       = $request->input('umur_max');
 
-        // Sorting
         $sortBy   = $request->input('sort_by', 'created_at'); // default
         $sortDir  = $request->input('sort_dir', 'desc');      // default
 
-        $pelamars = Pelamar::query()
+        $applicants = Applicant::query()
 
             // --- SEARCH ---
             ->when($search, function ($query) use ($search) {
@@ -58,7 +55,7 @@ class PelamarController extends Controller
             ->appends($request->all());
 
         return view('main.pelamar', compact(
-            'pelamars',
+            'applicants',
             'search',
             'tempatLahir',
             'jenisKelamin',
@@ -93,8 +90,12 @@ class PelamarController extends Controller
             'cv' => 'required|file|mimes:pdf|max:2048',
             'pas_foto' => 'required|file|mimes:pdf|max:2048',
             'transkrip_nilai' => 'required|file|mimes:pdf|max:2048',
+            'ktp' => 'required|file|mimes:pdf|max:2048',
+            'ijazah' => 'required|file|mimes:pdf|max:2048',
+            'kartu_bpjs' => 'required|file|mimes:pdf|max:2048',
+            'suket_pengalaman_kerja' => 'required|file|mimes:pdf|max:2048',
+            'daftar_riwayat_hidup' => 'required|file|mimes:pdf|max:2048'
         ]);
-
 
         // Handle file uploads
         if ($request->hasFile('cv')) {
@@ -109,7 +110,27 @@ class PelamarController extends Controller
             $validated['transkrip_nilai'] = $request->file('transkrip_nilai')->store('dokumen/transkrip', 'public');
         }
 
-        Pelamar::create($validated);
+        if ($request->hasFile('ktp')) {
+            $validated['ktp'] = $request->file('ktp')->store('dokumen/ktp', 'public');
+        }
+
+        if ($request->hasFile('ijazah')) {
+            $validated['ijazah'] = $request->file('ijazah')->store('dokumen/ijazah', 'public');
+        }
+
+        if ($request->hasFile('kartu_bpjs')) {
+            $validated['kartu_bpjs'] = $request->file('kartu_bpjs')->store('dokumen/kartu_bpjs', 'public');
+        }
+
+        if ($request->hasFile('suket_pengalaman_kerja')) {
+            $validated['suket_pengalaman_kerja'] = $request->file('suket_pengalaman_kerja')->store('dokumen/suket_pengalaman_kerja', 'public');
+        }
+
+        if ($request->hasFile('daftar_riwayat_hidup')) {
+            $validated['daftar_riwayat_hidup'] = $request->file('daftar_riwayat_hidup')->store('dokumen/daftar_riwayat_hidup', 'public');
+        }
+        
+        Applicant::create($validated);
 
         return response()->json([
             'success' => true,
@@ -120,29 +141,29 @@ class PelamarController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pelamar $pelamar)
+    public function show(Applicant $applicant)
     {
         return response()->json([
             'success' => true,
-            'data' => $pelamar
+            'data' => $applicant
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pelamar $pelamar)
+    public function edit(Applicant $applicant)
     {
         return response()->json([
             'success' => true,
-            'data' => $pelamar
+            'data' => $applicant
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pelamar $pelamar)
+    public function update(Request $request, Applicant $applicant)
     {
         $validated = $request->validate([
             'nama_lengkap' => 'required|string|max:255',
@@ -154,31 +175,72 @@ class PelamarController extends Controller
             'cv' => 'nullable|file|mimes:pdf|max:2048',
             'pas_foto' => 'nullable|file|mimes:pdf|max:2048',
             'transkrip_nilai' => 'nullable|file|mimes:pdf|max:2048',
+            'ktp' => 'nullable|file|mimes:pdf|max:2048',
+            'ijazah' => 'nullable|file|mimes:pdf|max:2048',
+            'kartu_bpjs' => 'nullable|file|mimes:pdf|max:2048',
+            'suket_pengalaman_kerja' => 'nullable|file|mimes:pdf|max:2048',
+            'daftar_riwayat_hidup' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
         // Handle file uploads and delete old files
         if ($request->hasFile('cv')) {
-            if ($pelamar->cv) {
-                Storage::disk('public')->delete($pelamar->cv);
+            if ($applicant->cv) {
+                Storage::disk('public')->delete($applicant->cv);
             }
             $validated['cv'] = $request->file('cv')->store('dokumen/cv', 'public');
         }
 
         if ($request->hasFile('pas_foto')) {
-            if ($pelamar->pas_foto) {
-                Storage::disk('public')->delete($pelamar->pas_foto);
+            if ($applicant->pas_foto) {
+                Storage::disk('public')->delete($applicant->pas_foto);
             }
             $validated['pas_foto'] = $request->file('pas_foto')->store('dokumen/pas_foto', 'public');
         }
 
         if ($request->hasFile('transkrip_nilai')) {
-            if ($pelamar->transkrip_nilai) {
-                Storage::disk('public')->delete($pelamar->transkrip_nilai);
+            if ($applicant->transkrip_nilai) {
+                Storage::disk('public')->delete($applicant->transkrip_nilai);
             }
             $validated['transkrip_nilai'] = $request->file('transkrip_nilai')->store('dokumen/transkrip', 'public');
         }
 
-        $pelamar->update($validated);
+        if ($request->hasFile('ktp')) {
+            if ($applicant->ktp) {
+                Storage::disk('public')->delete($applicant->ktp);
+            }
+            $validated['ktp'] = $request->file('ktp')->store('dokumen/ktp', 'public');
+        }
+
+        if ($request->hasFile('ijazah')) {
+            if ($applicant->ijazah) {
+                Storage::disk('public')->delete($applicant->ijazah);
+            }
+            $validated['ijazah'] = $request->file('ijazah')->store('dokumen/ijazah', 'public');
+        }
+
+        if ($request->hasFile('kartu_bpjs')) {
+            if ($applicant->kartu_bpjs) {
+                Storage::disk('public')->delete($applicant->kartu_bpjs);
+            }
+            $validated['kartu_bpjs'] = $request->file('kartu_bpjs')->store('dokumen/kartu_bpjs', 'public');
+        }
+
+        if ($request->hasFile('suket_pengalaman_kerja')) {
+            if ($applicant->suket_pengalaman_kerja) {
+                Storage::disk('public')->delete($applicant->suket_pengalaman_kerja);
+            }
+            $validated['suket_pengalaman_kerja'] = $request->file('suket_pengalaman_kerja')->store('dokumen/suket_pengalaman_kerja', 'public');
+        }
+
+        if ($request->hasFile('daftar_riwayat_hidup')) {
+            if ($applicant->daftar_riwayat_hidup) {
+                Storage::disk('public')->delete($applicant->daftar_riwayat_hidup);
+            }
+            $validated['daftar_riwayat_hidup'] = $request->file('daftar_riwayat_hidup')->store('dokumen/daftar_riwayat_hidup', 'public');
+        }
+
+
+        $applicant->update($validated);
 
         return response()->json([
             'success' => true,
@@ -189,21 +251,20 @@ class PelamarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pelamar $pelamar)
+    public function destroy(Applicant $applicant)
     {
         // Delete associated files
-        if ($pelamar->cv) {
-            Storage::disk('public')->delete($pelamar->cv);
+        if ($applicant->cv) {
+            Storage::disk('public')->delete($applicant->cv);
         }
-        if ($pelamar->pas_foto) {
-            Storage::disk('public')->delete($pelamar->pas_foto);
+        if ($applicant->pas_foto) {
+            Storage::disk('public')->delete($applicant->pas_foto);
         }
-        if ($pelamar->transkrip_nilai) {
-            Storage::disk('public')->delete($pelamar->transkrip_nilai);
+        if ($applicant->transkrip_nilai) {
+            Storage::disk('public')->delete($applicant->transkrip_nilai);
         }
 
-        $pelamar->delete();
-
+        $applicant->delete();
         return response()->json([
             'success' => true,
             'message' => 'Data pelamar berhasil dihapus!'
