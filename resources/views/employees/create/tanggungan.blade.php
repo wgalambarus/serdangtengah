@@ -142,6 +142,10 @@ function removeDependentRow(btn) {
       btn.closest("div.p-8").remove();
   }
 }
+
+function onlyString(input) {
+  input.value = input.value.replace(/[^A-Za-zs]/g, '');
+}
 </script>
 
 @endsection

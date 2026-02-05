@@ -23,6 +23,7 @@
       <label class="block text-sm font-medium text-gray-700 mb-1">Nama *</label>
       <input type="text" name="dependent_name[]"
              value="{{ $name }}"
+             oninput="onlyString(this)"
              class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg
                     focus:ring-2 focus:ring-blue-600" />
     </div>

@@ -91,6 +91,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Provinsi *</label>
             <input type="text" name="ktp_province"
                 value="{{ old('ktp_province') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('ktp_province') border-red-500 @else border-gray-300 @enderror">
             @error('ktp_province') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -101,6 +102,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kota *</label>
             <input type="text" name="ktp_city"
                 value="{{ old('ktp_city') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('ktp_city') border-red-500 @else border-gray-300 @enderror">
             @error('ktp_city') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -111,6 +113,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kecamatan *</label>
             <input type="text" name="ktp_district"
                 value="{{ old('ktp_district') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('ktp_district') border-red-500 @else border-gray-300 @enderror">
             @error('ktp_district') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -121,6 +124,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kelurahan *</label>
             <input type="text" name="ktp_village"
                 value="{{ old('ktp_village') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('ktp_village') border-red-500 @else border-gray-300 @enderror">
             @error('ktp_village') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -170,6 +174,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Provinsi *</label>
             <input type="text" name="dom_province"
                 value="{{ old('dom_province') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('dom_province') border-red-500 @else border-gray-300 @enderror">
             @error('dom_province') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -180,6 +185,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kota *</label>
             <input type="text" name="dom_city"
                 value="{{ old('dom_city') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('dom_city') border-red-500 @else border-gray-300 @enderror">
             @error('dom_city') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -190,6 +196,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kecamatan *</label>
             <input type="text" name="dom_district"
                 value="{{ old('dom_district') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('dom_district') border-red-500 @else border-gray-300 @enderror">
             @error('dom_district') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -200,6 +207,7 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">Kelurahan *</label>
             <input type="text" name="dom_village"
                 value="{{ old('dom_village') }}"
+                oninput="onlyString(this)"
                 class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600
                        @error('dom_village') border-red-500 @else border-gray-300 @enderror">
             @error('dom_village') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
@@ -246,6 +254,11 @@ function copyAddress() {
         document.querySelector(`[name="${f}"]`).value;
     });
 }
+
+function onlyString(input) {
+    input.value = input.value.replace(/[^A-Za-zs]/g, '');
+}
+
 </script>
 
 @endsection

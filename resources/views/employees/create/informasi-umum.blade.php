@@ -96,6 +96,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir *</label>
           <input type="text" name="birth_place"
                  value="{{ old('birth_place') }}"
+                 oninput="onlyString(this)"
                  class="required-field w-full px-4 py-3 bg-gray-50 rounded-lg
                         focus:ring-2 focus:ring-blue-600 transition
                         @error('birth_place') border-red-500 @else border-gray-300 @enderror">
@@ -240,6 +241,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama *</label>
           <input type="text" name="emergency_name"
                  value="{{ old('emergency_name') }}"
+                 oninput="onlyString(this)"
                  class="required-field w-full px-4 py-3 rounded-lg bg-gray-50 
                         focus:ring-2 focus:ring-blue-600
                         @error('emergency_name') border-red-500 @else border-gray-300 @enderror">
@@ -250,6 +252,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">Hubungan *</label>
           <input type="text" name="emergency_relation"
                  value="{{ old('emergency_relation') }}"
+                 oninput="onlyString(this)"
                  class="required-field w-full px-4 py-3 rounded-lg bg-gray-50
                         focus:ring-2 focus:ring-blue-600
                         @error('emergency_relation') border-red-500 @else border-gray-300 @enderror">
@@ -331,6 +334,10 @@ function renderTags() {
         <button type="button" onclick="removeSkill('${s}')" class="text-blue-600 text-xs">✕</button>
       </div>`;
   });
+}
+
+function onlyString(input) {
+  input.value = input.value.replace(/[^A-Za-zs]/g, '');
 }
 </script>
 
