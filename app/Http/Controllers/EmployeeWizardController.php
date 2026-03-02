@@ -17,42 +17,59 @@ use App\Models\EmployeeTraining;
 class EmployeeWizardController extends Controller
 {
 
+    private array $steps = [
+        'informasi-umum',
+        'alamat-karyawan',
+        'pendidikan',
+        'tanggungan',
+        'pekerjaan',
+        'pelatihan',
+        'review'
+
+    ];
+
     public function index()
     {
-        return view('employees.create.informasi-umum');
+        return redirect()->route('employee.create.step', 'informasi-umum');
     }
-    public function show($step)
-    {
-        $allowedSteps = [
-            'informasi-umum',
-            'alamat-karyawan',
-            'pendidikan',
-            'tanggungan',
-            'pekerjaan',
-            'pelatihan',
-            'review'
-        ];
 
-        if (!in_array($step, $allowedSteps)) {
+    private function guardStepAccess(string $step)
+    {
+        $allData = session()->get('employee_wizard', []);
+        $index = array_search($step, $this->steps);
+
+        if ($index === 0) return null;
+
+        for ($i = 0; $i < $index; $i++) {
+            if (!isset($allData[$this->steps[$i]])) {
+                return redirect()
+                    ->route('employee.create.step', $this->steps[$i])
+                    ->with('error', 'Silakan lengkapi step sebelumnya.');
+            }
+        }
+
+        return null;
+    }
+
+    public function show($step)
+    { 
+
+        if (!in_array($step, $this->steps)) {
             abort(404);
         }
 
-        $data = session()->get('employee_wizard.' . $step, []);
+        $redirect = $this->guardStepAccess($step);
+        if ($redirect) return $redirect;
 
-        return view('employees.create.' . $step, compact('data'));
+        $data = session()->get("employee_wizard.$step", []);
+
+        return view("employees.create.$step", compact('data'));
     }
 
-
-    /**
-     * SAVE EACH STEP TO SESSION
-     */
-    public function storeStep(Request $request, $step)
+    public function validateStep(Request $request, string $step)
     {
-        switch ($step) {
-
-            // =========================== INFORMASI UMUM ===========================
-            case 'informasi-umum':
-                $validated = $request->validate([
+        return match ($step) {
+            'informasi-umum' => $request->validate([
                     'full_name'     => 'required|string|max:255',
                     'national_id'   => 'required|string|max:20',
                     'email'         => 'required|email',
@@ -68,20 +85,14 @@ class EmployeeWizardController extends Controller
                     'bpjs_tk'       => 'nullable|string',
                     'bpjs_kes'      => 'nullable|string',
                     'npwp'          => 'nullable|string',
-                    'skills'        => 'nullable|string',
+                    'skills'        => 'nullable|array',
+                    'skills.*'      => 'string|max:100',
                     'emergency_name'=> 'required|string',
                     'emergency_relation'=> 'required|string',
                     'emergency_phone'=> 'required|string',
 
-                ]);
-
-                session()->put('employee_wizard.informasi-umum', $validated);
-                break;
-
-
-            // =========================== ALAMAT KARYAWAN ===========================
-            case 'alamat-karyawan':
-                $validated = $request->validate([
+                ]),
+            'alamat-karyawan' => $request->validate([
                     // KTP
                     'ktp_address'   => 'required',
                     'ktp_province'  => 'required',
@@ -97,101 +108,231 @@ class EmployeeWizardController extends Controller
                     'dom_district'  => 'required',
                     'dom_village'   => 'required',
                     'dom_postal'    => 'required',
-                ]);
-
-                session()->put('employee_wizard.alamat-karyawan', $validated);
-                break;
-
-
-            // =========================== PENDIDIKAN ===========================
-            case 'pendidikan':
-
-                $validated = $request->validate([
+                ]),
+            'pendidikan' => $request->validate([
                     'school_name.*' => 'required|string',
                     'city.*'        => 'required|string',
                     'major.*'       => 'required|string',
                     'year_in.*' => 'required|digits:4',
                     'year_out.*' => 'required|digits:4',
 
-                ]);
-
-                session()->put('employee_wizard.pendidikan', $validated);
-                break;
-
-
-            // =========================== TANGGUNGAN ===========================
-            case 'tanggungan':
-
-                $validated = $request->validate([
+                ]),
+            'tanggungan' => $request->validate([
                     'dependent_name.*' => 'required|string',
                     'dependent_gender.*'   => 'required|string',
                     'dependent_birth.*'=> 'required|date',
                     'dependent_education.*'=> 'required|string',
-                ]);
-
-                session()->put('employee_wizard.tanggungan', $validated);
-                break;
-
-
-            // =========================== PEKERJAAN ===========================
-            case 'pekerjaan':
-
-                $validated = $request->validate([
+                ]),
+            'pekerjaan' => $request->validate([
                     'position.*'      => 'required|string',
                     'work_unit.*'    => 'required|string',
                     'start_date.*'    => 'required|date',
                     'end_date.*'      => 'nullable|date',
                     'work_note.*'         => 'nullable|string',
-                ]);
-
-                session()->put('employee_wizard.pekerjaan', $validated);
-                break;
-
-
-            // =========================== PELATIHAN ===========================
-            case 'pelatihan':
-                $validated = $request->validate([
+                ]),
+            'pelatihan' => $request->validate([
                     'training_name.*' => 'required|string',
                     'training_provider.*'      => 'required|string',
                     'training_year.*'          => 'required|integer',
                     'training_location.*'      => 'nullable|string',
                     'training_certificate.*' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
-                ]);
-                $files = [];
+                ]),
 
-                if ($request->hasFile('training_certificate')) {
-                    foreach ($request->file('training_certificate') as $i => $file) {
-                        $files[$i] = $file->store('temp_training', 'public');
-                    }
-                }
+            default => $request->all()
+        };
+    }
 
-                // store path saja ke session
-                $validated['training_certificate'] = $files;
+    private function isWizardComplete(?array $data): bool
+    {
+        if (!$data) return false;
 
-                session()->put('employee_wizard.pelatihan', $validated);
-                return redirect()->route('employee.create.review');
-                break;
+        foreach ($this->steps as $step) {
+            if ($step === 'review') continue;
+
+            if (!isset($data[$step])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    // public function storeStep(Request $request, $step)
+    // {
+    //     switch ($step) {
+
+    //         // =========================== INFORMASI UMUM ===========================
+    //         case 'informasi-umum':
+    //             $validated = $request->validate([
+    //                 'full_name'     => 'required|string|max:255',
+    //                 'national_id'   => 'required|string|max:20',
+    //                 'email'         => 'required|email',
+    //                 'phone'         => 'required',
+    //                 'birth_place'   => 'required|string',
+    //                 'birth_date'    => 'required|date',
+    //                 'gender'        => 'required|string',
+    //                 'marital_status'=> 'required|string',
+    //                 'spouse_name'   => 'nullable|string',
+    //                 'last_education'=> 'required|string',
+    //                 'religion'      => 'required|string',
+    //                 'blood_type'    => 'required|string',
+    //                 'bpjs_tk'       => 'nullable|string',
+    //                 'bpjs_kes'      => 'nullable|string',
+    //                 'npwp'          => 'nullable|string',
+    //                 'skills'        => 'nullable|array',
+    //                 'skills.*'      => 'string|max:100',
+    //                 'emergency_name'=> 'required|string',
+    //                 'emergency_relation'=> 'required|string',
+    //                 'emergency_phone'=> 'required|string',
+
+    //             ]);
+
+    //             session()->put('employee_wizard.informasi-umum', $validated);
+    //             break;
+
+
+    //         // =========================== ALAMAT KARYAWAN ===========================
+    //         case 'alamat-karyawan':
+    //             $validated = $request->validate([
+    //                 // KTP
+    //                 'ktp_address'   => 'required',
+    //                 'ktp_province'  => 'required',
+    //                 'ktp_city'      => 'required',
+    //                 'ktp_district'  => 'required',
+    //                 'ktp_village'   => 'required',
+    //                 'ktp_postal'    => 'required',
+
+    //                 // DOMISILI
+    //                 'dom_address'   => 'required',
+    //                 'dom_province'  => 'required',
+    //                 'dom_city'      => 'required',
+    //                 'dom_district'  => 'required',
+    //                 'dom_village'   => 'required',
+    //                 'dom_postal'    => 'required',
+    //             ]);
+
+    //             session()->put('employee_wizard.alamat-karyawan', $validated);
+    //             break;
+
+
+    //         // =========================== PENDIDIKAN ===========================
+    //         case 'pendidikan':
+
+    //             $validated = $request->validate([
+    //                 'school_name.*' => 'required|string',
+    //                 'city.*'        => 'required|string',
+    //                 'major.*'       => 'required|string',
+    //                 'year_in.*' => 'required|digits:4',
+    //                 'year_out.*' => 'required|digits:4',
+
+    //             ]);
+
+    //             session()->put('employee_wizard.pendidikan', $validated);
+    //             break;
+
+
+    //         // =========================== TANGGUNGAN ===========================
+    //         case 'tanggungan':
+
+    //             $validated = $request->validate([
+    //                 'dependent_name.*' => 'required|string',
+    //                 'dependent_gender.*'   => 'required|string',
+    //                 'dependent_birth.*'=> 'required|date',
+    //                 'dependent_education.*'=> 'required|string',
+    //             ]);
+
+    //             session()->put('employee_wizard.tanggungan', $validated);
+    //             break;
+
+
+    //         // =========================== PEKERJAAN ===========================
+    //         case 'pekerjaan':
+
+    //             $validated = $request->validate([
+    //                 'position.*'      => 'required|string',
+    //                 'work_unit.*'    => 'required|string',
+    //                 'start_date.*'    => 'required|date',
+    //                 'end_date.*'      => 'nullable|date',
+    //                 'work_note.*'         => 'nullable|string',
+    //             ]);
+
+    //             session()->put('employee_wizard.pekerjaan', $validated);
+    //             break;
+
+
+    //         // =========================== PELATIHAN ===========================
+    //         case 'pelatihan':
+    //             $validated = $request->validate([
+    //                 'training_name.*' => 'required|string',
+    //                 'training_provider.*'      => 'required|string',
+    //                 'training_year.*'          => 'required|integer',
+    //                 'training_location.*'      => 'nullable|string',
+    //                 'training_certificate.*' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
+    //             ]);
+    //             $files = [];
+
+    //             if ($request->hasFile('training_certificate')) {
+    //                 foreach ($request->file('training_certificate') as $i => $file) {
+    //                     $files[$i] = $file->store('temp_training', 'public');
+    //                 }
+    //             }
+
+    //             // store path saja ke session
+    //             $validated['training_certificate'] = $files;
+
+    //             session()->put('employee_wizard.pelatihan', $validated);
+    //             return redirect()->route('employee.create.review');
+    //             break;
             
 
+    //     }
+    //     if($step == 'review'){
+    //         return view('employee.create.index')->with('success', 'Karyawan baru berhasil ditambahkan.');
+    //     }
+    //     return redirect()->route('employee.create.step', $this->nextStep($step));
+    // }
+
+    public function storeStep(Request $request, string $step)
+    {
+        if (!in_array($step, $this->steps)) {
+            abort(404);
         }
-        if($step == 'review'){
-            return view('employee.create.index')->with('success', 'Karyawan baru berhasil ditambahkan.');
+
+        $validated = $this->validateStep($request, $step);
+
+        session()->put("employee_wizard.$step", $validated);
+
+        if ($step === 'pelatihan') {
+            return redirect()->route('employee.create.review');
         }
-        return redirect()->route('employee.create.step', $this->nextStep($step));
+
+        return redirect()->route(
+            'employee.create.step',
+            $this->nextStep($step)
+        );
     }
+    
+    private function nextStep(string $current): string
+    {
+        $index = array_search($current, $this->steps);
+
+        return $this->steps[$index + 1] ?? 'review';
+    }
+
 
 
     /**
      * FINAL SUBMIT → SAVE ALL SESSION DATA TO DB
-     */
+    */
     public function finish(Request $request)
     {
         $data = session()->get('employee_wizard');
-    
 
-        if (!$data) {
-            return redirect()->route('employee.create.step', 'informasi-umum')
-                             ->with('error', 'Data belum lengkap.');
+        if (!$this->isWizardComplete($data)) {
+            return redirect()
+                ->route('employee.create.step', 'informasi-umum')
+                ->with('error', 'Data wizard tidak lengkap.');
         }
 
         DB::beginTransaction();
@@ -213,7 +354,7 @@ class EmployeeWizardController extends Controller
                 'bpjs_tk'       => $data['informasi-umum']['bpjs_tk'] ?? null,
                 'bpjs_kes'      => $data['informasi-umum']['bpjs_kes'] ?? null,
                 'npwp'          => $data['informasi-umum']['npwp'] ?? null,
-                'skills' => json_encode(explode(',', $data['informasi-umum']['skills'])),
+                'skills'        => $data['informasi-umum']['skills'] ?? [],
                 'emergency_name'=> $data['informasi-umum']['emergency_name'],
                 'emergency_relation'=> $data['informasi-umum']['emergency_relation'],
                 'emergency_phone'=> $data['informasi-umum']['emergency_phone']
@@ -322,28 +463,36 @@ class EmployeeWizardController extends Controller
     /**
      * NEXT STEP LOGIC
      */
-    private function nextStep($current)
-    {
-        $steps = [
-            'informasi-umum',
-            'alamat-karyawan',
-            'pendidikan',
-            'tanggungan',
-            'pekerjaan',
-            'pelatihan',
-            'review'
-        ];
+    // private function nextStep($current)
+    // {
+    //     $steps = [
+    //         'informasi-umum',
+    //         'alamat-karyawan',
+    //         'pendidikan',
+    //         'tanggungan',
+    //         'pekerjaan',
+    //         'pelatihan',
+    //         'review'
+    //     ];
 
-        $index = array_search($current, $steps);
+    //     $index = array_search($current, $steps);
 
-        return $steps[$index + 1] ?? 'pelatihan';
-    }
+    //     return $steps[$index + 1] ?? 'pelatihan';
+    // }
 
     public function review()
     {
         $data = session()->get('employee_wizard');
 
-        return view('employees.index', compact('data'));
+        if (!$this->isWizardComplete($data)) {
+            return redirect()
+                ->route('employee.create.step', 'informasi-umum')
+                ->with('error', 'Silakan lengkapi semua step.');
+        }
+
+        return view('employees.create.review', [
+            'd' => $data
+        ]);
     }
 
 }

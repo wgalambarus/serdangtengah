@@ -214,24 +214,27 @@
                  class="w-full px-4 py-3 bg-gray-50 rounded-lg
                         focus:ring-2 focus:ring-blue-600 transition border-gray-300">
         </div>
-
-        {{-- SKILLS --}}
+       {{-- SKILLS --}}
         <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Keahlian / Skills</label>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                Keahlian / Skills
+            </label>
 
-          <input type="text" id="skillsInput" placeholder="Tambah skill lalu tekan Enter" name="skills[]"
-                 class="w-full px-4 py-3 bg-gray-50 rounded-lg border 
-                        @error('skills.*') border-red-500 @else border-gray-300 @enderror
-                        focus:ring-2 focus:ring-blue-600 transition">
+            {{-- Input hanya untuk ngetik skill --}}
+            <input type="text"
+                  id="skillsInput"
+                  placeholder="Tambah skill lalu tekan Enter"
+                  class="w-full px-4 py-3 bg-gray-50 rounded-lg border
+                          @error('skills.*') border-red-500 @else border-gray-300 @enderror
+                          focus:ring-2 focus:ring-blue-600 transition">
 
-          @error('skills.*') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+            @error('skills.*')
+                <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+            @enderror
 
-          <div id="skillsTags" class="flex flex-wrap gap-2 mt-3"></div>
-
-          {{-- Serialized JSON --}}
-          <input type="hidden" id="skillsHidden" name="skills" value="{{ old('skills') }}">
+            {{-- Container tag --}}
+            <div id="skillsTags" class="flex flex-wrap gap-2 mt-3"></div>
         </div>
-
         {{-- EMERGENCY CONTACT --}}
         <div class="md:col-span-2 mt-6">
           <h3 class="text-lg font-semibold text-gray-800 mb-4">Kontak Darurat</h3>
@@ -290,55 +293,75 @@
 
 {{-- ========================= SCRIPT ========================= --}}
 <script>
+    let skills = @json(old('skills', []));
+</script>
+
+<script>
 // ========= Skills Tag Input ==========
 const skillInput = document.getElementById("skillsInput");
 const tagContainer = document.getElementById("skillsTags");
-const hiddenSkills = document.getElementById("skillsHidden");
 
-let skills = [];
+// skills sudah diinject dari blade via @json(old())
+skills = Array.isArray(skills) ? skills : [];
 
-if (hiddenSkills.value) {
-    try { skills = JSON.parse(hiddenSkills.value); } catch {}
+renderTags();
+
+skillInput.addEventListener("keypress", e => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+
+    const v = skillInput.value.trim();
+    if (!v) return;
+
+    // prevent duplicate (case insensitive)
+    if (skills.some(s => s.toLowerCase() === v.toLowerCase())) return;
+
+    skills.push(v);
+    skillInput.value = "";
+    renderTags();
+});
+
+function removeSkill(index) {
+    skills.splice(index, 1);
     renderTags();
 }
 
-skillInput.addEventListener("keypress", e => {
-  if (e.key !== "Enter") return;
-  e.preventDefault();
-
-  const v = skillInput.value.trim();
-  if (!v || skills.includes(v)) return;
-
-  skills.push(v);
-  skillInput.value = "";
-  syncHidden();
-  renderTags();
-});
-
-function removeSkill(s) {
-  skills = skills.filter(item => item !== s);
-  syncHidden();
-  renderTags();
-}
-
-function syncHidden() {
-  hiddenSkills.value = JSON.stringify(skills);
-}
-
 function renderTags() {
-  tagContainer.innerHTML = "";
-  skills.forEach(s => {
-    tagContainer.innerHTML += `
-      <div class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm flex items-center gap-2">
-        ${s}
-        <button type="button" onclick="removeSkill('${s}')" class="text-blue-600 text-xs">✕</button>
-      </div>`;
-  });
+    tagContainer.innerHTML = "";
+
+    skills.forEach((s, index) => {
+        const tag = document.createElement("div");
+        tag.className = "px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm flex items-center gap-2";
+
+        tag.innerHTML = `
+            ${escapeHtml(s)}
+            <button type="button" class="text-blue-600 text-xs">✕</button>
+            <input type="hidden" name="skills[]" value="${escapeHtml(s)}">
+        `;
+
+        tag.querySelector("button").addEventListener("click", () => {
+            removeSkill(index);
+        });
+
+        tagContainer.appendChild(tag);
+    });
 }
 
+// prevent XSS
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// fix regex kamu tadi
 function onlyString(input) {
-  input.value = input.value.replace(/[^A-Za-zs]/g, '');
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
 }
 </script>
+
 
 @endsection
