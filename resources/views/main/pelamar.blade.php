@@ -299,6 +299,21 @@
         </div>
 
         <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir *</label>
+          <select name="pendidikan_terakhir"
+                  id="pendidikan_terakhir"
+                  required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="">Pilih...</option>
+            <option value="SMA/SMK">SMA/SMK</option>
+            <option value="D3">D3</option>
+            <option value="S1">S1</option>
+            <option value="S2">S2</option>
+            <option value="S3">S3</option>
+          </select>
+        </div>
+          <p class="text-xs text-red-500 mt-1 hidden" id="error_pendidikan_terakhir">Isi pendidikan terakhir terlebih dahulu</p>
+        <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Alamat</label>
           <textarea name="alamat"
                     id="alamat"
@@ -461,6 +476,7 @@
       <p><span class="font-semibold">Nama Lengkap:</span> <span id="detailNama"></span></p>
       <p><span class="font-semibold">Tempat, Tanggal Lahir:</span> <span id="detailTTL"></span></p>
       <p><span class="font-semibold">Jenis Kelamin:</span> <span id="detailJenisKelamin"></span></p>
+        <p><span class="font-semibold">Pendidikan Terakhir:</span> <span id="detailPendidikan"></span></p>
       <p><span class="font-semibold">Nomor HP:</span> <span id="detailHP"></span></p>
       <p><span class="font-semibold">Alamat:</span> <span id="detailAlamat"></span></p>
       <div class="mt-6 pt-6 border-t border-gray-200">
@@ -518,6 +534,10 @@ document.getElementById('tanggal_lahir').addEventListener('change', function(e) 
 
 document.getElementById('jenis_kelamin').addEventListener('change', function(e) {
   validateField('jenis_kelamin');
+});
+
+document.getElementById('pendidikan_terakhir').addEventListener('change', function(e) {
+  validateField('pendidikan_terakhir');
 });
 
 // Validate individual field
@@ -584,7 +604,21 @@ function validateField(fieldName) {
         error.textContent = 'Alamat maksimal 500 karakter';
       }
       break;
+
+    case 'pendidikan_terakhir':
+    const pendidikanValue = field.value;
+    const allowed = ['SMA/SMK','D3','S1','S2','S3'];
+
+    if (!pendidikanValue) {
+      isValid = false;
+      error.textContent = 'Pendidikan terakhir wajib dipilih';
+    } else if (!allowed.includes(pendidikanValue)) {
+      isValid = false;
+      error.textContent = 'Pendidikan terakhir tidak valid';
+    }
+    break;
   }
+  
 
   if (!isValid) {
     field.classList.add('border-red-500');
@@ -650,6 +684,8 @@ function validateStep1() {
   validateField('tempat_lahir');
   validateField('tanggal_lahir');
   validateField('nomor_hp');
+  validateField('jenis_kelamin');
+  validateField('pendidikan_terakhir');
   validateField('alamat');
 
   nextStep();

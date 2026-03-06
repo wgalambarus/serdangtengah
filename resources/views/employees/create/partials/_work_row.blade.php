@@ -4,7 +4,6 @@
     $position   = $position   ?? old("position.$i", '');
     $work_unit  = $work_unit  ?? old("work_unit.$i", '');
     $start_date = $start_date ?? old("start_date.$i", '');
-    $end_date   = $end_date   ?? old("end_date.$i", '');
     $work_note  = $work_note  ?? old("work_note.$i", '');
 @endphp
 
@@ -53,17 +52,6 @@
           <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
         @enderror
       </div>
-
-      {{-- TANGGAL SELESAI --}}
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai</label>
-        <input type="date" name="end_date[]" value="{{ $end_date }}"
-               class="w-full px-4 py-3 bg-gray-50 border @error("end_date.$i") border-red-500 @else border-gray-300 @enderror rounded-lg">
-        @error("end_date.$i")
-          <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-        @enderror
-      </div>
-
     </div>
 
     {{-- CATATAN --}}

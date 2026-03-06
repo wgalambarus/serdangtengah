@@ -82,7 +82,6 @@
                 'position' => old("position.$i"),
                 'work_unit' => old("work_unit.$i"),
                 'start_date' => old("start_date.$i"),
-                'end_date' => old("end_date.$i"),
                 'work_note' => old("work_note.$i"),
             ])
         @endforeach
@@ -95,7 +94,6 @@
                 'position' => $data['position'][$i] ?? '',
                 'work_unit' => $data['work_unit'][$i] ?? '',
                 'start_date' => $data['start_date'][$i] ?? '',
-                'end_date' => $data['end_date'][$i] ?? '',
                 'work_note' => $data['work_note'][$i] ?? '',
             ])
         @endforeach
@@ -107,7 +105,6 @@
             'position' => '',
             'work_unit' => '',
             'start_date' => '',
-            'end_date' => '',
             'work_note' => '',
         ])
     @endif

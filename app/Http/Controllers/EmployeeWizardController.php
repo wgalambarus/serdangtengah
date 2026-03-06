@@ -127,7 +127,6 @@ class EmployeeWizardController extends Controller
                     'position.*'      => 'required|string',
                     'work_unit.*'    => 'required|string',
                     'start_date.*'    => 'required|date',
-                    'end_date.*'      => 'nullable|date',
                     'work_note.*'         => 'nullable|string',
                 ]),
             'pelatihan' => $request->validate([
@@ -340,7 +339,7 @@ class EmployeeWizardController extends Controller
         try {
             // ===================== SAVE EMPLOYEE =====================
             $emp = Employee::create([
-                'employee_no'   => 'EMP-' . date('Ymd') . '-' . str_pad($employee->id, 4, '0', STR_PAD_LEFT),
+                'employee_no' => Employee::generateEmployeeNo(),
                 'full_name'     => $data['informasi-umum']['full_name'],
                 'national_id'   => $data['informasi-umum']['national_id'],
                 'email'         => $data['informasi-umum']['email'],
@@ -417,7 +416,6 @@ class EmployeeWizardController extends Controller
                     'status'    => $v,
                     'unit'  => $data['pekerjaan']['work_unit'][$i],
                     'start_date'  => $data['pekerjaan']['start_date'][$i],
-                    'end_date'    => $data['pekerjaan']['end_date'][$i] ?? null,
                     'note'       => $data['pekerjaan']['work_note'][$i] ?? null,
                 ]);
             }

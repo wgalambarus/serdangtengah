@@ -87,6 +87,7 @@ class ApplicantController extends Controller
             'tempat_lahir' => 'required|string|max:255',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'pendidikan_terakhir' => 'required|in:SMA/SMK,D3,S1,S2,S3',
             'alamat' => 'required|string',
             'nomor_hp' => 'required|string|max:20',
             'cv' => 'required|file|mimes:pdf|max:2048',
@@ -301,13 +302,13 @@ class ApplicantController extends Controller
 
             // 1. Buat data karyawan baru
             $employee = Employee::create([
-                'employee_no'    => 'EMP-' . date('Ymd') . '-' . str_pad($applicant->id, 4, '0', STR_PAD_LEFT),
+                'employee_no'    => Employee::generateEmployeeNo(),
                 'full_name'      => $applicant->nama_lengkap,
                 'birth_place'    => $applicant->tempat_lahir,
                 'birth_date'     => $applicant->tanggal_lahir,
                 'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P', // Sesuaikan enum DB employees (L/P)
                 'phone'          => $applicant->nomor_hp,
-                'last_education' => 'Sesuai Ijazah Pelamar', // Placeholder
+                'last_education' => $applicant->pendidikan_terakhir, // Placeholder
                 'marital_status' => 'BELUM_MENIKAH',        // Default enum
                 'national_id'    => 'PENDING_' . time(),    // Karena di tabel applicants tidak ada field KTP (nomor), hanya file
                 'skills'         => [],                      // Default array untuk kolom JSON
