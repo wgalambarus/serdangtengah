@@ -294,6 +294,11 @@
 {{-- ========================= SCRIPT ========================= --}}
 <script>
     let skills = @json(old('skills', []));
+
+    windows.addEventListener("pageshow", function() {
+      skills = Array.isArray(skills) ? skills : [];
+      renderTags();
+    });
 </script>
 
 <script>
