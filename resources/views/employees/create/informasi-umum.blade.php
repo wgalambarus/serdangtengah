@@ -61,6 +61,7 @@
           <label class="block text-sm font-medium text-gray-700 mb-1">NIK KTP *</label>
           <input type="text" name="national_id" maxlength="16"
                  value="{{ old('national_id') }}"
+                 autocomplete="off"
                  oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                  class="required-field w-full px-4 py-3 bg-gray-50 rounded-lg 
                         focus:ring-2 focus:ring-blue-600 transition
