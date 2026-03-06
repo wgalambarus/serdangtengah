@@ -158,7 +158,6 @@
                     <th class="{{ $tableCell }}">Posisi</th>
                     <th class="{{ $tableCell }}">Unit</th>
                     <th class="{{ $tableCell }}">Mulai</th>
-                    <th class="{{ $tableCell }}">Selesai</th>
                     <th class="{{ $tableCell }}">Catatan</th>
                 </tr>
             </thead>
@@ -168,15 +167,12 @@
                     <td class="{{ $tableCell }}">{{ $v }}</td>
                     <td class="{{ $tableCell }}">{{ $d['pekerjaan']['work_unit'][$i] }}</td>
                     <td class="{{ $tableCell }}">{{ $d['pekerjaan']['start_date'][$i] }}</td>
-                    <td class="{{ $tableCell }}">{{ $d['pekerjaan']['end_date'][$i] }}</td>
                     <td class="{{ $tableCell }}">{{ $d['pekerjaan']['work_note'][$i] }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-
-
 
     {{-- ========================================================
                         TRAINING

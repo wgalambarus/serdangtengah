@@ -15,6 +15,7 @@ class Applicant extends Model
         'tempat_lahir',
         'tanggal_lahir',
         'jenis_kelamin',
+        'pendidikan_terakhir',
         'alamat',
         'nomor_hp',
         'cv',

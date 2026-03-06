@@ -16,11 +16,9 @@ return new class extends Migration
         $table->unsignedBigInteger('employee_id');
         $table->string('status')->nullable();
         $table->date('start_date')->nullable();
-        $table->date('end_date')->nullable();
         $table->string('unit')->nullable();
         $table->text('note')->nullable();
         $table->timestamps();
-
 
         $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         $table->index(['employee_id','start_date']);

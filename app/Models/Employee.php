@@ -26,6 +26,17 @@ class Employee extends Model
     return $this->hasMany(EmployeeAddress::class);
     }
 
+    public static function generateEmployeeNo()
+    {
+        $lastEmployee = self::orderBy('id', 'desc')->first();
+
+        $nextNumber = $lastEmployee
+            ? ((int) substr($lastEmployee->employee_no, -6)) + 1
+            : 1;
+
+        return 'EMP-' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
+    }
+
 
     public function spouse()
     {
