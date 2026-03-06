@@ -340,6 +340,7 @@ class EmployeeWizardController extends Controller
         try {
             // ===================== SAVE EMPLOYEE =====================
             $emp = Employee::create([
+                'employee_no'   => 'EMP-' . date('Ymd') . '-' . str_pad($employee->id, 4, '0', STR_PAD_LEFT),
                 'full_name'     => $data['informasi-umum']['full_name'],
                 'national_id'   => $data['informasi-umum']['national_id'],
                 'email'         => $data['informasi-umum']['email'],

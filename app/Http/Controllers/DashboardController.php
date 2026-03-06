@@ -29,7 +29,7 @@ class DashboardController extends Controller
 
             $employeeByPosition = Employee::select('employees.id')
                 ->with(['latestPosition'=> function($query){
-                    $query->select('id', 'employee_id', 'position_id')
+                    $query->select('id', 'employee_no', 'position_id')
                         ->with('position:id,name');
 
                 }])

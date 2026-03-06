@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeWizardController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 //  Halaman Utama — Bisa diakses semua orang
