@@ -256,7 +256,7 @@ function copyAddress() {
 }
 
 function onlyString(input) {
-    input.value = input.value.replace(/[^A-Za-zs]/g, '');
+    input.value = input.value.replace(/[^A-Za-z\s]/g, '');
 }
 
 </script>

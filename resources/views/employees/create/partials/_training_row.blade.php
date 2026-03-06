@@ -59,7 +59,7 @@
 </div>
 
 <!-- SERTIFIKAT (opsional) → 1 kolom sendiri -->
-<div">
+<div>
     <label class="block text-sm font-medium text-gray-700 mb-1">Sertifikat (Opsional)</label>
     <input type="file" name="training_certificate[]"
            class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg">
