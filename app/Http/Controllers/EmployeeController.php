@@ -12,61 +12,61 @@ class EmployeeController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    $search      = $request->input('search');
-    $gender      = $request->input('gender');
-    $min_age     = $request->input('min_age');
-    $max_age     = $request->input('max_age');
-    $birthplace  = $request->input('birthplace');
+    {
+        $search      = $request->input('search');
+        $gender      = $request->input('gender');
+        $min_age     = $request->input('min_age');
+        $max_age     = $request->input('max_age');
+        $birthplace  = $request->input('birthplace');
 
-    // Sorting
-    $sortBy  = $request->input('sort_by', 'created_at'); // default
-    $sortDir = $request->input('sort_dir', 'desc');      // default
+        // Sorting
+        $sortBy  = $request->input('sort_by', 'created_at'); // default
+        $sortDir = $request->input('sort_dir', 'desc');      // default
 
-    $employees = Employee::query()
+        $employees = Employee::query()
 
-        // SEARCH
-        ->when($search, function ($query) use ($search) {
-            $query->where('full_name', 'LIKE', "%{$search}%");
-        })
+            // SEARCH
+            ->when($search, function ($query) use ($search) {
+                $query->where('full_name', 'LIKE', "%{$search}%");
+            })
 
-        // FILTER GENDER
-        ->when($gender, function ($query) use ($gender) {
-            $query->where('gender', $gender);
-        })
+            // FILTER GENDER
+            ->when($gender, function ($query) use ($gender) {
+                $query->where('gender', $gender);
+            })
 
-        // FILTER TEMPAT LAHIR
-        ->when($birthplace, function ($query) use ($birthplace) {
-            $query->where('birth_place', 'LIKE', "%{$birthplace}%");
-        })
+            // FILTER TEMPAT LAHIR
+            ->when($birthplace, function ($query) use ($birthplace) {
+                $query->where('birth_place', 'LIKE', "%{$birthplace}%");
+            })
 
-        // FILTER UMUR MIN
-        ->when($min_age, function ($query) use ($min_age) {
-            $query->whereRaw("TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) >= ?", [$min_age]);
-        })
+            // FILTER UMUR MIN
+            ->when($min_age, function ($query) use ($min_age) {
+                $query->whereRaw("TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) >= ?", [$min_age]);
+            })
 
-        // FILTER UMUR MAX
-        ->when($max_age, function ($query) use ($max_age) {
-            $query->whereRaw("TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) <= ?", [$max_age]);
-        })
+            // FILTER UMUR MAX
+            ->when($max_age, function ($query) use ($max_age) {
+                $query->whereRaw("TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) <= ?", [$max_age]);
+            })
 
-        // SORTING (DINAMIS)
-        ->orderBy($sortBy, $sortDir)
+            // SORTING (DINAMIS)
+            ->orderBy($sortBy, $sortDir)
 
-        ->paginate(10)
-        ->appends($request->all());
+            ->paginate(10)
+            ->appends($request->all());
 
-    return view('main.karyawan', compact(
-        'employees',
-        'search',
-        'gender',
-        'min_age',
-        'max_age',
-        'birthplace',
-        'sortBy',
-        'sortDir'
-    ));
-}
+        return view('main.karyawan', compact(
+            'employees',
+            'search',
+            'gender',
+            'min_age',
+            'max_age',
+            'birthplace',
+            'sortBy',
+            'sortDir'
+        ));
+    }
 
 
     /**
