@@ -190,9 +190,17 @@
                 {{ $applicant->jenis_kelamin ?? '-' }}
               </span>
             </td>
-            <td class="px-6 py-4 text-right">
-              <button class="text-blue-600 hover:underline mr-3" onclick="showDetailModal({{ $applicant->id }})">Detail</button>
-              <button class="text-red-600 hover:underline" onclick="deletePelamar({{ $applicant->id }})">Hapus</button>
+            <td class="px-6 py-4 text-right flex justify-end gap-2">
+                <form action="{{ route('rekrut.applicant', $applicant->id) }}" method="POST" 
+                      onsubmit="return confirm('Rekrut pelamar ini menjadi karyawan?')">
+                    @csrf
+                    <button type="submit" class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition">
+                        Rekrut
+                    </button>
+                </form>
+
+                <button class="text-blue-600 hover:underline text-xs" onclick="showDetailModal({{ $applicant->id }})">Detail</button>
+                <button class="text-red-600 hover:underline text-xs" onclick="deletePelamar({{ $applicant->id }})">Hapus</button>
             </td>
           </tr>
           @empty

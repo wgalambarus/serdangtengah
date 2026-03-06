@@ -297,9 +297,9 @@
                 Detail
               </button>
               <button class="text-red-600 hover:underline"
-                      onclick="deletePelamar({{ $employee->id }})">
+                      onclick="deleteKaryawan({{ $employee->id }})">
                 Hapus
-              </button>
+              </button> 
             </td>
 
           </tr>
@@ -340,6 +340,100 @@
       filterDropdown.classList.add('hidden');
     }
   });
+
+async function showDetailModal(employeeId) {
+  try {
+    const response = await fetch(`/employee/${employeeId}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    const result = await response.json();
+
+    if (result.success) {
+      const data = result.data;
+
+      document.getElementById('detailNama').textContent = data.nama_lengkap;
+      document.getElementById('detailTTL').textContent = data.tempat_lahir + ', ' + data.tanggal_lahir  || '-';
+      document.getElementById('detailJenisKelamin').textContent = data.jenis_kelamin || '-';
+      document.getElementById('detailHP').textContent = data.nomor_hp || '-';
+      document.getElementById('detailAlamat').textContent = data.alamat || '-';
+
+      const dokumenDiv = document.getElementById('detailDokumen');
+      dokumenDiv.innerHTML = '';
+
+      if (data.cv) {
+        dokumenDiv.innerHTML += `<p>• CV: <a href="/storage/${data.cv}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+      if (data.pas_foto) {
+        dokumenDiv.innerHTML += `<p>• Pas Foto: <a href="/storage/${data.pas_foto}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+      if (data.transkrip_nilai) {
+        dokumenDiv.innerHTML += `<p>• Transkrip Nilai: <a href="/storage/${data.transkrip_nilai}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.ktp) {
+        dokumenDiv.innerHTML += `<p>• KTP: <a href="/storage/${data.ktp}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.ijazah) {
+        dokumenDiv.innerHTML += `<p>• Ijazah: <a href="/storage/${data.ijazah}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.kartu_bpjs) {
+        dokumenDiv.innerHTML += `<p>• Kartu BPJS: <a href="/storage/${data.kartu_bpjs}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.suket_pengalaman_kerja) {
+        dokumenDiv.innerHTML += `<p>• Surat Keterangan Pengalaman Kerja: <a href="/storage/${data.suket_pengalaman_kerja}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (data.daftar_riwayat_hidup) {
+        dokumenDiv.innerHTML += `<p>• Daftar Riwayat Hidup: <a href="/storage/${data.daftar_riwayat_hidup}" target="_blank" class="text-blue-600 hover:underline">Lihat Dokumen</a></p>`;
+      }
+
+      if (!data.cv && !data.pas_foto && !data.transkrip_nilai && !data.ktp && !data.ijazah && !data.kartu_bpjs && !data.suket_pengalaman_kerja && !data.daftar_riwayat_hidup) {
+        dokumenDiv.innerHTML = '<p class="text-gray-500">Belum ada dokumen</p>';
+      }
+
+      overlay.classList.remove('hidden');
+      modalDetail.classList.remove('hidden');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Terjadi kesalahan saat mengambil data');
+  }
+}
+
+async function deleteKaryawan(employeeId) {
+    if (!confirm('Apakah Anda yakin ingin menghapus data karyawan ini?')) {
+        return;
+    }
+
+    try {
+        // Perhatikan URL: harus '/employee/' sesuai dengan Route::resource('employee', ...)
+        const response = await fetch(`/employee/${employeeId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' // Tambahkan ini agar server tahu kita minta JSON
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(result.message);
+            window.location.reload();
+        } else {
+            alert(result.message || 'Terjadi kesalahan saat menghapus data');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan koneksi saat menghapus data');
+    }
+}
 </script>
 
 @endsection

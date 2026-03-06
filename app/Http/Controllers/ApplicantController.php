@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -269,5 +271,48 @@ class ApplicantController extends Controller
             'success' => true,
             'message' => 'Data pelamar berhasil dihapus!'
         ]);
+    }
+    
+    public function rekrut($id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $applicant = Applicant::findOrFail($id);
+
+            // 1. Buat data karyawan baru
+            $employee = Employee::create([
+                'employee_no'    => 'EMP-' . date('Ymd') . '-' . str_pad($applicant->id, 4, '0', STR_PAD_LEFT),
+                'full_name'      => $applicant->nama_lengkap,
+                'birth_place'    => $applicant->tempat_lahir,
+                'birth_date'     => $applicant->tanggal_lahir,
+                'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P', // Sesuaikan enum DB employees (L/P)
+                'phone'          => $applicant->nomor_hp,
+                'last_education' => 'Sesuai Ijazah Pelamar', // Placeholder
+                'marital_status' => 'BELUM_MENIKAH',        // Default enum
+                'national_id'    => 'PENDING_' . time(),    // Karena di tabel applicants tidak ada field KTP (nomor), hanya file
+                'skills'         => [],                      // Default array untuk kolom JSON
+                // Field lainnya bisa dikosongkan (nullable) atau diberi default
+            ]);
+
+            // 2. Simpan Alamat KTP (diambil dari string alamat pelamar)
+            \App\Models\EmployeeAddress::create([
+                'employee_id'  => $employee->id,
+                'type'         => 'KTP',
+                'address_line' => $applicant->alamat,
+            ]);
+
+            // 3. (Opsional) Hapus data pelamar setelah direkrut agar tidak double
+            // $applicant->delete(); 
+
+            DB::commit();
+
+            return redirect()->route('employee.index')
+                ->with('success', "Berhasil merekrut {$applicant->nama_lengkap} sebagai karyawan baru.");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal merekrut: ' . $e->getMessage());
+        }
     }
 }

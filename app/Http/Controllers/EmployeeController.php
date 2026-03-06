@@ -90,7 +90,10 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        //
+                return response()->json([
+            'success' => true,
+            'data' => $employee
+        ]);
     }
 
     /**
@@ -114,6 +117,23 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        //
+        try {
+            // Karena data karyawan tidak memiliki kolom file cv/foto langsung di tabelnya,
+            // kita langsung hapus recordnya saja. 
+            // Relasi lain (alamat/pendidikan) akan terhapus otomatis jika menggunakan ON DELETE CASCADE di DB.
+            
+            $employee->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data karyawan berhasil dihapus!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus: ' . $e->getMessage()
+            ], 500);
+        }
     }
+    
 }

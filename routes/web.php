@@ -44,6 +44,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 });
+Route::post('/rekrut/{id}', [ApplicantController::class, 'rekrut'])
+    ->name('rekrut.applicant');
+
+
 
 
 
