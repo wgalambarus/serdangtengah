@@ -27,24 +27,19 @@ class DashboardController extends Controller
                 })
                 ->toArray();
 
-            $employeeByPosition = Employee::select('employees.id')
-                ->with(['latestPosition'=> function($query){
-                    $query->select('id', 'employee_no', 'position_id')
-                        ->with('position:id,name');
-
-                }])
+            $employeeByPosition = Employee::with('latestJob')
                 ->get()
                 ->groupBy(function($employee) {
-                    return $employee->latestPosition?->position->name ?? 'Unassigned';
+                    return $employee->latestJob?->status ?? 'Unassigned';
                 })
                 ->map(function($employees, $position){
                     return (object)[
-                        'name' => $position,
-                        'count' => count($employees)
-                    ];
-                })
-                ->sortByDesc('count')
-                ->values();
+                'name' => $position,
+                'count' => count($employees)
+            ];
+            })
+            ->sortByDesc('count')
+            ->values();
 
             return view('main.dashboard', compact('dataBulan', 'employeeByPosition'));
     }
