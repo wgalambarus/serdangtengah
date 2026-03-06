@@ -14,8 +14,8 @@ Route::view('/', 'auth.login')->name('home');
 //  Semua route berikut hanya untuk user yang login & verified
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Dashboard
-    Route::view('/dashboard', 'main.dashboard')->name('dashboard');
+// Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Resource Pelamar (CRUD Pelamar)
     Route::resource('pelamar', ApplicantController::class)

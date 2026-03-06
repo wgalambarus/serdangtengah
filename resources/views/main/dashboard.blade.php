@@ -27,13 +27,13 @@
           </svg>
         </div>
         <div>
-          <p class="text-gray-600 text-sm">Jumlah Karyawan</p>
-          <p class="text-3xl font-bold text-gray-800 mt-1">248</p>
+            <p class="text-gray-600 text-sm">Jumlah Karyawan</p>
+            <p class="text-3xl font-bold text-gray-800 mt-1">{{ \App\Models\Employee::count() }}</p>
         </div>
       </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <!-- <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div class="flex items-center gap-4">
         <div class="p-3 rounded-lg bg-green-50 text-green-600">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -45,7 +45,7 @@
           <p class="text-3xl font-bold text-gray-800 mt-1">235</p>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div class="flex items-center gap-4">
@@ -56,32 +56,24 @@
         </div>
         <div>
           <p class="text-gray-600 text-sm">Jumlah Pelamar</p>
-          <p class="text-3xl font-bold text-gray-800 mt-1">87</p>
+          <p class="text-3xl font-bold text-gray-800 mt-1">{{ \App\Models\Applicant::count() }}</p>
         </div>
       </div>
     </div>
   </div>
 
-  {{-- Pelamar per bulan & Top pelamar --}}
+  {{-- Pelamar per bulan & Karyawan per posisi --}}
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     {{-- Pelamar per bulan --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
       <h3 class="text-lg font-semibold text-gray-800 mb-6">Pelamar Per Bulan</h3>
 
       @php
-        $dataBulan = [
-          ['bulan' => 'Jan', 'pelamar' => 45],
-          ['bulan' => 'Feb', 'pelamar' => 52],
-          ['bulan' => 'Mar', 'pelamar' => 48],
-          ['bulan' => 'Apr', 'pelamar' => 61],
-          ['bulan' => 'Mei', 'pelamar' => 55],
-          ['bulan' => 'Jun', 'pelamar' => 67],
-        ];
-        $maxPelamar = collect($dataBulan)->max('pelamar');
+        $maxPelamar = collect($dataBulan)->max('pelamar') ?? 1;
       @endphp
 
       <div class="space-y-4">
-        @foreach ($dataBulan as $item)
+        @forelse ($dataBulan as $item)
           <div class="flex items-center gap-3">
             <span class="w-12 text-sm text-gray-600 font-medium">{{ $item['bulan'] }}</span>
             <div class="flex-1 bg-gray-100 rounded-full h-8 overflow-hidden">
@@ -91,46 +83,35 @@
               </div>
             </div>
           </div>
-        @endforeach
+        @empty
+          <p class="text-gray-500">Belum ada data pelamar</p>
+        @endforelse
       </div>
     </div>
 
-    {{-- Top pelamar --}}
+    {{-- Karyawan per posisi --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h3 class="text-lg font-semibold text-gray-800 mb-6">Top Pelamar</h3>
+      <h3 class="text-lg font-semibold text-gray-800 mb-6">Karyawan Per Posisi</h3>
 
       @php
-        $pelamarTeratas = [
-          ['nama' => 'Ahmad Rizki', 'nilai' => 95, 'posisi' => 'Full Stack Developer'],
-          ['nama' => 'Siti Nurhaliza', 'nilai' => 92, 'posisi' => 'UI/UX Designer'],
-          ['nama' => 'Budi Santoso', 'nilai' => 90, 'posisi' => 'Data Analyst'],
-          ['nama' => 'Dewi Lestari', 'nilai' => 88, 'posisi' => 'Backend Developer'],
-          ['nama' => 'Eko Prasetyo', 'nilai' => 85, 'posisi' => 'Frontend Developer'],
-        ];
+        $maxKaryawan = collect($employeeByPosition)->max('count') ?? 1;
       @endphp
 
       <div class="space-y-4">
-        @foreach ($pelamarTeratas as $i => $p)
-          <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold">
-                {{ $i + 1 }}
+        @forelse ($employeeByPosition as $item)
+          <div class="flex items-center gap-3">
+            <span class="w-40 text-sm text-gray-600 font-medium truncate" title="{{ $item->name }}">{{ $item->name }}</span>
+            <div class="flex-1 bg-gray-100 rounded-full h-8 overflow-hidden">
+              <div class="bg-purple-600 h-full rounded-full flex items-center justify-end pr-3 text-white text-xs font-semibold"
+                style="width: {{ ($item->count / $maxKaryawan) * 100 }}%">
+                {{ $item->count }}
               </div>
-              <div>
-                <p class="font-medium text-gray-800">{{ $p['nama'] }}</p>
-                <p class="text-sm text-gray-500">{{ $p['posisi'] }}</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="text-lg font-bold text-blue-600">{{ $p['nilai'] }}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path d="M9 5l7 7-7 7" />
-              </svg>
             </div>
           </div>
-        @endforeach
+        @empty
+          <p class="text-gray-500">Belum ada data karyawan</p>
+        @endforelse
       </div>
     </div>
   </div>
-</div>
 @endsection

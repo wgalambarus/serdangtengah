@@ -250,6 +250,25 @@ class ApplicantController extends Controller
         ]);
     }
 
+    public function getApplicantsByMonth()
+    {
+        $applicantsByMonth = Applicant::selectRaw('MONTH(created_at) as bulan, COUNT(*) as pelamar')
+            ->whereYear('created_at', now()->year)
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get()
+            ->map(function($item){
+                $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return [
+                'bulan' => $months[$item->bulan - 1],
+                'pelamar' => $item->pelamar
+            ];
+            })
+        ->toArray();
+
+        return $applicantsByMonth;
+    }
+    
     /**
      * Remove the specified resource from storage.
      */
