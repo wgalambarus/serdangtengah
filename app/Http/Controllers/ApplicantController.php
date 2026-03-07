@@ -323,7 +323,7 @@ class ApplicantController extends Controller
             ]);
 
             // 3. (Opsional) Hapus data pelamar setelah direkrut agar tidak double
-            // $applicant->delete(); 
+            $applicant->delete(); 
 
             DB::commit();
 

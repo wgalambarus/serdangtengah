@@ -129,13 +129,27 @@ class EmployeeWizardController extends Controller
                     'start_date.*'    => 'required|date',
                     'work_note.*'         => 'nullable|string',
                 ]),
-            'pelatihan' => $request->validate([
+            'pelatihan' => (function () use ($request) {
+                $validated = $request->validate([
                     'training_name.*' => 'required|string',
-                    'training_provider.*'      => 'required|string',
-                    'training_year.*'          => 'required|integer',
-                    'training_location.*'      => 'nullable|string',
+                    'training_provider.*' => 'required|string',
+                    'training_year.*' => 'required|integer',
+                    'training_location.*' => 'nullable|string',
                     'training_certificate.*' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
-                ]),
+                ]);
+
+                // handle upload supaya session hanya simpan path
+                if ($request->hasFile('training_certificate')) {
+                    foreach ($request->file('training_certificate') as $i => $file) {
+                        if ($file) {
+                            $validated['training_certificate'][$i] =
+                                $file->store('temp/training_certificates', 'public');
+                        }
+                    }
+                }
+
+                return $validated;
+            })(),
 
             default => $request->all()
         };
@@ -157,140 +171,6 @@ class EmployeeWizardController extends Controller
     }
 
 
-    // public function storeStep(Request $request, $step)
-    // {
-    //     switch ($step) {
-
-    //         // =========================== INFORMASI UMUM ===========================
-    //         case 'informasi-umum':
-    //             $validated = $request->validate([
-    //                 'full_name'     => 'required|string|max:255',
-    //                 'national_id'   => 'required|string|max:20',
-    //                 'email'         => 'required|email',
-    //                 'phone'         => 'required',
-    //                 'birth_place'   => 'required|string',
-    //                 'birth_date'    => 'required|date',
-    //                 'gender'        => 'required|string',
-    //                 'marital_status'=> 'required|string',
-    //                 'spouse_name'   => 'nullable|string',
-    //                 'last_education'=> 'required|string',
-    //                 'religion'      => 'required|string',
-    //                 'blood_type'    => 'required|string',
-    //                 'bpjs_tk'       => 'nullable|string',
-    //                 'bpjs_kes'      => 'nullable|string',
-    //                 'npwp'          => 'nullable|string',
-    //                 'skills'        => 'nullable|array',
-    //                 'skills.*'      => 'string|max:100',
-    //                 'emergency_name'=> 'required|string',
-    //                 'emergency_relation'=> 'required|string',
-    //                 'emergency_phone'=> 'required|string',
-
-    //             ]);
-
-    //             session()->put('employee_wizard.informasi-umum', $validated);
-    //             break;
-
-
-    //         // =========================== ALAMAT KARYAWAN ===========================
-    //         case 'alamat-karyawan':
-    //             $validated = $request->validate([
-    //                 // KTP
-    //                 'ktp_address'   => 'required',
-    //                 'ktp_province'  => 'required',
-    //                 'ktp_city'      => 'required',
-    //                 'ktp_district'  => 'required',
-    //                 'ktp_village'   => 'required',
-    //                 'ktp_postal'    => 'required',
-
-    //                 // DOMISILI
-    //                 'dom_address'   => 'required',
-    //                 'dom_province'  => 'required',
-    //                 'dom_city'      => 'required',
-    //                 'dom_district'  => 'required',
-    //                 'dom_village'   => 'required',
-    //                 'dom_postal'    => 'required',
-    //             ]);
-
-    //             session()->put('employee_wizard.alamat-karyawan', $validated);
-    //             break;
-
-
-    //         // =========================== PENDIDIKAN ===========================
-    //         case 'pendidikan':
-
-    //             $validated = $request->validate([
-    //                 'school_name.*' => 'required|string',
-    //                 'city.*'        => 'required|string',
-    //                 'major.*'       => 'required|string',
-    //                 'year_in.*' => 'required|digits:4',
-    //                 'year_out.*' => 'required|digits:4',
-
-    //             ]);
-
-    //             session()->put('employee_wizard.pendidikan', $validated);
-    //             break;
-
-
-    //         // =========================== TANGGUNGAN ===========================
-    //         case 'tanggungan':
-
-    //             $validated = $request->validate([
-    //                 'dependent_name.*' => 'required|string',
-    //                 'dependent_gender.*'   => 'required|string',
-    //                 'dependent_birth.*'=> 'required|date',
-    //                 'dependent_education.*'=> 'required|string',
-    //             ]);
-
-    //             session()->put('employee_wizard.tanggungan', $validated);
-    //             break;
-
-
-    //         // =========================== PEKERJAAN ===========================
-    //         case 'pekerjaan':
-
-    //             $validated = $request->validate([
-    //                 'position.*'      => 'required|string',
-    //                 'work_unit.*'    => 'required|string',
-    //                 'start_date.*'    => 'required|date',
-    //                 'end_date.*'      => 'nullable|date',
-    //                 'work_note.*'         => 'nullable|string',
-    //             ]);
-
-    //             session()->put('employee_wizard.pekerjaan', $validated);
-    //             break;
-
-
-    //         // =========================== PELATIHAN ===========================
-    //         case 'pelatihan':
-    //             $validated = $request->validate([
-    //                 'training_name.*' => 'required|string',
-    //                 'training_provider.*'      => 'required|string',
-    //                 'training_year.*'          => 'required|integer',
-    //                 'training_location.*'      => 'nullable|string',
-    //                 'training_certificate.*' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
-    //             ]);
-    //             $files = [];
-
-    //             if ($request->hasFile('training_certificate')) {
-    //                 foreach ($request->file('training_certificate') as $i => $file) {
-    //                     $files[$i] = $file->store('temp_training', 'public');
-    //                 }
-    //             }
-
-    //             // store path saja ke session
-    //             $validated['training_certificate'] = $files;
-
-    //             session()->put('employee_wizard.pelatihan', $validated);
-    //             return redirect()->route('employee.create.review');
-    //             break;
-            
-
-    //     }
-    //     if($step == 'review'){
-    //         return view('employee.create.index')->with('success', 'Karyawan baru berhasil ditambahkan.');
-    //     }
-    //     return redirect()->route('employee.create.step', $this->nextStep($step));
-    // }
 
     public function storeStep(Request $request, string $step)
     {
@@ -425,18 +305,11 @@ class EmployeeWizardController extends Controller
 
             foreach ($data['pelatihan']['training_name'] as $i => $v) {
 
-                // --- HANDLE FILE ---
-                $certificatePath = null;
-
-                // file input ada di $request, bukan session
-                if ($request->hasFile("training_certificate.$i")) {
-                    $file = $request->file("training_certificate.$i");
-                    $certificatePath = $file->store('certificates', 'public');
-                }
+                $certificatePath = $data['pelatihan']['training_certificate'][$i] ?? null;
 
                 EmployeeTraining::create([
                     'employee_id'      => $emp->id,
-                    'title'            => $v,  // sesuai DB
+                    'title'            => $v,
                     'provider'         => $data['pelatihan']['training_provider'][$i],
                     'location'         => $data['pelatihan']['training_location'][$i] ?? null,
                     'year'             => $data['pelatihan']['training_year'][$i],
@@ -449,8 +322,9 @@ class EmployeeWizardController extends Controller
 
             session()->forget('employee_wizard');
 
-            return view('employee.create.index')->with('success', 'Karyawan baru berhasil ditambahkan.');
+            return redirect()->route('employee.index')->with('success', 'Karyawan baru berhasil ditambahkan.');
 
+        } catch (\Exception $e) {
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating employee via wizard: ' . $e->getMessage());
@@ -458,26 +332,6 @@ class EmployeeWizardController extends Controller
         }
     }
 
-
-    /**
-     * NEXT STEP LOGIC
-     */
-    // private function nextStep($current)
-    // {
-    //     $steps = [
-    //         'informasi-umum',
-    //         'alamat-karyawan',
-    //         'pendidikan',
-    //         'tanggungan',
-    //         'pekerjaan',
-    //         'pelatihan',
-    //         'review'
-    //     ];
-
-    //     $index = array_search($current, $steps);
-
-    //     return $steps[$index + 1] ?? 'pelatihan';
-    // }
 
     public function review()
     {
