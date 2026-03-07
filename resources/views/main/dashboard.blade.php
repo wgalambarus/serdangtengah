@@ -17,21 +17,21 @@
 
 @section('content')
 <div class="space-y-6">
-  {{-- Statistik --}}
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div class="flex items-center gap-4">
-        <div class="p-3 rounded-lg bg-blue-50 text-blue-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path d="M17 20h5V4H2v16h5v-6h10v6z" />
-          </svg>
-        </div>
-        <div>
-            <p class="text-gray-600 text-sm">Jumlah Karyawan</p>
-            <p class="text-3xl font-bold text-gray-800 mt-1">{{ \App\Models\Employee::count() }}</p>
-        </div>
+{{-- Statistik --}}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <div class="flex items-center gap-4">
+      <div class="p-3 rounded-lg bg-blue-50 text-blue-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M17 20h5V4H2v16h5v-6h10v6z" />
+        </svg>
+      </div>
+      <div>
+        <p class="text-gray-600 text-sm">Jumlah Karyawan</p>
+        <p class="text-3xl font-bold text-gray-800 mt-1">{{ \App\Models\Employee::count() }}</p>
       </div>
     </div>
+  </div>
 
     <!-- <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div class="flex items-center gap-4">
@@ -47,20 +47,20 @@
       </div>
     </div> -->
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div class="flex items-center gap-4">
-        <div class="p-3 rounded-lg bg-purple-50 text-purple-600">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
-          </svg>
-        </div>
-        <div>
-          <p class="text-gray-600 text-sm">Jumlah Pelamar</p>
-          <p class="text-3xl font-bold text-gray-800 mt-1">{{ \App\Models\Applicant::count() }}</p>
-        </div>
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <div class="flex items-center gap-4">
+      <div class="p-3 rounded-lg bg-purple-50 text-purple-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
+        </svg>
+      </div>
+      <div>
+        <p class="text-gray-600 text-sm">Jumlah Pelamar</p>
+        <p class="text-3xl font-bold text-gray-800 mt-1">{{ \App\Models\Applicant::count() }}</p>
       </div>
     </div>
   </div>
+</div>
 
   {{-- Pelamar per bulan & Karyawan per posisi --}}
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
