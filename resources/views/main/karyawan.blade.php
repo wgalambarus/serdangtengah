@@ -8,6 +8,13 @@
 @endsection
 
 @section('content')
+
+@if(session('success'))
+  <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
+    {{ session('success') }}
+  </div>
+@endif
+
 <div class="flex flex-col lg:flex-row justify-between items-center mb-6 mt-4 gap-4">
   <div>
     <h2 class="text-2xl font-semibold text-gray-800 tracking-tight">
@@ -292,6 +299,10 @@
                 </span>
             </td>
             <td class="px-6 py-4 text-right">
+              <a href="{{ route('employee.edit', $employee) }}" 
+                 class="text-green-600 hover:underline mr-3">
+                edit
+              </a>
               <button class="text-blue-600 hover:underline mr-3"
                       onclick="showDetailModal({{ $employee->id }})">
                 Detail
@@ -342,6 +353,14 @@
   });
 
 async function showDetailModal(employeeId) {
+  // modal elements may not exist on this page; avoid runtime errors.
+  const overlay = document.getElementById('overlay');
+  const modalDetail = document.getElementById('modalDetail');
+  if (!overlay || !modalDetail) {
+    console.warn('detail modal elements not found');
+    return;
+  }
+
   try {
     const response = await fetch(`/employee/${employeeId}`, {
       headers: {
@@ -353,11 +372,19 @@ async function showDetailModal(employeeId) {
     if (result.success) {
       const data = result.data;
 
-      document.getElementById('detailNama').textContent = data.nama_lengkap;
-      document.getElementById('detailTTL').textContent = data.tempat_lahir + ', ' + data.tanggal_lahir  || '-';
-      document.getElementById('detailJenisKelamin').textContent = data.jenis_kelamin || '-';
-      document.getElementById('detailHP').textContent = data.nomor_hp || '-';
-      document.getElementById('detailAlamat').textContent = data.alamat || '-';
+      document.getElementById('detailNama').textContent = data.full_name;
+      document.getElementById('detailTTL').textContent = (data.birth_place ?? '') + ', ' + (data.birth_date ?? '-') ;
+      document.getElementById('detailJenisKelamin').textContent = data.gender || '-';
+      document.getElementById('detailHP').textContent = data.phone || '-';
+      document.getElementById('detailAlamat').textContent = '-';
+      // addresses are returned in data.addresses array
+      if (data.addresses && data.addresses.length) {
+          const ktp = data.addresses.find(a => a.type==='KTP');
+          const cur = data.addresses.find(a => a.type==='CURRENT');
+          if (ktp) {
+              document.getElementById('detailAlamat').textContent = ktp.address_line;
+          }
+      }
 
       const dokumenDiv = document.getElementById('detailDokumen');
       dokumenDiv.innerHTML = '';
