@@ -9,6 +9,6 @@ class EmployeeTraining extends Model
 {
     use HasFactory;
     protected $table = 'employee_trainings';
-    protected $fillable = ['employee_id','title','year','location','provider'];
+    protected $fillable = ['employee_id','title','year','location','provider', 'certificate_path'];
     public function employee(){ return $this->belongsTo(Employee::class); }
 }
