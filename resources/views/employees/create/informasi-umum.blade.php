@@ -216,12 +216,11 @@
                         focus:ring-2 focus:ring-blue-600 transition border-gray-300">
         </div>
        {{-- SKILLS --}}
-        <div class="md:col-span-2">
+        {{-- <div class="md:col-span-2">
             <label class="block text-sm font-medium text-gray-700 mb-2">
                 Keahlian / Skills
             </label>
 
-            {{-- Input hanya untuk ngetik skill --}}
             <input type="text"
                   id="skillsInput"
                   placeholder="Tambah skill lalu tekan Enter"
@@ -233,9 +232,8 @@
                 <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
             @enderror
 
-            {{-- Container tag --}}
             <div id="skillsTags" class="flex flex-wrap gap-2 mt-3"></div>
-        </div>
+        </div> --}}
         {{-- EMERGENCY CONTACT --}}
         <div class="md:col-span-2 mt-6">
           <h3 class="text-lg font-semibold text-gray-800 mb-4">Kontak Darurat</h3>

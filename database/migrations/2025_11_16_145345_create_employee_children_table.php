@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('employee_childrens', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('employee_id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->date('birth_date')->nullable();
             $table->enum('gender', ['L','P'])->nullable();
             $table->string('last_education')->nullable();
