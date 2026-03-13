@@ -17,7 +17,7 @@
         ['name' => 'Dashboard', 'icon' => 'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8v-10h-8v10zm0-18v6h8V3h-8z', 'url' => '/dashboard'],
         ['name' => 'Pelamar', 'icon' => 'M17 20h5V4H2v16h5v-6h10v6z', 'url' => '/pelamar'],
         ['name' => 'Karyawan', 'icon' => 'M4 4h16v16H4z', 'url' => '/employee'],
-        ['name' => 'Lowongan', 'icon' => 'M4 4h16v4H4zm0 6h16v10H4z', 'url' => '/lowongan'],
+        // ['name' => 'Lowongan', 'icon' => 'M4 4h16v4H4zm0 6h16v10H4z', 'url' => '/lowongan'],
       ];
 
       $current = request()->path();
