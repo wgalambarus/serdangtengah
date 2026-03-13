@@ -80,67 +80,28 @@ class ApplicantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-            $validated = $request->validate([
-            'nama_lengkap' => 'required|string|max:255',
-            'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'pendidikan_terakhir' => 'required|in:SMA/SMK,D3,S1,S2,S3',
-            'alamat' => 'required|string',
-            'nomor_hp' => 'required|string|max:20',
-            'cv' => 'required|file|mimes:pdf|max:2048',
-            'pas_foto' => 'required|file|mimes:pdf|max:2048',
-            'transkrip_nilai' => 'required|file|mimes:pdf|max:2048',
-            'ktp' => 'required|file|mimes:pdf|max:2048',
-            'ijazah' => 'required|file|mimes:pdf|max:2048',
-            'kartu_bpjs' => 'required|file|mimes:pdf|max:2048',
-            'suket_pengalaman_kerja' => 'required|file|mimes:pdf|max:2048',
-            'daftar_riwayat_hidup' => 'required|file|mimes:pdf|max:2048'
-        ]);
+   public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nama_lengkap' => 'required|string|max:255',
+        'cv' => 'required|file|mimes:pdf|max:2048',
+        // ... tambahkan validasi lainnya di sini
+    ]);
 
-        // Handle file uploads
-        if ($request->hasFile('cv')) {
-            $validated['cv'] = $request->file('cv')->store('dokumen/cv', 'public');
+    $fileFields = ['cv', 'pas_foto', 'transkrip_nilai', 'ktp', 'ijazah', 'kartu_bpjs', 'suket_pengalaman_kerja', 'daftar_riwayat_hidup'];
+
+    foreach ($fileFields as $field) {
+        if ($request->hasFile($field)) {
+            // Simpan file ke storage dan masukkan path-nya ke array $validated
+            $validated[$field] = $request->file($field)->store('dokumen/' . $field, 'public');
         }
-
-        if ($request->hasFile('pas_foto')) {
-            $validated['pas_foto'] = $request->file('pas_foto')->store('dokumen/pas_foto', 'public');
-        }
-
-        if ($request->hasFile('transkrip_nilai')) {
-            $validated['transkrip_nilai'] = $request->file('transkrip_nilai')->store('dokumen/transkrip', 'public');
-        }
-
-        if ($request->hasFile('ktp')) {
-            $validated['ktp'] = $request->file('ktp')->store('dokumen/ktp', 'public');
-        }
-
-        if ($request->hasFile('ijazah')) {
-            $validated['ijazah'] = $request->file('ijazah')->store('dokumen/ijazah', 'public');
-        }
-
-        if ($request->hasFile('kartu_bpjs')) {
-            $validated['kartu_bpjs'] = $request->file('kartu_bpjs')->store('dokumen/kartu_bpjs', 'public');
-        }
-
-        if ($request->hasFile('suket_pengalaman_kerja')) {
-            $validated['suket_pengalaman_kerja'] = $request->file('suket_pengalaman_kerja')->store('dokumen/suket_pengalaman_kerja', 'public');
-        }
-
-        if ($request->hasFile('daftar_riwayat_hidup')) {
-            $validated['daftar_riwayat_hidup'] = $request->file('daftar_riwayat_hidup')->store('dokumen/daftar_riwayat_hidup', 'public');
-        }
-        
-        Applicant::create($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data pelamar berhasil disimpan!'
-        ]);
     }
+    
+    // Simpan ke DB. Cek phpMyAdmin setelah ini, kolom file HARUS ada isinya.
+    Applicant::create($validated);
 
+    return response()->json(['success' => true, 'message' => 'Data tersimpan ke tabel applicants!']);
+}
     /**
      * Display the specified resource.
      */
@@ -293,46 +254,49 @@ class ApplicantController extends Controller
         ]);
     }
     
-    public function rekrut($id)
-    {
-        DB::beginTransaction();
+// ApplicantController.php
 
-        try {
-            $applicant = Applicant::findOrFail($id);
+public function rekrut($id)
+{
+    DB::beginTransaction();
+    try {
+        $applicant = Applicant::findOrFail($id);
 
-            // 1. Buat data karyawan baru
-            $employee = Employee::create([
-                'employee_no'    => Employee::generateEmployeeNo(),
-                'full_name'      => $applicant->nama_lengkap,
-                'birth_place'    => $applicant->tempat_lahir,
-                'birth_date'     => $applicant->tanggal_lahir,
-                'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P', // Sesuaikan enum DB employees (L/P)
-                'phone'          => $applicant->nomor_hp,
-                'last_education' => $applicant->pendidikan_terakhir, // Placeholder
-                'marital_status' => 'BELUM_MENIKAH',        // Default enum
-                'national_id'    => 'PENDING_' . time(),    // Karena di tabel applicants tidak ada field KTP (nomor), hanya file
-                'skills'         => [],                      // Default array untuk kolom JSON
-                // Field lainnya bisa dikosongkan (nullable) atau diberi default
-            ]);
+        // 1. Buat data karyawan
+        $employee = Employee::create([
+            'employee_no'    => Employee::generateEmployeeNo(),
+            'full_name'      => $applicant->nama_lengkap,
+            'birth_place'    => $applicant->tempat_lahir,
+            'birth_date'     => $applicant->tanggal_lahir,
+            'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P',
+            'phone'          => $applicant->nomor_hp,
+            'last_education' => $applicant->pendidikan_terakhir,
+            'marital_status' => 'BELUM_MENIKAH',
+            'national_id'    => 'KTP_' . time(),
+        ]);
 
-            // 2. Simpan Alamat KTP (diambil dari string alamat pelamar)
-            \App\Models\EmployeeAddress::create([
-                'employee_id'  => $employee->id,
-                'type'         => 'KTP',
-                'address_line' => $applicant->alamat,
-            ]);
+        // 2. PINDAHKAN SEMUA PATH FILE KE TABEL FILES (Satu Baris)
+        DB::table('files')->insert([
+            'employee_id'            => $employee->id,
+            'cv'                     => $applicant->cv,
+            'pas_foto'               => $applicant->pas_foto,
+            'ktp'                    => $applicant->ktp,
+            'ijazah'                 => $applicant->ijazah,
+            'transkrip_nilai'        => $applicant->transkrip_nilai,
+            'kartu_bpjs'             => $applicant->kartu_bpjs,
+            'suket_pengalaman_kerja' => $applicant->suket_pengalaman_kerja,
+            'daftar_riwayat_hidup'   => $applicant->daftar_riwayat_hidup,
+            'created_at'             => now(),
+            'updated_at'             => now(),
+        ]);
 
-            // 3. (Opsional) Hapus data pelamar setelah direkrut agar tidak double
-            $applicant->delete(); 
+        // $applicant->delete();
+        DB::commit();
 
-            DB::commit();
-
-            return redirect()->route('employee.index')
-                ->with('success', "Berhasil merekrut {$applicant->nama_lengkap} sebagai karyawan baru.");
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Gagal merekrut: ' . $e->getMessage());
-        }
+        return redirect()->route('employee.index')->with('success', "Berhasil! File sudah pindah ke tabel files.");
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Gagal: ' . $e->getMessage());
     }
+}
 }
