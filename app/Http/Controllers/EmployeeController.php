@@ -94,10 +94,21 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        // return JSON data for detail modal (used in listing page)
-        return response()->json([
-            'success' => true,
-            'data' => $employee->load(['addresses','spouse','children','jobHistory','educations','trainings'])
+    // Mengambil alamat spesifik
+        $ktpAddress     = $employee->addresses()->where('type', 'KTP')->first();
+        $currentAddress = $employee->addresses()->where('type', 'CURRENT')->first();
+
+        // Load semua relasi agar tidak ada N+1 query
+        $employee->load(['educations', 'children', 'jobHistory', 'trainings']);
+
+        return view('employees.show', [
+            'employee'       => $employee,
+            'ktpAddress'     => $ktpAddress,
+            'currentAddress' => $currentAddress,
+            'educations'     => $employee->educations,
+            'children'       => $employee->children,
+            'jobHistory'     => $employee->jobHistory,
+            'trainings'      => $employee->trainings,
         ]);
     }
 

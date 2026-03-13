@@ -301,12 +301,12 @@
             <td class="px-6 py-4 text-right">
               <a href="{{ route('employee.edit', $employee) }}" 
                  class="text-green-600 hover:underline mr-3">
-                edit
+                Edit
               </a>
-              <button class="text-blue-600 hover:underline mr-3"
-                      onclick="showDetailModal({{ $employee->id }})">
+              <a href="{{ route('employee.show', $employee) }}" 
+                 class="text-blue-600 hover:underline mr-3">
                 Detail
-              </button>
+              </a>
               <button class="text-red-600 hover:underline"
                       onclick="deleteKaryawan({{ $employee->id }})">
                 Hapus
