@@ -9,24 +9,33 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+   public function up(): void
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('table_name');
-            $table->string('operation');
-            $table->unsignedBigInteger('record_id')->nullable();
-            $table->string('changed_by')->nullable();
-            $table->json('old_data')->nullable();
-            $table->json('new_data')->nullable();
-            $table->timestamp('changed_at')->useCurrent();
-            $table->index(['table_name','record_id']);
+            $table->id();
+            // Menghubungkan ke tabel employees
+            $table->foreignId('employee_id')
+                  ->constrained('employees')
+                  ->onDelete('cascade'); 
+            
+            // Kolom dokumen (Sesuai permintaan Anda)
+            $table->string('cv')->nullable();
+            $table->string('pas_foto')->nullable();
+            $table->string('ktp')->nullable();
+            $table->string('ijazah')->nullable();
+            $table->string('transkrip_nilai')->nullable();
+            $table->string('kartu_bpjs')->nullable();
+            $table->string('suket_pengalaman_kerja')->nullable();
+            $table->string('daftar_riwayat_hidup')->nullable();
+            
+            $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
      */
+
     public function down(): void
     {
         Schema::dropIfExists('files');

@@ -80,28 +80,58 @@ class ApplicantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-   public function store(Request $request)
+public function store(Request $request)
 {
+    // 1. Validasi Lengkap (Semua kolom di tabel applicants)
     $validated = $request->validate([
-        'nama_lengkap' => 'required|string|max:255',
-        'cv' => 'required|file|mimes:pdf|max:2048',
-        // ... tambahkan validasi lainnya di sini
+        'nama_lengkap'           => 'required|string|max:255',
+        'tempat_lahir'           => 'required|string|max:255',
+        'tanggal_lahir'          => 'required|date',
+        'jenis_kelamin'          => 'required|in:Laki-laki,Perempuan',
+        'pendidikan_terakhir'    => 'required|string|max:255',
+        'alamat'                 => 'required|string',
+        'nomor_hp'               => 'required|string|max:20',
+        // Validasi File: Wajib PDF, Maksimal 2MB (2048 KB)
+        'cv'                     => 'required|file|mimes:pdf|max:2048',
+        'pas_foto'               => 'required|file|mimes:pdf|max:2048',
+        'transkrip_nilai'        => 'required|file|mimes:pdf|max:2048',
+        'ktp'                    => 'required|file|mimes:pdf|max:2048',
+        'ijazah'                 => 'required|file|mimes:pdf|max:2048',
+        'kartu_bpjs'             => 'required|file|mimes:pdf|max:2048',
+        'suket_pengalaman_kerja' => 'required|file|mimes:pdf|max:2048',
+        'daftar_riwayat_hidup'   => 'required|file|mimes:pdf|max:2048'
     ]);
 
-    $fileFields = ['cv', 'pas_foto', 'transkrip_nilai', 'ktp', 'ijazah', 'kartu_bpjs', 'suket_pengalaman_kerja', 'daftar_riwayat_hidup'];
+    // 2. Mapping Folder Penyimpanan di storage/app/public/
+    $fileFields = [
+        'cv'                     => 'dokumen/cv',
+        'pas_foto'               => 'dokumen/pas_foto',
+        'transkrip_nilai'        => 'dokumen/transkrip',
+        'ktp'                    => 'dokumen/ktp',
+        'ijazah'                 => 'dokumen/ijazah',
+        'kartu_bpjs'             => 'dokumen/kartu_bpjs',
+        'suket_pengalaman_kerja' => 'dokumen/suket_pengalaman_kerja',
+        'daftar_riwayat_hidup'   => 'dokumen/daftar_riwayat_hidup'
+    ];
 
-    foreach ($fileFields as $field) {
+    // 3. Proses Unggah File & Ambil Path-nya
+    foreach ($fileFields as $field => $folderPath) {
         if ($request->hasFile($field)) {
-            // Simpan file ke storage dan masukkan path-nya ke array $validated
-            $validated[$field] = $request->file($field)->store('dokumen/' . $field, 'public');
+            // Simpan file ke disk 'public' dan masukkan path ke array $validated
+            $validated[$field] = $request->file($field)->store($folderPath, 'public');
         }
     }
     
-    // Simpan ke DB. Cek phpMyAdmin setelah ini, kolom file HARUS ada isinya.
+    // 4. Simpan Data ke Tabel Applicants
+    // Pastikan semua kolom di atas sudah ada di properti $fillable pada Model Applicant
     Applicant::create($validated);
 
-    return response()->json(['success' => true, 'message' => 'Data tersimpan ke tabel applicants!']);
+    return response()->json([
+        'success' => true,
+        'message' => 'Data pelamar dan seluruh berkas berhasil disimpan!'
+    ]);
 }
+
     /**
      * Display the specified resource.
      */
@@ -236,67 +266,76 @@ class ApplicantController extends Controller
      */
     public function destroy(Applicant $applicant)
     {
-        // Delete associated files
-        if ($applicant->cv) {
-            Storage::disk('public')->delete($applicant->cv);
-        }
-        if ($applicant->pas_foto) {
-            Storage::disk('public')->delete($applicant->pas_foto);
-        }
-        if ($applicant->transkrip_nilai) {
-            Storage::disk('public')->delete($applicant->transkrip_nilai);
+        // Daftar semua kolom file yang ada di tabel applicants
+        $fileFields = [
+            'cv', 
+            'pas_foto', 
+            'transkrip_nilai', 
+            'ktp', 
+            'ijazah', 
+            'kartu_bpjs', 
+            'suket_pengalaman_kerja', 
+            'daftar_riwayat_hidup'
+        ];
+
+        // Loop untuk menghapus setiap file fisik dari disk 'public'
+        foreach ($fileFields as $field) {
+            if ($applicant->$field) {
+                // Menghapus file berdasarkan path yang tersimpan di kolom database
+                Storage::disk('public')->delete($applicant->$field);
+            }
         }
 
+        // Setelah semua file fisik terhapus, hapus data pelamar dari database
         $applicant->delete();
+
         return response()->json([
             'success' => true,
-            'message' => 'Data pelamar berhasil dihapus!'
+            'message' => 'Data pelamar dan semua berkas fisiknya berhasil dihapus!'
         ]);
     }
     
-// ApplicantController.php
+    public function rekrut($id)
+    {
+        DB::beginTransaction();
+        try {
+            $applicant = Applicant::findOrFail($id);
 
-public function rekrut($id)
-{
-    DB::beginTransaction();
-    try {
-        $applicant = Applicant::findOrFail($id);
+            // 1. Buat data karyawan
+            $employee = Employee::create([
+                'employee_no'    => Employee::generateEmployeeNo(),
+                'full_name'      => $applicant->nama_lengkap,
+                'birth_place'    => $applicant->tempat_lahir,
+                'birth_date'     => $applicant->tanggal_lahir,
+                'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P',
+                'phone'          => $applicant->nomor_hp,
+                'last_education' => $applicant->pendidikan_terakhir,
+                'marital_status' => 'BELUM_MENIKAH',
+                'national_id'    => 'KTP_' . time(),
+            ]);
 
-        // 1. Buat data karyawan
-        $employee = Employee::create([
-            'employee_no'    => Employee::generateEmployeeNo(),
-            'full_name'      => $applicant->nama_lengkap,
-            'birth_place'    => $applicant->tempat_lahir,
-            'birth_date'     => $applicant->tanggal_lahir,
-            'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P',
-            'phone'          => $applicant->nomor_hp,
-            'last_education' => $applicant->pendidikan_terakhir,
-            'marital_status' => 'BELUM_MENIKAH',
-            'national_id'    => 'KTP_' . time(),
-        ]);
+            // 2. PINDAHKAN SEMUA PATH FILE KE TABEL FILES (Satu Baris)
+            DB::table('files')->insert([
+                'employee_id'            => $employee->id,
+                'cv'                     => $applicant->cv,
+                'pas_foto'               => $applicant->pas_foto,
+                'ktp'                    => $applicant->ktp,
+                'ijazah'                 => $applicant->ijazah,
+                'transkrip_nilai'        => $applicant->transkrip_nilai,
+                'kartu_bpjs'             => $applicant->kartu_bpjs,
+                'suket_pengalaman_kerja' => $applicant->suket_pengalaman_kerja,
+                'daftar_riwayat_hidup'   => $applicant->daftar_riwayat_hidup,
+                'created_at'             => now(),
+                'updated_at'             => now(),
+            ]);
 
-        // 2. PINDAHKAN SEMUA PATH FILE KE TABEL FILES (Satu Baris)
-        DB::table('files')->insert([
-            'employee_id'            => $employee->id,
-            'cv'                     => $applicant->cv,
-            'pas_foto'               => $applicant->pas_foto,
-            'ktp'                    => $applicant->ktp,
-            'ijazah'                 => $applicant->ijazah,
-            'transkrip_nilai'        => $applicant->transkrip_nilai,
-            'kartu_bpjs'             => $applicant->kartu_bpjs,
-            'suket_pengalaman_kerja' => $applicant->suket_pengalaman_kerja,
-            'daftar_riwayat_hidup'   => $applicant->daftar_riwayat_hidup,
-            'created_at'             => now(),
-            'updated_at'             => now(),
-        ]);
+            // $applicant->delete();
+            DB::commit();
 
-        // $applicant->delete();
-        DB::commit();
-
-        return redirect()->route('employee.index')->with('success', "Berhasil! File sudah pindah ke tabel files.");
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with('error', 'Gagal: ' . $e->getMessage());
+            return redirect()->route('employee.index')->with('success', "Berhasil! File sudah pindah ke tabel files.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal: ' . $e->getMessage());
+        }
     }
-}
 }

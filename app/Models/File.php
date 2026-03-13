@@ -10,7 +10,17 @@ class File extends Model
 {
     use HasFactory;
     protected $table = 'files';
-    protected $fillable = ['owner_type','owner_id','file_type','path','filename','size'];
+    protected $fillable = [
+        'employee_id',
+        'cv',
+        'pas_foto',
+        'ktp',
+        'ijazah',
+        'transkrip_nilai',
+        'kartu_bpjs',
+        'suket_pengalaman_kerja',
+        'daftar_riwayat_hidup',
+    ];
 
 
     // Polymorphic owner via owner_type/owner_id
