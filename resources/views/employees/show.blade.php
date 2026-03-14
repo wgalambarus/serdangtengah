@@ -224,37 +224,58 @@
             </div>
         </div>
 
-        <!-- pendidikan section -->
-        <div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
-            <h3 class="text-xl font-semibold mb-4">Riwayat Pendidikan</h3>
-            <div id="educationContainer" class="space-y-12">
-                @if(old('school_name'))
-                    @foreach(old('school_name') as $i => $val)
-                        @include('employees.create.partials._education_row', [
-                            'index' => $i,
-                            'school_name' => old("school_name.$i"),
-                            'city'        => old("city.$i"),
-                            'major'       => old("major.$i"),
-                            'year_in'     => old("year_in.$i"),
-                            'year_out'    => old("year_out.$i"),
-                        ])
-                    @endforeach
-                @elseif(isset($educations) && $educations->count())
-                    @foreach($educations as $i => $edu)
-                        @include('employees.create.partials._education_row', [
-                            'index' => $i,
-                            'school_name' => $edu->school_name,
-                            'city'        => $edu->city,
-                            'major'       => $edu->major,
-                            'year_in'     => $edu->year_in,
-                            'year_out'    => $edu->year_out,
-                        ])
-                    @endforeach
-                @else
-                    @include('employees.create.partials._education_row', ['index' => 0])
-                @endif
-            </div>
-        </div>
+<!-- pendidikan section -->
+<div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
+    <h3 class="text-xl font-semibold mb-4">Riwayat Pendidikan</h3>
+
+    <div id="educationContainer" class="space-y-12">
+
+        {{-- Jika ada old input (validation error) --}}
+        @if(old('school_name'))
+
+            @foreach(old('school_name') as $i => $val)
+                @include('employees.create.partials._education_row', [
+                    'index' => $i,
+                    'school_name' => old("school_name.$i"),
+                    'city'        => old("city.$i"),
+                    'major'       => old("major.$i"),
+                    'year_in'     => old("year_in.$i"),
+                    'year_out'    => old("year_out.$i"),
+                ])
+            @endforeach
+
+
+        {{-- Jika ada data dari database --}}
+        @elseif($educations->count())
+
+            @foreach($educations as $i => $edu)
+                @include('employees.create.partials._education_row', [
+                    'index' => $i,
+                    'school_name' => $edu->school_name ?? '',
+                    'city'        => $edu->city ?? '',
+                    'major'       => $edu->major ?? '',
+                    'year_in'     => $edu->year_in ?? '',
+                    'year_out'    => $edu->year_out ?? '',
+                ])
+            @endforeach
+
+
+        {{-- Jika tidak ada data sama sekali --}}
+        @else
+
+            @include('employees.create.partials._education_row', [
+                'index' => 0,
+                'school_name' => '',
+                'city'        => '',
+                'major'       => '',
+                'year_in'     => '',
+                'year_out'    => '',
+            ])
+
+        @endif
+
+    </div>
+</div>
 
         <!-- dependents section -->
         <div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
@@ -326,42 +347,134 @@
         </div>
 
         <!-- training section -->
-        <div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
-            <h3 class="text-xl font-semibold mb-4">Training / Pelatihan</h3>
-            <div id="trainingContainer" class="space-y-12">
-                @if(old('training_name'))
-                    @foreach(old('training_name') as $i => $val)
-                        @include('employees.create.partials._training_row', [
-                            'index' => $i,
-                            'training_name' => old("training_name.$i"),
-                            'training_provider' => old("training_provider.$i"),
-                            'training_year' => old("training_year.$i"),
-                            'training_location' => old("training_location.$i"),
-                            'existing_certificate' => old("existing_certificate.$i"),
-                        ])
-                    @endforeach
-                @elseif(isset($trainings) && $trainings->count())
-                    @foreach($trainings as $i => $t)
-                        @include('employees.create.partials._training_row', [
-                            'index' => $i,
-                            'training_name' => $t->title,
-                            'training_provider' => $t->provider,
-                            'training_year' => $t->year,
-                            'training_location' => $t->location,
-                            'existing_certificate' => $t->certificate_path,
-                        ])
-                    @endforeach
-                @else
-                    @include('employees.create.partials._training_row', ['index' => 0])
-                @endif
-            </div>
+        <!-- training section -->
+<div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
+  <h3 class="text-xl font-semibold mb-6">Training / Pelatihan</h3>
+
+  <div class="space-y-8">
+
+    @forelse($trainings as $training)
+
+    <div class="p-8 border border-gray-200 rounded-xl bg-gray-50 shadow-sm">
+
+      <div class="flex items-center justify-between mb-6">
+        <h4 class="text-sm font-semibold text-gray-700">Data Pelatihan</h4>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {{-- NAMA TRAINING --}}
+        <div>
+          <p class="text-sm font-medium text-gray-700 mb-1">Nama Training</p>
+          <p class="text-gray-800">{{ $training->title }}</p>
         </div>
 
-        {{-- <div class="flex justify-end">
-            <button type="submit" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700">
-                Simpan Perubahan
-            </button>
-        </div> --}}
+        {{-- PROVIDER --}}
+        <div>
+          <p class="text-sm font-medium text-gray-700 mb-1">Penyelenggara</p>
+          <p class="text-gray-800">{{ $training->provider }}</p>
+        </div>
+
+        {{-- TAHUN --}}
+        <div>
+          <p class="text-sm font-medium text-gray-700 mb-1">Tahun</p>
+          <p class="text-gray-800">{{ $training->year }}</p>
+        </div>
+
+        {{-- LOKASI --}}
+        <div>
+          <p class="text-sm font-medium text-gray-700 mb-1">Lokasi</p>
+          <p class="text-gray-800">{{ $training->location }}</p>
+        </div>
+
+        {{-- CERTIFICATE --}}
+        <div class="md:col-span-2">
+          <p class="text-sm font-medium text-gray-700 mb-2">Sertifikat</p>
+
+          @if($training->certificate_path)
+
+            <a href="{{ asset('storage/'.$training->certificate_path) }}"
+               target="_blank"
+               class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg shadow-sm hover:bg-blue-100">
+              📄 Lihat Sertifikat
+            </a>
+
+          @else
+            <p class="text-gray-400 italic">Tidak ada sertifikat</p>
+          @endif
+
+        </div>
+
+      </div>
+
+    </div>
+
+    @empty
+
+    <div class="text-gray-500 italic">
+      Tidak ada data pelatihan.
+    </div>
+
+    @endforelse
+
+  </div>
+</div>
+
+<!-- dokumen section -->
+<div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
+
+    <h3 class="text-xl font-semibold mb-6">Dokumen Karyawan</h3>
+
+    <div class="p-8 border border-gray-200 rounded-xl bg-gray-50 shadow-sm">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            @php
+                $files = [
+                    'CV' => $employee->file->cv ?? null,
+                    'Pas Foto' => $employee->file->pas_foto ?? null,
+                    'KTP' => $employee->file->ktp ?? null,
+                    'Ijazah' => $employee->file->ijazah ?? null,
+                    'Transkrip Nilai' => $employee->file->transkrip_nilai ?? null,
+                    'Kartu BPJS' => $employee->file->kartu_bpjs ?? null,
+                    'Surat Pengalaman Kerja' => $employee->file->suket_pengalaman_kerja ?? null,
+                    'Daftar Riwayat Hidup' => $employee->file->daftar_riwayat_hidup ?? null,
+                ];
+            @endphp
+
+            @foreach($files as $label => $path)
+
+                <div>
+                    <p class="text-sm font-medium text-gray-700 mb-2">{{ $label }}</p>
+
+                    @if($path)
+
+                        <a href="{{ asset('storage/'.$path) }}"
+                           target="_blank"
+                           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg shadow-sm hover:bg-blue-100 transition text-sm">
+
+                            📄 Lihat Dokumen
+
+                        </a>
+
+                    @else
+
+                        <p class="text-gray-400 italic text-sm">
+                            Tidak tersedia
+                        </p>
+
+                    @endif
+
+                </div>
+
+            @endforeach
+
+        </div>
+
+    </div>
+
+</div>
+
     </form>
 </div>
 
