@@ -23,7 +23,12 @@ class Employee extends Model
 
     public function addresses()
     {
-    return $this->hasMany(EmployeeAddress::class);
+        return $this->hasMany(EmployeeAddress::class);
+    }
+
+    public function file()
+    {
+        return $this->hasOne(File::class);
     }
 
     public static function generateEmployeeNo()
