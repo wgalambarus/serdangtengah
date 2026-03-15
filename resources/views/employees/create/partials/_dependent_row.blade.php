@@ -20,7 +20,7 @@
 
     {{-- Nama --}}
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Nama *</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
       <input type="text" name="dependent_name[]"
              value="{{ $name }}"
              oninput="onlyString(this)"
@@ -30,7 +30,7 @@
 
     {{-- Tanggal Lahir --}}
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir *</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
       <input type="date" name="dependent_birth[]"
              value="{{ $birth }}"
              class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg
@@ -39,7 +39,7 @@
 
     {{-- Jenis Kelamin --}}
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin *</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
       <select name="dependent_gender[]"
               class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg
                      focus:ring-2 focus:ring-blue-600">
@@ -51,7 +51,7 @@
 
     {{-- Pendidikan Terakhir --}}
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir *</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
       <select name="dependent_education[]"
               class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg
                      focus:ring-2 focus:ring-blue-600">

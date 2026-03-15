@@ -21,7 +21,7 @@
 
     {{-- NAMA TRAINING --}}
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Nama Pelatihan *</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Nama Pelatihan</label>
       <input type="text" name="training_name[]" value="{{ $training_name }}"
              class="w-full px-4 py-3 bg-gray-50 border @error("training_name.$i") border-red-500 @else border-gray-300 @enderror rounded-lg">
       @error("training_name.$i") <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
@@ -29,7 +29,7 @@
 
     {{-- PROVIDER --}}
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Penyelenggara *</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Penyelenggara</label>
       <input type="text" name="training_provider[]" value="{{ $training_provider }}"
              class="w-full px-4 py-3 bg-gray-50 border @error("training_provider.$i") border-red-500 @else border-gray-300 @enderror rounded-lg">
       @error("training_provider.$i") <p class="text-xs text-red-600 mt-1">{{ $message }}</p> @enderror
@@ -40,7 +40,7 @@
 
     <!-- Kolom Kiri: Tahun -->
     <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Tahun *</label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
       <input type="number" name="training_year[]" value="{{ $training_year }}"
               inputmode="numeric"
               pattern="[0-9]{4}"

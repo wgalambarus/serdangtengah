@@ -7,7 +7,9 @@ use App\Models\EmployeeEducation;
 use App\Models\EmployeeChild;
 use App\Models\JobHistory;
 use App\Models\EmployeeTraining;
+use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class EmployeeController extends Controller
@@ -208,7 +210,15 @@ class EmployeeController extends Controller
             'training_certificate.*'  => 'nullable|file|mimes:jpg,png,pdf|max:2048',
             'existing_certificate'    => 'nullable|array',
             'existing_certificate.*'  => 'nullable|string',
-        ]);
+            // file uploads
+            'cv'                         => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'pas_foto'                   => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'ktp'                        => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'ijazah'                     => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'transkrip_nilai'            => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'kartu_bpjs'                 => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'suket_pengalaman_kerja'     => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'daftar_riwayat_hidup'       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',        ]);
 
         // convert skills string into array if present
         if (isset($validated['skills']) && is_string($validated['skills'])) {
@@ -308,6 +318,43 @@ class EmployeeController extends Controller
                     'certificate_path' => $certificatePath,
                 ]);
             }
+        }
+
+        // file upload documents
+        $fileAttributes = [
+            'cv',
+            'pas_foto',
+            'ktp',
+            'ijazah',
+            'transkrip_nilai',
+            'kartu_bpjs',
+            'suket_pengalaman_kerja',
+            'daftar_riwayat_hidup',
+        ];
+
+        $fileData = [];
+
+        foreach ($fileAttributes as $attr) {
+            if ($request->hasFile($attr)) {
+                $upload = $request->file($attr);
+                if ($upload && $upload->isValid()) {
+                    // delete old file first if exists
+                    if ($employee->file && $employee->file->$attr) {
+                        Storage::disk('public')->delete($employee->file->$attr);
+                    }
+                    $fileData[$attr] = $upload->store("dokumen/$attr", 'public');
+                }
+            }
+        }
+
+        if (!empty($fileData)) {
+            $file = $employee->file;
+            if (!$file) {
+                $file = new File(['employee_id' => $employee->id]);
+            }
+            $file->fill($fileData);
+            $file->employee_id = $employee->id;
+            $file->save();
         }
 
         return redirect()->route('employee.index')->with('success', 'Data karyawan berhasil diperbarui.');

@@ -329,7 +329,7 @@ public function store(Request $request)
                 'updated_at'             => now(),
             ]);
 
-            // $applicant->delete();
+            $applicant->delete();
             DB::commit();
 
             return redirect()->route('employee.index')->with('success', "Berhasil! File sudah pindah ke tabel files.");

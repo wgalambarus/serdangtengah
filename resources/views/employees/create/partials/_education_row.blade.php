@@ -23,21 +23,21 @@
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Nama Sekolah *</label>
             <input type="text" name="school_name[]"
-                   value="{{ $school_name }}"
+                   value="{{ $school_name ?? '' }}"
                    class="required-field w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg"/>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Kota *</label>
             <input type="text" name="city[]"
-                   value="{{ $city }}"
+                   value="{{ $city ?? '' }}"
                    class="required-field w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg"/>
         </div>
 
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Jurusan *</label>
             <input type="text" name="major[]"
-                   value="{{ $major }}"
+                   value="{{ $major ?? '' }}"
                    class="required-field w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg"/>
         </div>
 
@@ -45,7 +45,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Masuk *</label>
                 <input type="number" name="year_in[]"
-                       value="{{ $year_in }}"
+                       value="{{ $year_in ?? '' }}"
                        inputmode="numeric"
                        pattern="[0-9]{4}"
                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)"
@@ -55,7 +55,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Lulus *</label>
                 <input type="number" name="year_out[]"
-                       value="{{ $year_out }}"
+                       value="{{ $year_out ?? '' }}"
                        inputmode="numeric"
                        pattern="[0-9]{4}"
                        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)"

@@ -22,7 +22,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap *</label>
                     <input type="text" name="full_name" value="{{ old('full_name', $employee->full_name) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('full_name') border-red-500 @else border-gray-300 @enderror">
+                                  @error('full_name') border-red-500 @else border-gray_300 @enderror">
                     @error('full_name')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -32,7 +32,7 @@
                     <input type="text" name="national_id" maxlength="20" 
                            value="{{ old('national_id', $employee->national_id) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('national_id') border-red-500 @else border-gray-300 @enderror">
+                                  @error('national_id') border-red-500 @else border_gray-300 @enderror">
                     @error('national_id')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -42,7 +42,7 @@
                     <input type="email" name="email" 
                            value="{{ old('email', $employee->email) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('email') border-red-500 @else border-gray-300 @enderror">
+                                  @error('email') border-red-500 @else border-gray_300 @enderror">
                     @error('email')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -52,7 +52,7 @@
                     <input type="text" name="phone" maxlength="15" 
                            value="{{ old('phone', $employee->phone) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('phone') border-red-500 @else border-gray-300 @enderror">
+                                  @error('phone') border-red-500 @else border-gray_300 @enderror">
                     @error('phone')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -62,7 +62,7 @@
                     <input type="text" name="birth_place" 
                            value="{{ old('birth_place', $employee->birth_place) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('birth_place') border-red-500 @else border-gray-300 @enderror">
+                                  @error('birth_place') border-red-500 @else border_gray-300 @enderror">
                     @error('birth_place')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -81,7 +81,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin *</label>
                     <select name="gender" 
                             class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                   @error('gender') border-red-500 @else border-gray-300 @enderror">
+                                   @error('gender') border-red-500 @else border_gray-300 @enderror">
                         <option value="">Pilih...</option>
                         <option value="L" {{ old('gender', $employee->gender)=='L'?'selected':'' }}>Laki-laki</option>
                         <option value="P" {{ old('gender', $employee->gender)=='P'?'selected':'' }}>Perempuan</option>
@@ -138,20 +138,11 @@
                 </div>
 
                 {{-- npwp --}}
-                <div class="md:col-span-2">
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">NPWP</label>
                     <input type="text" name="npwp" 
                            value="{{ old('npwp', $employee->npwp) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
-                </div>
-
-                {{-- skills --}}
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Keahlian (pisahkan dengan koma)</label>
-                    <input type="text" name="skills" 
-                           value="{{ old('skills', implode(',', $employee->skills ?? [])) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
-                    <p class="text-xs text-gray-500 mt-1">Contoh: PHP, Laravel, MySQL</p>
                 </div>
 
                 {{-- emergency info --}}
@@ -269,7 +260,14 @@
                         ])
                     @endforeach
                 @else
-                    @include('employees.create.partials._education_row', ['index' => 0])
+                    @include('employees.create.partials._education_row', [
+                        'index' => 0,
+                        'school_name' => '',
+                        'city' => '',
+                        'major' => '',
+                        'year_in' => '',
+                        'year_out' => '',
+                    ])
                 @endif
             </div>
         </div>
@@ -399,6 +397,38 @@
                 @else
                     @include('employees.create.partials._training_row', ['index' => 0])
                 @endif
+            </div>
+        </div>
+
+        <!-- dokumen section -->
+        <div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Dokumen Karyawan</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @php
+                    $file = $employee->file ?? null;
+                @endphp
+
+                @foreach ([
+                    ['name' => 'ijazah', 'label' => 'Ijazah'],
+                    ['name' => 'cv', 'label' => 'CV'],
+                    ['name' => 'pas_foto', 'label' => 'Pas Foto'],
+                    ['name' => 'transkrip_nilai', 'label' => 'Transkrip Nilai'],
+                    ['name' => 'ktp', 'label' => 'KTP'],
+                    ['name' => 'kartu_bpjs', 'label' => 'Kartu BPJS'],
+                    ['name' => 'suket_pengalaman_kerja', 'label' => 'Surat Keterangan Pengalaman Kerja'],
+                    ['name' => 'daftar_riwayat_hidup', 'label' => 'Daftar Riwayat Hidup'],
+                ] as $doc)
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ $doc['label'] }}</label>
+                        @if($file && $file->{$doc['name']})
+                            <div class="mb-2">
+                                <a href="{{ asset('storage/'.$file->{$doc['name']}) }}" target="_blank" class="text-blue-600 hover:underline text-xs">📄 Lihat {{ $doc['label'] }}</a>
+                            </div>
+                        @endif
+                        <input type="file" name="{{ $doc['name'] }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+                        @error($doc['name'])<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
+                    </div>
+                @endforeach
             </div>
         </div>
 
