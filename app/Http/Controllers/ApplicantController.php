@@ -332,7 +332,7 @@ public function store(Request $request)
             $applicant->delete();
             DB::commit();
 
-            return redirect()->route('employee.index')->with('success', "Berhasil! File sudah pindah ke tabel files.");
+            return redirect()->route('employee.index')->with('success', "Berhasil! pelamar sudah menjadi karyawan.");
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal: ' . $e->getMessage());
