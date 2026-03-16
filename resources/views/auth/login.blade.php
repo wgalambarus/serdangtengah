@@ -69,7 +69,7 @@
             @enderror
         </div>
 
-        <!-- Remember Me -->
+        <!-- Remember Me
         <div class="flex items-center gap-2">
             <input 
                 id="remember_me"
@@ -78,7 +78,7 @@
                 class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             >
             <label for="remember_me" class="text-sm text-gray-700">Remember me</label>
-        </div>
+        </div> -->
 
         <!-- Login Button -->
         <button 

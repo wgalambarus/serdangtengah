@@ -47,6 +47,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 Route::post('/rekrut/{id}', [ApplicantController::class, 'rekrut'])
     ->name('rekrut.applicant');
+<<<<<<< HEAD
 Route::get('/check-upload', function () {
     return [
         'upload_max_filesize' => ini_get('upload_max_filesize'),
@@ -59,5 +60,11 @@ Route::get('/phpinfo', function () {
 
 
 
+=======
+
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+>>>>>>> 12aa6034af29afbf0a5fb0903658361f516eab93
 
 require __DIR__.'/auth.php';

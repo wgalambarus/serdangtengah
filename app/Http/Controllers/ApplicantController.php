@@ -327,7 +327,9 @@ public function store(Request $request)
                 'updated_at'             => now(),
             ]);
 
-            $applicant->delete();
+            $applicant->update(['status' => 'diterima']);
+
+            // $applicant->delete();
             DB::commit();
 
             return redirect()->route('employee.index')->with('success', "Berhasil! pelamar sudah menjadi karyawan.");
