@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('alamat')->nullable();
             $table->string('pendidikan_terakhir')->nullable();
             $table->string('nomor_hp', 20)->nullable();
+            $table->enum('status', ['pending', 'diterima', 'ditolak'])->default('pending');
 
             // Dokumen
             $table->string('pas_foto')->nullable();
