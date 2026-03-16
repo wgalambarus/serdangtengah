@@ -14,6 +14,6 @@ class Applicant extends Model
         'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 
         'pendidikan_terakhir', 'alamat', 'nomor_hp', 'cv', 'pas_foto', 
         'transkrip_nilai', 'ktp', 'ijazah', 'kartu_bpjs', 
-        'suket_pengalaman_kerja', 'daftar_riwayat_hidup'
+        'suket_pengalaman_kerja', 'daftar_riwayat_hidup', 'status'
     ];
 }

@@ -88,8 +88,8 @@
                     <th class="py-3 px-6 font-semibold text-left">Nama</th>
                     <th class="py-3 px-6 font-semibold text-left">Email</th>
                     <th class="py-3 px-6 font-semibold text-left">Telepon</th>
-                    <th class="py-3 px-6 font-semibold text-left">Skor</th>
                     <th class="py-3 px-6 font-semibold text-left">Tanggal Lamar</th>
+                    <th class="py-3 px-6 font-semibold text-left">Status</th>
                     <th class="py-3 px-6 font-semibold text-right">Aksi</th>
                 </tr>
             </thead>
@@ -121,6 +121,11 @@
                     {{-- Tanggal Lamar --}}
                     <td class="py-3 px-6 text-gray-600">
                         {{ optional($pelamar->pivot->created_at)->format('d M Y') }}
+                    </td>
+
+                    {{-- Status --}}
+                    <td class="py-3 px-6 text-gray-600">
+                        {{ ucfirst($pelamar->status) }}
                     </td>
 
                     {{-- Action Buttons --}}
