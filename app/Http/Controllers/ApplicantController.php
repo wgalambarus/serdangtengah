@@ -310,8 +310,6 @@ public function store(Request $request)
                 'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P',
                 'phone'          => $applicant->nomor_hp,
                 'last_education' => $applicant->pendidikan_terakhir,
-                'marital_status' => 'BELUM_MENIKAH',
-                'national_id'    => 'KTP_' . time(),
             ]);
 
             // 2. PINDAHKAN SEMUA PATH FILE KE TABEL FILES (Satu Baris)
