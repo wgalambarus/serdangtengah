@@ -96,12 +96,12 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-    // Mengambil alamat spesifik
+        // Mengambil alamat spesifik
         $ktpAddress     = $employee->addresses()->where('type', 'KTP')->first();
         $currentAddress = $employee->addresses()->where('type', 'CURRENT')->first();
 
-        // Load semua relasi agar tidak ada N+1 query
-        $employee->load(['educations', 'children', 'jobHistory', 'trainings', 'file']);
+        // UBAH DI SINI: Ganti 'file' menjadi 'employeeFile'
+        $employee->load(['educations', 'children', 'jobHistory', 'trainings', 'employeeFile']);
 
         return view('employees.show', [
             'employee'       => $employee,
@@ -111,8 +111,8 @@ class EmployeeController extends Controller
             'children'       => $employee->children,
             'jobHistory'     => $employee->jobHistory,
             'trainings'      => $employee->trainings,
-            'file'           => $employee->file,
-
+            // UBAH DI SINI JUGA:
+            'file'           => $employee->employeeFile, 
         ]);
     }
 

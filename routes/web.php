@@ -48,10 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::post('/rekrut/{id}', [ApplicantController::class, 'rekrut'])
     ->name('rekrut.applicant');
 
-Route::get('/phpinfo', function () {
-    phpinfo();
-});
-
+// Pastikan ini ada di web.php Anda
+Route::post('/applicant/{id}/rekrut', [ApplicantController::class, 'rekrut'])->name('applicant.rekrut');
+Route::post('/applicant/{id}/tolak', [ApplicantController::class, 'tolak'])->name('applicant.tolak');
 
 
 

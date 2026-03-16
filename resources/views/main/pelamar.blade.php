@@ -116,26 +116,19 @@
                 </label>
               </th>
 
-              {{-- NAMA LENGKAP --}}
-              <th class="px-6 py-3">
-                <button type="button" class="flex items-center gap-1 hover:text-gray-900"
-                  onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'nama_lengkap', 'sort_dir' => ($sortBy === 'nama_lengkap' && $sortDir === 'asc') ? 'desc' : 'asc'])) }}'">
-                  Nama Lengkap
-                  <!-- Sort Icons (original icons preserved) -->
-                  <span class="flex flex-col -mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      class="w-3 h-3 {{ ($sortBy === 'nama_lengkap' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}"
-                      fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 3l5 7H5l5-7z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      class="w-3 h-3 {{ ($sortBy === 'nama_lengkap' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}"
-                      fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 17l-5-7h10l-5 7z" />
-                    </svg>
-                  </span>
-                </button>
-              </th>
+    {{-- NAMA LENGKAP --}}
+    <th class="px-6 py-3">
+      <button
+        type="button"
+        class="flex items-center gap-1 hover:text-gray-900"
+        onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'nama_lengkap', 'sort_dir' => ($sortBy === 'nama_lengkap' && $sortDir === 'asc') ? 'desc' : 'asc' ])) }}'">
+        Nama Lengkap
+        <span class="flex flex-col -mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'nama_lengkap' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l5 7H5l5-7z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'nama_lengkap' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 17l-5-7h10l-5 7z"/></svg>
+        </span>
+      </button>
+    </th>
 
               {{-- NOMOR HP --}}
               <th class="px-6 py-3">
@@ -157,112 +150,106 @@
                 </button>
               </th>
 
-              {{-- JENIS KELAMIN --}}
-              <th class="px-6 py-3">
-                <button type="button" class="flex items-center gap-1 hover:text-gray-900"
-                  onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'jenis_kelamin', 'sort_dir' => ($sortBy === 'jenis_kelamin' && $sortDir === 'asc') ? 'desc' : 'asc'])) }}'">
-                  Jenis Kelamin
-                  <span class="flex flex-col -mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      class="w-3 h-3 {{ ($sortBy === 'jenis_kelamin' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}"
-                      fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 3l5 7H5l5-7z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      class="w-3 h-3 {{ ($sortBy === 'jenis_kelamin' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}"
-                      fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 17l-5-7h10l-5 7z" />
-                    </svg>
-                  </span>
-                </button>
-              </th>
+    {{-- JENIS KELAMIN --}}
+    <th class="px-6 py-3">
+      <button
+        type="button"
+        class="flex items-center gap-1 hover:text-gray-900"
+        onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'jenis_kelamin', 'sort_dir' => ($sortBy === 'jenis_kelamin' && $sortDir === 'asc') ? 'desc' : 'asc' ])) }}'">
+        Jenis Kelamin
+        <span class="flex flex-col -mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'jenis_kelamin' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l5 7H5l5-7z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'jenis_kelamin' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 17l-5-7h10l-5 7z"/></svg>
+        </span>
+      </button>
+    </th>
 
-              {{-- STATUS --}}
-              <th class="px-6 py-3">
-                <button type="button" class="flex items-center gap-1 hover:text-gray-900"
-                  onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'status', 'sort_dir' => ($sortBy === 'status' && $sortDir === 'asc') ? 'desc' : 'asc'])) }}'">
-                  Status
-                  <span class="flex flex-col -mt-1">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      class="w-3 h-3 {{ ($sortBy === 'status' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}"
-                      fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 3l5 7H5l5-7z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                      class="w-3 h-3 {{ ($sortBy === 'status' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}"
-                      fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 17l-5-7h10l-5 7z" />
-                    </svg>
-                  </span>
-                </button>
-              </th>
+    {{-- STATUS (DIBUAT KONSISTEN) --}}
+    <th class="px-6 py-3">
+      <button
+        type="button"
+        class="flex items-center gap-1 hover:text-gray-900"
+        onclick="window.location='{{ route('pelamar.index', array_merge(request()->all(), ['sort_by' => 'status', 'sort_dir' => ($sortBy === 'status' && $sortDir === 'asc') ? 'desc' : 'asc' ])) }}'">
+        Status
+        <span class="flex flex-col -mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'status' && $sortDir === 'asc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l5 7H5l5-7z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 {{ ($sortBy === 'status' && $sortDir === 'desc') ? 'text-blue-600' : 'text-gray-400' }}" fill="currentColor" viewBox="0 0 20 20"><path d="M10 17l-5-7h10l-5 7z"/></svg>
+        </span>
+      </button>
+    </th>
 
               <th class="px-6 py-3 text-right">Aksi</th>
             </tr>
           </thead>
 
-          <tbody id="pelamarTableBody">
-            @forelse($applicants as $index => $applicant)
-                    <tr class="{{ $index > 0 ? 'border-t border-gray-100' : '' }}">
-                      <td class="px-6 py-4">
-                        <label class="chk-container">
-                          <input type="checkbox" class="chk-custom row-check" value="{{ $applicant->id }}">
-                        </label>
-                      </td>
-                      <td class="px-6 py-4 font-medium">{{ $applicant->nama_lengkap }}</td>
-                      <td class="px-6 py-4">{{ $applicant->nomor_hp ?? '-' }}</td>
-                      <td class="px-6 py-4">
-                        <span class="px-2 py-1 text-xs rounded-lg 
-                          {{ $applicant->jenis_kelamin === 'Laki-laki'
-              ? 'bg-blue-100 text-blue-700'
-              : 'bg-pink-100 text-pink-700' }}">
-                          {{ $applicant->jenis_kelamin ?? '-' }}
-                        </span>
-                      </td>
-                      <td class="px-6 py-4">
-                        <span class="px-2 py-1 text-xs rounded-lg font-medium
-               {{ $applicant->status === 'pending'
-              ? 'bg-yellow-100 text-yellow-700'
-              : ($applicant->status === 'diterima'
-                ? 'bg-green-100 text-green-700'
-                : 'bg-red-100 text-red-700') }}">
-                          {{ ucfirst($applicant->status) }}
-                        </span>
-                      </td>
-                      <td class="px-6 py-4 text-right flex justify-end gap-2">
-                        <form action="{{ route('rekrut.applicant', $applicant->id) }}" method="POST"
-                          onsubmit="return confirm('Rekrut pelamar ini menjadi karyawan?')">
-                          @csrf
-                          <button type="submit"
-                            class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition">
-                            Rekrut
-                          </button>
-                        </form>
+    <tbody id="pelamarTableBody">
+      @forelse($applicants as $index => $applicant)
+      <tr class="hover:bg-gray-50 transition-colors {{ $index > 0 ? 'border-t border-gray-100' : '' }}">
+        <td class="px-6 py-4">
+          <input type="checkbox" class="row-check chk-custom" value="{{ $applicant->id }}">
+        </td>
+        <td class="px-6 py-4 font-medium text-gray-900">{{ $applicant->nama_lengkap }}</td>
+        <td class="px-6 py-4 text-gray-600">{{ $applicant->nomor_hp ?? '-' }}</td>
+        <td class="px-6 py-4">
+          <span class="px-3 py-1 text-xs font-semibold rounded-full 
+            {{ $applicant->jenis_kelamin === 'Laki-laki' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700' }}">
+            {{ $applicant->jenis_kelamin ?? '-' }}
+          </span>
+        </td>
+        
+        {{-- Kolom Status --}}
+        <td class="px-6 py-4">
+          @php $status = strtoupper($applicant->status ?? 'PENDING'); @endphp
+          @if($status === 'DITERIMA')
+            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Diterima</span>
+          @elseif($status === 'DITOLAK')
+            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">Ditolak</span>
+          @else
+            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">Pending</span>
+          @endif
+        </td>
 
-                        <button class="text-blue-600 hover:underline text-xs"
-                          onclick="showDetailModal({{ $applicant->id }})">Detail</button>
-                        <button class="text-red-600 hover:underline text-xs"
-                          onclick="deletePelamar({{ $applicant->id }})">Hapus</button>
-                      </td>
-                    </tr>
-            @empty
-              <tr>
-                <td colspan="6" class="px-6 py-8 text-center text-gray-500">Belum ada data pelamar</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
+        {{-- Kolom AKSI (Dibuat Rapi) --}}
+        <td class="px-6 py-4 text-right">
+          <div class="flex justify-end items-center gap-3">
+            @if(strtoupper($applicant->status ?? 'PENDING') === 'PENDING')
+              <form action="{{ route('applicant.rekrut', $applicant->id) }}" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm transition">
+                  Rekrut
+                </button>
+              </form>
+
+              <form action="{{ route('applicant.tolak', $applicant->id) }}" method="POST" class="inline">
+                @csrf
+                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white text-xs px-3 py-1.5 rounded-lg shadow-sm transition">
+                  Tolak
+                </button>
+              </form>
+            @endif
+
+            <button onclick="showDetailModal({{ $applicant->id }})" class="text-blue-600 hover:text-blue-800 text-xs font-medium underline decoration-2 underline-offset-4">
+              Detail
+            </button>
+          </div>
+        </td>
+      </tr>
+      @empty
+        <tr><td colspan="6" class="px-6 py-10 text-center text-gray-500 italic">Belum ada data pelamar</td></tr>
+      @endforelse
+    </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+    <div class="p-6 border-t border-gray-200">
+      <div class="flex justify-center">
+        {{ $applicants->links() }}
       </div>
     </div>
-  </div>
-  <div class="p-6 border-t border-gray-200">
-    <div class="flex justify-center">
-      {{ $applicants->links() }}
-    </div>
-  </div>
-  {{-- BACKDROP MODAL --}}
-  <div id="overlay"
-    class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+{{-- BACKDROP MODAL --}}
+<div id="overlay"
+  class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
 
     {{-- MODAL TAMBAH/EDIT PELAMAR --}}
     <div id="modalForm"

@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EmployeeFile extends Model
 {
     use HasFactory;
 
-    // Nama tabel di database
+    // Menentukan tabel yang digunakan
     protected $table = 'files';
+
+    // Daftar kolom yang boleh diisi
     protected $fillable = [
         'employee_id',
         'cv',
@@ -24,11 +25,8 @@ class EmployeeFile extends Model
         'daftar_riwayat_hidup',
     ];
 
-
-    // Polymorphic owner via owner_type/owner_id
-    public function owner()
+    public function employee()
     {
-    // Eloquent morphs expect type/value formats; we keep polymorphic simple via manual relations
-    return $this->morphTo(__FUNCTION__, 'owner_type', 'owner_id');
+        return $this->belongsTo(Employee::class);
     }
 }

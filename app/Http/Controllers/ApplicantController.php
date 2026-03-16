@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
+use App\Models\EmployeeFile;
 use App\Models\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -132,17 +133,15 @@ public function store(Request $request)
     ]);
 }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Applicant $applicant)
-    {
-        return response()->json([
-            'success' => true,
-            'data' => $applicant
-        ]);
-    }
-
+public function show(Applicant $applicant)
+{
+    // Kita harus mengembalikan JSON agar JavaScript bisa membacanya
+    return response()->json([
+        'success' => true,
+        'data'    => $applicant
+    ]);
+}
+    
     /**
      * Show the form for editing the specified resource.
      */
@@ -264,78 +263,65 @@ public function store(Request $request)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Applicant $applicant)
-    {
-        // Daftar semua kolom file yang ada di tabel applicants
-        $fileFields = [
-            'cv', 
-            'pas_foto', 
-            'transkrip_nilai', 
-            'ktp', 
-            'ijazah', 
-            'kartu_bpjs', 
-            'suket_pengalaman_kerja', 
-            'daftar_riwayat_hidup'
-        ];
+    public function tolak($id)
+{
+    try {
+        $applicant = Applicant::findOrFail($id);
 
-        // Loop untuk menghapus setiap file fisik dari disk 'public'
-        foreach ($fileFields as $field) {
-            if ($applicant->$field) {
-                // Menghapus file berdasarkan path yang tersimpan di kolom database
-                Storage::disk('public')->delete($applicant->$field);
-            }
-        }
-
-        // Setelah semua file fisik terhapus, hapus data pelamar dari database
-        $applicant->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Data pelamar dan semua berkas fisiknya berhasil dihapus!'
+        // HANYA UPDATE STATUS SAJA
+        // Tidak ada file yang dihapus, tidak ada data yang di-null-kan
+        $applicant->update([
+            'status' => 'DITOLAK'
         ]);
+
+        return back()->with('success', 'Status pelamar berhasil diubah menjadi Ditolak.');
+
+    } catch (\Exception $e) {
+        return back()->with('error', 'Gagal mengubah status: ' . $e->getMessage());
     }
+}
     
     public function rekrut($id)
-    {
-        DB::beginTransaction();
-        try {
-            $applicant = Applicant::findOrFail($id);
+{
+    DB::beginTransaction();
+    try {
+        $applicant = Applicant::findOrFail($id);
 
-            // 1. Buat data karyawan
-            $employee = Employee::create([
-                'employee_no'    => Employee::generateEmployeeNo(),
-                'full_name'      => $applicant->nama_lengkap,
-                'birth_place'    => $applicant->tempat_lahir,
-                'birth_date'     => $applicant->tanggal_lahir,
-                'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P',
-                'phone'          => $applicant->nomor_hp,
-                'last_education' => $applicant->pendidikan_terakhir,
-            ]);
+        // 1. Buat data karyawan baru
+        $employee = Employee::create([
+            'employee_no'    => Employee::generateEmployeeNo(),
+            'full_name'      => $applicant->nama_lengkap,
+            'birth_place'    => $applicant->tempat_lahir,
+            'birth_date'     => $applicant->tanggal_lahir,
+            'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P',
+            'phone'          => $applicant->nomor_hp,
+            'last_education' => $applicant->pendidikan_terakhir,
+            'marital_status' => 'BELUM_MENIKAH',
+            'national_id'    => 'KTP_' . time(),
+        ]);
 
-            // 2. PINDAHKAN SEMUA PATH FILE KE TABEL FILES (Satu Baris)
-            DB::table('files')->insert([
-                'employee_id'            => $employee->id,
-                'cv'                     => $applicant->cv,
-                'pas_foto'               => $applicant->pas_foto,
-                'ktp'                    => $applicant->ktp,
-                'ijazah'                 => $applicant->ijazah,
-                'transkrip_nilai'        => $applicant->transkrip_nilai,
-                'kartu_bpjs'             => $applicant->kartu_bpjs,
-                'suket_pengalaman_kerja' => $applicant->suket_pengalaman_kerja,
-                'daftar_riwayat_hidup'   => $applicant->daftar_riwayat_hidup,
-                'created_at'             => now(),
-                'updated_at'             => now(),
-            ]);
+        // 2. Simpan Dokumen ke tabel files (Model EmployeeFile baru)
+        \App\Models\EmployeeFile::create([
+            'employee_id'            => $employee->id,
+            'cv'                     => $applicant->cv,
+            'pas_foto'               => $applicant->pas_foto,
+            'ktp'                    => $applicant->ktp,
+            'ijazah'                 => $applicant->ijazah,
+            'transkrip_nilai'        => $applicant->transkrip_nilai,
+            'kartu_bpjs'             => $applicant->kartu_bpjs,
+            'suket_pengalaman_kerja' => $applicant->suket_pengalaman_kerja,
+            'daftar_riwayat_hidup'   => $applicant->daftar_riwayat_hidup,
+        ]);
 
-            $applicant->update(['status' => 'diterima']);
+        // 3. UBAH STATUS PELAMAR JADI DITERIMA (Tidak Dihapus)
+        $applicant->update(['status' => 'DITERIMA']);
 
-            // $applicant->delete();
-            DB::commit();
+        DB::commit();
+        return redirect()->route('employee.index')->with('success', "Pelamar diterima sebagai karyawan.");
 
-            return redirect()->route('employee.index')->with('success', "Berhasil! pelamar sudah menjadi karyawan.");
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Gagal: ' . $e->getMessage());
-        }
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Gagal: ' . $e->getMessage());
     }
+}
 }
