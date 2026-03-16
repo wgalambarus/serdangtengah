@@ -58,6 +58,15 @@
   <!-- ===================================================== -->
   <!-- CARD SECTION – konsisten dengan referensi kamu        -->
   <!-- ===================================================== -->
+  @if ($errors->any())
+<div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+    <ul class="text-red-600 text-sm space-y-1">
+        @foreach ($errors->all() as $error)
+            <li>• {{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
   <form method="POST" action="{{ route('employee.create.store', 'pendidikan') }}">
   @csrf
   <div class="bg-white shadow-md border border-gray-200 rounded-xl mt-10 p-8 mb-14">

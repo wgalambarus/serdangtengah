@@ -11,6 +11,7 @@ use App\Models\JobHistory;
 use App\Models\EmployeeChild;
 use Illuminate\Support\Facades\Log;
 use App\Models\EmployeeTraining;
+use Illuminate\Support\Facades\Validator;
 
 
 class EmployeeWizardController extends Controller
@@ -68,79 +69,124 @@ public function show($step)
 public function validateStep(Request $request, string $step)
 {
     return match ($step) {
+
         'informasi-umum' => $request->validate([
-                'full_name'     => 'required|string|max:255',
-                'national_id'   => 'required|string|max:20',
-                'email'         => 'required|email',
-                'phone'         => 'required',
-                'birth_place'   => 'required|string',
-                'birth_date'    => 'required|date',
-                'gender'        => 'required|string',
-                'marital_status'=> 'required|string',
-                'spouse_name'   => 'nullable|string',
-                'last_education'=> 'required|string',
-                'religion'      => 'required|string',
-                'blood_type'    => 'required|string',
-                'bpjs_tk'       => 'nullable|string',
-                'bpjs_kes'      => 'nullable|string',
-                'npwp'          => 'nullable|string',
-                'emergency_name'=> 'required|string',
-                'emergency_relation'=> 'required|string',
-                'emergency_phone'=> 'required|string',
+            'full_name'          => 'required|string|max:255',
+            'national_id'        => 'required|digits:16|unique:employees,national_id',
+            'email'              => 'required|email|max:255|unique:employees,email',
+            'phone'              => 'required|string|max:20',
 
-            ]),
+            'birth_place'        => 'required|string|max:255',
+            'birth_date'         => 'required|date',
+
+            'gender'             => 'required|string|max:20',
+            'marital_status'     => 'required|string|max:20',
+            'spouse_name'        => 'nullable|string|max:255',
+
+            'last_education'     => 'required|string|max:50',
+            'religion'           => 'required|string|max:50',
+            'blood_type'         => 'required|string|max:5',
+
+            'bpjs_tk'            => 'nullable|string|max:30',
+            'bpjs_kes'           => 'nullable|string|max:30',
+            'npwp'               => 'nullable|string|max:30',
+
+            'emergency_name'     => 'required|string|max:255',
+            'emergency_relation' => 'required|string|max:50',
+            'emergency_phone'    => 'required|string|max:20',
+        ]),
+
         'alamat-karyawan' => $request->validate([
-                // KTP
-                'ktp_address'   => 'required',
-                'ktp_province'  => 'required',
-                'ktp_city'      => 'required',
-                'ktp_district'  => 'required',
-                'ktp_village'   => 'required',
-                'ktp_postal'    => 'required',
 
-                // DOMISILI
-                'dom_address'   => 'required',
-                'dom_province'  => 'required',
-                'dom_city'      => 'required',
-                'dom_district'  => 'required',
-                'dom_village'   => 'required',
-                'dom_postal'    => 'required',
-            ]),
-        'pendidikan' => $request->validate([
-                'school_name.*' => 'required|string',
-                'city.*'        => 'required|string',
-                'major.*'       => 'required|string',
-                'year_in.*' => 'required|digits:4',
-                'year_out.*' => 'required|digits:4',
+            // KTP
+            'ktp_address'   => 'required|string|max:255',
+            'ktp_province'  => 'required|string|max:100',
+            'ktp_city'      => 'required|string|max:100',
+            'ktp_district'  => 'required|string|max:100',
+            'ktp_village'   => 'required|string|max:100',
+            'ktp_postal'    => 'required|digits_between:4,6',
 
-            ]),
+            // DOMISILI
+            'dom_address'   => 'required|string|max:255',
+            'dom_province'  => 'required|string|max:100',
+            'dom_city'      => 'required|string|max:100',
+            'dom_district'  => 'required|string|max:100',
+            'dom_village'   => 'required|string|max:100',
+            'dom_postal'    => 'required|digits_between:4,6',
+        ]),
+
+        'pendidikan' => (function () use ($request) {
+
+            $validator = Validator::make($request->all(), [
+                'school_name.*' => 'required|string|max:255',
+                'city.*'        => 'required|string|max:255',
+                'major.*'       => 'required|string|max:255',
+
+                'year_in.*'  => 'required|integer|between:1900,' . date('Y'),
+                'year_out.*' => 'required|integer|between:1900,' . date('Y'),
+            ]);
+
+            // Validasi logika tahun
+            $validator->after(function ($validator) use ($request) {
+
+                if (!$request->year_in || !$request->year_out) {
+                    return;
+                }
+
+                foreach ($request->year_in as $i => $yearIn) {
+
+                    if (isset($request->year_out[$i])) {
+
+                        $yearOut = $request->year_out[$i];
+
+                        if ($yearOut < $yearIn) {
+                            $validator->errors()->add(
+                                "year_out.$i",
+                                "Year out must be greater than or equal to year in."
+                            );
+                        }
+                    }
+                }
+            });
+
+            return $validator->validate();
+
+        })(),
+
         'tanggungan' => $request->validate([
-                'dependent_name' => 'nullable|array',
+            'dependent_name' => 'nullable|array',
 
-                'dependent_name.*' => 'nullable|string',
-                'dependent_gender.*' => 'nullable|string',
-                'dependent_birth.*' => 'nullable|date',
-                'dependent_education.*' => 'nullable|string',
-            ]),
+            'dependent_name.*'      => 'nullable|string|max:255',
+            'dependent_gender.*'    => 'nullable|string|max:20',
+            'dependent_birth.*'     => 'nullable|date',
+            'dependent_education.*' => 'nullable|string|max:100',
+        ]),
+
         'pekerjaan' => $request->validate([
-                'position.*'      => 'required|string',
-                'work_unit.*'    => 'required|string',
-                'start_date.*'    => 'required|date',
-                'work_note.*'         => 'nullable|string',
-            ]),
+            'position.*'   => 'required|string|max:255',
+            'work_unit.*'  => 'required|string|max:255',
+            'start_date.*' => 'required|date',
+            'work_note.*'  => 'nullable|string|max:500',
+        ]),
+
         'pelatihan' => (function () use ($request) {
+
             $validated = $request->validate([
-                'training_name.*' => 'nullable|string',
-                'training_provider.*' => 'nullable|string',
-                'training_year.*' => 'nullable|integer',
-                'training_location.*' => 'nullable|string',
-                'training_certificate.*' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
+                'training_name.*'        => 'nullable|string|max:255',
+                'training_provider.*'    => 'nullable|string|max:255',
+                'training_year.*'        => 'nullable|integer|between:1900,' . date('Y'),
+                'training_location.*'    => 'nullable|string|max:255',
+
+                'training_certificate.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             ]);
 
             // handle upload supaya session hanya simpan path
             if ($request->hasFile('training_certificate')) {
+
                 foreach ($request->file('training_certificate') as $i => $file) {
+
                     if ($file) {
+
                         $validated['training_certificate'][$i] =
                             $file->store('temp/training_certificates', 'public');
                     }
@@ -148,6 +194,7 @@ public function validateStep(Request $request, string $step)
             }
 
             return $validated;
+
         })(),
 
         default => $request->all()
