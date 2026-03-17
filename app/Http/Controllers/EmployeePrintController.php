@@ -9,46 +9,67 @@ use App\Models\EmployeeChild;
 use App\Models\EmployeeEducation;
 use App\Models\EmployeeTraining;
 use App\Models\JobHistory;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 
 class EmployeePrintController extends Controller
 {
+    public function print(Request $request, $id)
+    {
+        // Ambil data dari popup/form
+        $unit_kerja = $request->query('unit_kerja');
+        $nik_kerja = $request->query('nik_kerja');
+        $kepala_kebun = $request->query('kepala_kebun');
 
-    public function print($id)
-{
-    $employee = Employee::findOrFail($id);
+        $employee = Employee::findOrFail($id);
 
-    $ktp = EmployeeAddress::where('employee_id', $id)
-        ->where('type', 'KTP')
-        ->first();
 
-    $dom = EmployeeAddress::where('employee_id', $id)
-        ->where('type', 'CURRENT')
-        ->first();
+        $ktp = EmployeeAddress::where('employee_id', $id)
+            ->where('type', 'KTP')
+            ->first();
 
-    $spouse = EmployeeSpouse::where('employee_id', $id)->first();
+        $dom = EmployeeAddress::where('employee_id', $id)
+            ->where('type', 'CURRENT')
+            ->first();
 
-    $children = EmployeeChild::where('employee_id', $id)->get();
+        $spouse = EmployeeSpouse::where('employee_id', $id)->first();
 
-    $educations = EmployeeEducation::where('employee_id', $id)
-        ->orderBy('year_in')
-        ->get();
+        $children = EmployeeChild::where('employee_id', $id)->get();
 
-    $trainings = EmployeeTraining::where('employee_id', $id)->get();
+        $educations = EmployeeEducation::where('employee_id', $id)
+            ->orderBy('year_in')
+            ->get();
 
-    $jobs = JobHistory::where('employee_id', $id)
-        ->orderBy('start_date')
-        ->get();
+        $trainings = EmployeeTraining::where('employee_id', $id)->get();
 
-    return view('employees.print', compact(
-        'employee',
-        'ktp',
-        'dom',
-        'spouse',
-        'children',
-        'educations',
-        'trainings',
-        'jobs'
-    ));
-}
+        $jobs = JobHistory::where('employee_id', $id)
+            ->orderBy('start_date')
+            ->get();
 
+        $firstJob = $jobs->where('start_date', $jobs->min('start_date'))->first();
+
+
+
+        $restJobs = $jobs->where('id', '!=', $firstJob->id);
+
+        // 🔥 Ganti dari return view → PDF
+        $pdf = Pdf::loadView('employees.print', compact(
+            'employee',
+            'ktp',
+            'dom',
+            'spouse',
+            'children',
+            'educations',
+            'trainings',
+            'jobs',
+            'firstJob',
+            'restJobs',
+            'unit_kerja',
+            'nik_kerja',
+            'kepala_kebun'
+
+        ))->setPaper('A4', 'portrait');
+
+        return $pdf->stream('employee-' . $id . '.pdf');
+    }
 }
