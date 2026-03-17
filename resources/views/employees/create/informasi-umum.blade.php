@@ -251,7 +251,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Hubungan *</label>
+          <label class="block text-sm font-medium text-gray-800 mb-1">Hubungan *</label>
           <input type="text" name="emergency_relation"
                  value="{{ old('emergency_relation') }}"
                  oninput="onlyString(this)"
@@ -272,8 +272,34 @@
           @error('emergency_phone') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
+                {{-- spouse section --}}
+                <div class="md:col-span-2 pt-6 mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Data Pasangan</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Pasangan</label>
+                            <input type="text" name="spouse_name"
+                                   value="{{ old('spouse_name') }}"
+                                   class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
+                            <input type="date" name="spouse_birth_date"
+                                   value="{{ old('spouse_birth_date') }}"
+                                   class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
+                            <input type="text" name="spouse_education"
+                                   value="{{ old('spouse_education') }}"
+                                   class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
+                        </div>
+                    </div>
+                </div>
+        
       </div> {{-- end grid --}}
     </div> {{-- end card --}}
+    
 
     {{-- NEXT BUTTON --}}
     <div class="flex justify-end mt-10">

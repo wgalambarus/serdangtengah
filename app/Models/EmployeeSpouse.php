@@ -10,5 +10,8 @@ class EmployeeSpouse extends Model
     use HasFactory;
     protected $table = 'employee_spouses';
     protected $fillable = ['employee_id','name','birth_date','last_education'];
+    protected $casts = [
+        'birth_date' => 'date',
+    ];
     public function employee(){ return $this->belongsTo(Employee::class); }
 }
