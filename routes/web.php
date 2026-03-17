@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeWizardController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeePrintController;
 use Illuminate\Support\Facades\Route;
 
 //  Halaman Utama — Bisa diakses semua orang
@@ -47,7 +48,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 Route::post('/rekrut/{id}', [ApplicantController::class, 'rekrut'])
     ->name('rekrut.applicant');
-
+Route::get('/employee/{id}/print', [EmployeePrintController::class, 'print'])
+    ->name('employee.print');
 // Pastikan ini ada di web.php Anda
 Route::post('/applicant/{id}/rekrut', [ApplicantController::class, 'rekrut'])->name('applicant.rekrut');
 Route::post('/applicant/{id}/tolak', [ApplicantController::class, 'tolak'])->name('applicant.tolak');

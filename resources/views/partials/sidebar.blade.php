@@ -2,7 +2,7 @@
   <div class="p-6 border-b border-gray-200 flex items-center gap-3">
     <img
       src="{{ asset('favicon.ico') }}"
-      alt="SmartRecruitment Logo"
+      alt="Serdang Tengah Logo"
       class="w-10 h-10 object-contain"
     />
 

@@ -476,6 +476,10 @@
 </div>
 
     </form>
+
+<a href="{{ route('employee.print', $employee->id) }}" target="_blank">
+    Cetak Form
+</a>
 </div>
 
 {{-- scripts for dynamic rows --}}
