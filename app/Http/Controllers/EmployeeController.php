@@ -101,13 +101,14 @@ class EmployeeController extends Controller
         $currentAddress = $employee->addresses()->where('type', 'CURRENT')->first();
 
         // UBAH DI SINI: Ganti 'file' menjadi 'employeeFile'
-        $employee->load(['educations', 'children', 'jobHistory', 'trainings', 'employeeFile']);
+        $employee->load(['educations', 'children', 'jobHistory', 'trainings', 'employeeFile', 'spouse']);
 
         return view('employees.show', [
             'employee'       => $employee,
             'ktpAddress'     => $ktpAddress,
             'currentAddress' => $currentAddress,
             'educations'     => $employee->educations,
+            'spouse'         => $employee->spouse,
             'children'       => $employee->children,
             'jobHistory'     => $employee->jobHistory,
             'trainings'      => $employee->trainings,
@@ -127,6 +128,7 @@ class EmployeeController extends Controller
 
         // load related collections for dynamic sections
         $educations = $employee->educations()->orderBy('year_in','desc')->get();
+        $spouse    = $employee->spouse;
         $children   = $employee->children()->get();
         $jobHistory = $employee->jobHistory()->get();
         $trainings  = $employee->trainings()->get();
@@ -136,6 +138,7 @@ class EmployeeController extends Controller
             'ktpAddress',
             'currentAddress',
             'educations',
+            'spouse',
             'children',
             'jobHistory',
             'trainings'
@@ -167,6 +170,11 @@ class EmployeeController extends Controller
             'emergency_name'=> 'required|string',
             'emergency_relation'=> 'required|string',
             'emergency_phone'=> 'required|string',
+
+            // spouse fields
+            'spouse_name'        => 'nullable|string|max:255',
+            'spouse_birth_date'  => 'nullable|date',
+            'spouse_education'   => 'nullable|string|max:255',
 
             // address fields are optional; update if present
             'ktp_address'   => 'nullable|string',
@@ -226,6 +234,21 @@ class EmployeeController extends Controller
         }
 
         $employee->update($validated);
+
+        // update or create spouse
+        if ($request->filled('spouse_name')) {
+            $employee->spouse()->updateOrCreate(
+                [], // empty condition since there's only one spouse per employee
+                [
+                    'name'           => $validated['spouse_name'],
+                    'birth_date'     => $validated['spouse_birth_date'],
+                    'last_education' => $validated['spouse_education'],
+                ]
+            );
+        } else {
+            // if spouse_name is empty, delete existing spouse
+            $employee->spouse()->delete();
+        }
 
         // update or create addresses
         if ($request->filled('ktp_address')) {

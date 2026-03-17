@@ -97,6 +97,8 @@
                         class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 transition">
                 </div>  
 
+               
+
                 {{-- last_education --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir *</label>
@@ -148,7 +150,7 @@
                 {{-- emergency info --}}
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kontak Darurat</label>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <input type="text" name="emergency_name" placeholder="Nama" 
                             value="{{ old('emergency_name', $employee->emergency_name) }}" 
                             class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 transition">
@@ -160,6 +162,35 @@
                             class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 transition">
                     </div>
                 </div>
+                 {{-- spouse section --}}
+                @if($spouse)
+                <div class="md:col-span-2">
+                    <h4 class="text-lg font-medium text-gray-700 mb-3">Data Pasangan</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Pasangan</label>
+                            <input type="text" 
+                                value="{{ $spouse->name }}" 
+                                disabled
+                                class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
+                            <input type="text" 
+                                value="{{ $spouse->birth_date ? $spouse->birth_date->format('d/m/Y') : '' }}" 
+                                disabled
+                                class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir</label>
+                            <input type="text" 
+                                value="{{ $spouse->last_education }}" 
+                                disabled
+                                class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300">
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
 

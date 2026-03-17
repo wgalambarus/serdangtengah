@@ -160,6 +160,31 @@
                                class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
                     </div>
                 </div>
+                
+                {{-- spouse section --}}
+                {{-- spouse_name --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nama Pasangan</label>
+                    <input type="text" name="spouse_name"
+                           value="{{ old('spouse_name', $spouse->name ?? '') }}"
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                </div>
+
+                {{-- spouse_birth_date --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir Pasangan</label>
+                    <input type="date" name="spouse_birth_date"
+                           value="{{ old('spouse_birth_date', $spouse->birth_date ?? '') }}"
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                </div>
+
+                {{-- spouse_education --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Pasangan</label>
+                    <input type="text" name="spouse_education"
+                           value="{{ old('spouse_education', $spouse->last_education ?? '') }}"
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                </div>
             </div>
         </div>
 
