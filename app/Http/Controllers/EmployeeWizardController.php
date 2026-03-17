@@ -82,6 +82,8 @@ public function show($step)
                 'gender'             => 'required|string|max:20',
                 'marital_status'     => 'required|string|max:20',
                 'spouse_name'        => 'nullable|string|max:255',
+                'spouse_birth_date'  => 'nullable|date',
+                'spouse_education'   => 'nullable|string|max:255',
 
                 'last_education'     => 'required|string|max:50',
                 'religion'           => 'required|string|max:50',
@@ -285,6 +287,16 @@ public function finish(Request $request)
             'emergency_phone'=> $data['informasi-umum']['emergency_phone']
         ]);
 
+
+        // ===================== SAVE SPOUSE =====================
+        if (!empty($data['informasi-umum']['spouse_name'])) {
+            EmployeeSpouse::create([
+                'employee_id'   => $emp->id,
+                'name'          => $data['informasi-umum']['spouse_name'],
+                'birth_date'    => $data['informasi-umum']['spouse_birth_date'],
+                'last_education'=> $data['informasi-umum']['spouse_education'],
+            ]);
+        }
 
         // ===================== SAVE ALAMAT =====================
         EmployeeAddress::create([
