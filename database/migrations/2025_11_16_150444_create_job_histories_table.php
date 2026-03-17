@@ -18,6 +18,7 @@ return new class extends Migration
         $table->date('start_date')->nullable();
         $table->string('unit')->nullable();
         $table->text('note')->nullable();
+        $table->enum("type", ['Karyawan', 'Pegawai', 'Staff'])->default('Karyawan');
         $table->timestamps();
 
         $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
