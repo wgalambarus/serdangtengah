@@ -9,6 +9,6 @@ class JobHistory extends Model
 {
     use HasFactory;
     protected $table = 'job_histories';
-    protected $fillable = ['employee_id','status','start_date','end_date','unit','note'];
+    protected $fillable = ['employee_id','position', 'status', 'grade','start_date','end_date','unit','note'];
     public function employee(){ return $this->belongsTo(Employee::class); }
 }

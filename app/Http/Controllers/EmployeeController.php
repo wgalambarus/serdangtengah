@@ -205,8 +205,12 @@ class EmployeeController extends Controller
             'dependent_education.*'   => 'required_with:dependent_name|string',
 
             'position'                => 'nullable|array',
-            'position.*'              => 'required_with:position|string',
+            'position.*'              => 'required_with:position|string|max:255',
+            'work_status'             => 'required_with:position|array',
+            'work_status.*'           => 'required_with:position|in:Karyawan,Pegawai,Staff',
             'work_unit.*'             => 'required_with:position|string',
+            'work_grade'              => 'nullable|array',
+            'work_grade.*'            => 'nullable|string|max:100',
             'start_date.*'            => 'required_with:position|date',
             'work_note.*'             => 'nullable|string',
 
@@ -313,7 +317,9 @@ class EmployeeController extends Controller
             foreach ($validated['position'] as $i => $pos) {
                 \App\Models\JobHistory::create([
                     'employee_id' => $employee->id,
-                    'status'      => $pos,
+                    'position'      => $pos,
+                    'status'        => $validated['work_status'][$i] ?? null,
+                    'grade'       => $validated['work_grade'][$i] ?? null,
                     'unit'        => $validated['work_unit'][$i] ?? null,
                     'start_date'  => $validated['start_date'][$i] ?? null,
                     'note'        => $validated['work_note'][$i] ?? null,

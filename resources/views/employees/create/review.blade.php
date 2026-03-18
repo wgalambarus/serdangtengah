@@ -17,6 +17,9 @@
     @php
         $d = session('employee_wizard');
     @endphp
+    <!-- @if(app()->environment('local'))  
+            <pre>{{ json_encode($d['pekerjaan'] ?? [], JSON_PRETTY_PRINT) }}</pre>
+        @endif -->
 
     <!-- CARD STYLE -->
     @php
@@ -156,6 +159,8 @@
             <thead class="{{ $tableHead }}">
                 <tr>
                     <th class="{{ $tableCell }}">Posisi</th>
+                    <th class="{{ $tableCell }}">Status</th>
+                    <th class="{{ $tableCell }}">Golongan</th>
                     <th class="{{ $tableCell }}">Unit</th>
                     <th class="{{ $tableCell }}">Mulai</th>
                     <th class="{{ $tableCell }}">Catatan</th>
@@ -165,6 +170,8 @@
                 @foreach($d['pekerjaan']['position'] as $i => $v)
                 <tr class="hover:bg-gray-50">
                     <td class="{{ $tableCell }}">{{ $v }}</td>
+                    <td class="{{ $tableCell }}">{{ $d['pekerjaan']['work_status'][$i] }}</td>
+                    <td class="{{ $tableCell }}">{{ $d['pekerjaan']['work_grade'][$i] }}</td>
                     <td class="{{ $tableCell }}">{{ $d['pekerjaan']['work_unit'][$i] }}</td>
                     <td class="{{ $tableCell }}">{{ $d['pekerjaan']['start_date'][$i] }}</td>
                     <td class="{{ $tableCell }}">{{ $d['pekerjaan']['work_note'][$i] }}</td>

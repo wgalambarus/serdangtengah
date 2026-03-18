@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('job_histories', function (Blueprint $table) {
         $table->bigIncrements('id');
         $table->unsignedBigInteger('employee_id');
-        $table->string('status')->nullable();
+        $table->string('position')->nullable();
+        $table->enum("status", ['Karyawan', 'Pegawai', 'Staff'])->default('Karyawan');
+        $table->string('grade')->nullable();
         $table->date('start_date')->nullable();
         $table->string('unit')->nullable();
         $table->text('note')->nullable();
-        $table->enum("type", ['Karyawan', 'Pegawai', 'Staff'])->default('Karyawan');
         $table->timestamps();
 
         $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

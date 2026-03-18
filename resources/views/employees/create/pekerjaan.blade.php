@@ -80,6 +80,8 @@
             @include('employees.create.partials._work_row', [
                 'index' => $i,
                 'position' => old("position.$i"),
+                'work_status' => old("work_status.$i"),
+                'work_grade' => old("work_grade.$i"),
                 'work_unit' => old("work_unit.$i"),
                 'start_date' => old("start_date.$i"),
                 'work_note' => old("work_note.$i"),
@@ -92,6 +94,8 @@
             @include('employees.create.partials._work_row', [
                 'index' => $i,
                 'position' => $data['position'][$i] ?? '',
+                'work_status' => $data['work_status'][$i] ?? '',
+                'work_grade' => $data['work_grade'][$i] ?? '',
                 'work_unit' => $data['work_unit'][$i] ?? '',
                 'start_date' => $data['start_date'][$i] ?? '',
                 'work_note' => $data['work_note'][$i] ?? '',
@@ -103,7 +107,9 @@
         @include('employees.create.partials._work_row', [
             'index' => 0,
             'position' => '',
+            'work_status' => '',
             'work_unit' => '',
+            'work_grade' => '',
             'start_date' => '',
             'work_note' => '',
         ])

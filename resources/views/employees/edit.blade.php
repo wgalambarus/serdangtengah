@@ -357,6 +357,8 @@
                         @include('employees.create.partials._work_row', [
                             'index' => $i,
                             'position' => old("position.$i"),
+                            'status' => old("work_status.$i"),
+                            'work_grade' => old("work_grade.$i"),
                             'work_unit' => old("work_unit.$i"),
                             'start_date' => old("start_date.$i"),
                             'work_note' => old("work_note.$i"),
@@ -366,7 +368,9 @@
                     @foreach($jobHistory as $i => $job)
                         @include('employees.create.partials._work_row', [
                             'index' => $i,
-                            'position' => $job->status,
+                            'position' => $job->position,
+                            'work_status' => $job->status,
+                            'work_grade' => $job->grade,
                             'work_unit' => $job->unit,
                             'start_date' => $job->start_date,
                             'work_note' => $job->note,
@@ -376,6 +380,8 @@
                     @include('employees.create.partials._work_row', [
                         'index' => 0,
                         'position' => '',
+                        'work_status' => '',
+                        'work_grade' => '',
                         'work_unit' => '',
                         'start_date' => '',
                         'work_note' => '',

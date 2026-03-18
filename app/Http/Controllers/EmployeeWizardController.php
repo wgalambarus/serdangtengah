@@ -12,6 +12,7 @@ use App\Models\EmployeeChild;
 use Illuminate\Support\Facades\Log;
 use App\Models\EmployeeTraining;
 use Illuminate\Support\Facades\Validator;
+use App\Models\EmployeeSpouse;
 
 
 class EmployeeWizardController extends Controller
@@ -165,7 +166,9 @@ public function show($step)
             ]),
 
             'pekerjaan' => $request->validate([
-                'position.*'   => 'required|string|max:255',
+                'position.*'     => 'nullable|string|max:255',
+                'work_status.*'   => 'nullable|in:Karyawan,Pegawai,Staff',
+                'work_grade.*' => 'nullable|string|max:100',
                 'work_unit.*'  => 'required|string|max:255',
                 'start_date.*' => 'required|date',
                 'work_note.*'  => 'nullable|string|max:500',
@@ -350,7 +353,9 @@ public function finish(Request $request)
         foreach ($data['pekerjaan']['position'] as $i => $v) {
             JobHistory::create([
                 'employee_id' => $emp->id,
-                'status'    => $v,
+                'position' => $v,
+                'status' => $data['pekerjaan']['work_status'][$i] ?? null,
+                'grade' => $data['pekerjaan']['work_grade'][$i] ?? null,
                 'unit'  => $data['pekerjaan']['work_unit'][$i],
                 'start_date'  => $data['pekerjaan']['start_date'][$i],
                 'note'       => $data['pekerjaan']['work_note'][$i] ?? null,
