@@ -174,6 +174,14 @@
           @error('blood_type') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
+        {{-- SKILLS --}}
+        <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Keahlian</label>
+            <input type="text" id="skillsInput" placeholder="Tambah skill lalu tekan Enter" class="w-full px-4 py-3 bg-gray-50 rounded-lg border @error('skills.*') border-red-500 @else border-gray-300 @enderror focus:ring-2 focus:ring-blue-600 transition">
+            @error('skills.*') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+            <div id="skillsTags" class="flex flex-wrap gap-2 mt-3"></div>
+        </div>
+
         {{-- BPJS TK --}}
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">BPJS Ketenagakerjaan</label>
@@ -320,7 +328,7 @@
 <script>
     let skills = @json(old('skills', []));
 
-    windows.addEventListener("pageshow", function() {
+    window.addEventListener("pageshow", function() {
       skills = Array.isArray(skills) ? skills : [];
       renderTags();
     });

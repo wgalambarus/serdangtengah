@@ -123,6 +123,13 @@
                         class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-600 transition">
                 </div>
 
+                {{-- skills --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Keahlian</label>
+                    <p class="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300">
+                        {{ $employee->skills ? (is_array($decoded = json_decode($employee->skills, true)) ? implode(', ', $decoded) : str_replace(' ', ', ', $employee->skills)) : 'Tidak ada' }}
+                </div>
+
                 {{-- bpjs_tk --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">BPJS Ketenagakerjaan</label>

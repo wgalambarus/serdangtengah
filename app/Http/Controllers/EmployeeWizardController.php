@@ -88,6 +88,8 @@ public function show($step)
 
                 'last_education'     => 'required|string|max:50',
                 'religion'           => 'required|string|max:50',
+                'skills'             => 'nullable|array',
+                'skills.*'          => 'nullable|string|max:255',
                 'blood_type'         => 'required|string|max:5',
 
                 'bpjs_tk'            => 'nullable|string|max:30',
@@ -282,6 +284,7 @@ public function finish(Request $request)
             'last_education' => $data['informasi-umum']['last_education'],
             'religion'      => $data['informasi-umum']['religion'],
             'blood_type'    => $data['informasi-umum']['blood_type'],
+            'skills'        => json_encode($data['informasi-umum']['skills'] ?? []),
             'bpjs_tk'       => $data['informasi-umum']['bpjs_tk'] ?? null,
             'bpjs_kes'      => $data['informasi-umum']['bpjs_kes'] ?? null,
             'npwp'          => $data['informasi-umum']['npwp'] ?? null,

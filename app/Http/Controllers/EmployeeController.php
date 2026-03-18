@@ -165,7 +165,8 @@ class EmployeeController extends Controller
             'bpjs_tk'       => 'nullable|string',
             'bpjs_kes'      => 'nullable|string',
             'npwp'          => 'nullable|string',
-            'skills'        => 'nullable|string', // comma separated list
+            'skills' => 'nullable|array',
+            'skills.*' => 'nullable|string|max:255', // comma separated list
             // we will explode into array after
             'emergency_name'=> 'required|string',
             'emergency_relation'=> 'required|string',
@@ -232,10 +233,13 @@ class EmployeeController extends Controller
             'suket_pengalaman_kerja'     => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'daftar_riwayat_hidup'       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',        ]);
 
-        // convert skills string into array if present
+        // convert skills string into array if present (legacy handling, but now expecting array)
         if (isset($validated['skills']) && is_string($validated['skills'])) {
             $validated['skills'] = array_filter(array_map('trim', explode(',', $validated['skills'])));
         }
+
+        // Encode skills array to JSON for DB storage
+        $validated['skills'] = json_encode($validated['skills'] ?? []);
 
         $employee->update($validated);
 

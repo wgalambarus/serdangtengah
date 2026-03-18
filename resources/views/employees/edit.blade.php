@@ -121,6 +121,19 @@
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
                 </div>
 
+                {{-- skills --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Keahlian</label>
+                    <textarea name="skills[]" rows="3" placeholder="Masukkan keahlian, satu per baris"
+                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    @if($employee->skills)
+                        @foreach(json_decode($employee->skills, true) ?? [] as $skill)
+                            {{ $skill }}
+                        @endforeach
+                    @endif
+                </textarea>
+            </div>
+
                 {{-- bpjs_tk --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">BPJS Ketenagakerjaan</label>

@@ -297,7 +297,9 @@
                     <td class="no">8</td>
                     <td class="label">Keahlian</td>
                     <td class="dot">:</td>
-                    <td class="value">{{ $employee->skills }}</td>
+                    <td class="value">
+                        {{ $employee->skills ? (is_array($decoded = json_decode($employee->skills, true)) ? implode(', ', $decoded) : str_replace(' ', ', ', $employee->skills)) : '' }}
+                    </td>
                     <td class="spacer"></td>
                     <td class="info-text">( Sebutkan secara spesifik)</td>
                 </tr>
