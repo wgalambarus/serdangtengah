@@ -821,8 +821,9 @@
           const data = result.data;
 
           document.getElementById('detailNama').textContent = data.nama_lengkap;
-          document.getElementById('detailTTL').textContent = data.tempat_lahir + ', ' + data.tanggal_lahir || '-';
+          document.getElementById('detailTTL').textContent = (data.tempat_lahir ? data.tempat_lahir + ', ' : '') + (data.tanggal_lahir || '-');
           document.getElementById('detailJenisKelamin').textContent = data.jenis_kelamin || '-';
+          document.getElementById('detailPendidikan').textContent = data.last_education || data.pendidikan_terakhir || '-';
           document.getElementById('detailHP').textContent = data.nomor_hp || '-';
           document.getElementById('detailAlamat').textContent = data.alamat || '-';
 

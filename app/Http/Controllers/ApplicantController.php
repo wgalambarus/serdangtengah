@@ -296,8 +296,6 @@ public function show(Applicant $applicant)
             'gender'         => ($applicant->jenis_kelamin == 'Laki-laki') ? 'L' : 'P',
             'phone'          => $applicant->nomor_hp,
             'last_education' => $applicant->pendidikan_terakhir,
-            'marital_status' => 'BELUM_MENIKAH',
-            'national_id'    => 'KTP_' . time(),
         ]);
 
         // 2. Simpan Dokumen ke tabel files (Model EmployeeFile baru)
