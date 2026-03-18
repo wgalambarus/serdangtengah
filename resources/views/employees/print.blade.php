@@ -497,7 +497,7 @@
                     <td class="dot">:</td>
                     <td class="value">
                         {{ $firstJob->status ?? '' }}
-                        <span class="gol-label">GOL :</span>
+                        <span class="gol-label">GOL :{{ $firstJob->grade ?? '' }}</span>
                     </td>
                     <td class="spacer"></td>
                     <td class="info-underlined">

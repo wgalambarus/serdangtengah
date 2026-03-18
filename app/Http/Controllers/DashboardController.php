@@ -30,7 +30,7 @@ class DashboardController extends Controller
             $employeeByPosition = Employee::with('latestJob')
                 ->get()
                 ->groupBy(function($employee) {
-                    return $employee->latestJob?->status ?? 'Unassigned';
+                    return $employee->latestJob?->position ?? 'Unassigned';
                 })
                 ->map(function($employees, $position){
                     return (object)[
