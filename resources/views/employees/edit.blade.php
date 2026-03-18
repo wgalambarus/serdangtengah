@@ -22,7 +22,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap *</label>
                     <input type="text" name="full_name" value="{{ old('full_name', $employee->full_name) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('full_name') border-red-500 @else border-gray_300 @enderror">
+                                  @error('full_name') border-red-500 @else border-gray-300 @enderror">
                     @error('full_name')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -32,7 +32,7 @@
                     <input type="text" name="national_id" maxlength="20" 
                            value="{{ old('national_id', $employee->national_id) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('national_id') border-red-500 @else border_gray-300 @enderror">
+                                  @error('national_id') border-red-500 @else border-gray-300 @enderror">
                     @error('national_id')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -42,7 +42,7 @@
                     <input type="email" name="email" 
                            value="{{ old('email', $employee->email) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('email') border-red-500 @else border-gray_300 @enderror">
+                                  @error('email') border-red-500 @else border-gray-300 @enderror">
                     @error('email')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -52,7 +52,7 @@
                     <input type="text" name="phone" maxlength="15" 
                            value="{{ old('phone', $employee->phone) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('phone') border-red-500 @else border-gray_300 @enderror">
+                                  @error('phone') border-red-500 @else border-gray-300 @enderror">
                     @error('phone')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -62,7 +62,7 @@
                     <input type="text" name="birth_place" 
                            value="{{ old('birth_place', $employee->birth_place) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('birth_place') border-red-500 @else border_gray-300 @enderror">
+                                  @error('birth_place') border-red-500 @else border-gray-300 @enderror">
                     @error('birth_place')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -72,7 +72,7 @@
                     <input type="date" name="birth_date" 
                            value="{{ old('birth_date', $employee->birth_date?->format('Y-m-d')) }}" 
                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                  @error('birth_date') border-red-500 @else border_gray-300 @enderror">
+                                  @error('birth_date') border-red-500 @else border-gray-300 @enderror">
                     @error('birth_date')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
@@ -81,7 +81,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin *</label>
                     <select name="gender" 
                             class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
-                                   @error('gender') border-red-500 @else border_gray-300 @enderror">
+                                   @error('gender') border-red-500 @else border-gray-300 @enderror">
                         <option value="">Pilih...</option>
                         <option value="L" {{ old('gender', $employee->gender)=='L'?'selected':'' }}>Laki-laki</option>
                         <option value="P" {{ old('gender', $employee->gender)=='P'?'selected':'' }}>Perempuan</option>
@@ -89,36 +89,52 @@
                     @error('gender')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
-                {{-- marital_status --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Status Pernikahan *</label>
-                    <input type="text" name="marital_status" 
-                           value="{{ old('marital_status', $employee->marital_status) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
-                </div>
-
                 {{-- last_education --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Terakhir *</label>
-                    <input type="text" name="last_education" 
-                           value="{{ old('last_education', $employee->last_education) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <select name="last_education" 
+                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
+                                   @error('last_education') border-red-500 @else border-gray-300 @enderror">
+                        <option value="">Pilih...</option>
+                        <option value="SMA/SMK" {{ old('last_education', $employee->last_education)=='SMA/SMK'?'selected':'' }}>SMA/SMK</option> 
+                        <option value="D3" {{ old('last_education', $employee->last_education)=='D3'?'selected':'' }}>D3</option>   
+                        <option value="S1" {{ old('last_education', $employee->last_education)=='S1'?'selected':'' }}>S1</option>
+                        <option value="S2" {{ old('last_education', $employee->last_education)=='S2'?'selected':'' }}>S2</option>
+                        <option value="S3" {{ old('last_education', $employee->last_education)=='S3'?'selected':'' }}>S3</option>
+                    </select>
+                    @error('last_education')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 {{-- religion --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Agama *</label>
-                    <input type="text" name="religion" 
-                           value="{{ old('religion', $employee->religion) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <select name="religion" 
+                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
+                                   @error('religion') border-red-500 @else border-gray-300 @enderror">
+                        <option value="">Pilih...</option>
+                        <option value="Islam" {{ old('religion', $employee->religion)=='Islam'?'selected':'' }}>Islam</option>
+                        <option value="Kristen" {{ old('religion', $employee->religion)=='Kristen'?'selected':'' }}>Kristen</option>
+                        <option value="Katolik" {{ old('religion', $employee->religion)=='Katolik'?'selected':'' }}>Katolik</option>
+                        <option value="Hindu" {{ old('religion', $employee->religion)=='Hindu'?'selected':'' }}>Hindu</option>
+                        <option value="Budha" {{ old('religion', $employee->religion)=='Budha'?'selected':'' }}>Budha</option>
+                        <option value="Konghucu" {{ old('religion', $employee->religion)=='Konghucu'?'selected':'' }}>Konghucu</option>
+                    </select>
+                    @error('religion')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 {{-- blood_type --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Golongan Darah *</label>
-                    <input type="text" name="blood_type" 
-                           value="{{ old('blood_type', $employee->blood_type) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <select name="blood_type" 
+                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
+                                   @error('blood_type') border-red-500 @else border-gray-300 @enderror">
+                        <option value="">Pilih...</option>
+                        <option value="A" {{ old('blood_type', $employee->blood_type)=='A'?'selected':'' }}>A</option>
+                        <option value="B" {{ old('blood_type', $employee->blood_type)=='B'?'selected':'' }}>B</option>
+                        <option value="AB" {{ old('blood_type', $employee->blood_type)=='AB'?'selected':'' }}>AB</option>
+                        <option value="O" {{ old('blood_type', $employee->blood_type)=='O'?'selected':'' }}>O</option>
+                    </select>
+                    @error('blood_type')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 {{-- bpjs_tk --}}
@@ -126,7 +142,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">BPJS Ketenagakerjaan</label>
                     <input type="text" name="bpjs_tk" 
                            value="{{ old('bpjs_tk', $employee->bpjs_tk) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
 
                 {{-- bpjs_kes --}}
@@ -134,7 +150,23 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">BPJS Kesehatan</label>
                     <input type="text" name="bpjs_kes" 
                            value="{{ old('bpjs_kes', $employee->bpjs_kes) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
+                </div>
+
+                
+                {{-- marital_status --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status Pernikahan *</label>
+                    <select name="marital_status" 
+                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300
+                                   @error('marital_status') border-red-500 @else border-gray-300 @enderror">
+                        <option value="">Pilih...</option>
+                        <option value="BELUM_MENIKAH" {{ old('marital_status', $employee->marital_status)=='BELUM_MENIKAH'?'selected':'' }}>Belum Menikah</option>
+                        <option value="MENIKAH" {{ old('marital_status', $employee->marital_status)=='MENIKAH'?'selected':'' }}>Sudah Menikah</option>
+                        <option value="DUDA" {{ old('marital_status', $employee->marital_status)=='DUDA'?'selected':'' }}>Duda</option>
+                        <option value="JANDA" {{ old('marital_status', $employee->marital_status)=='JANDA'?'selected':'' }}>Janda</option>
+                    </select>
+                    @error('marital_status')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 {{-- npwp --}}
@@ -142,7 +174,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">NPWP</label>
                     <input type="text" name="npwp" 
                            value="{{ old('npwp', $employee->npwp) }}" 
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
 
                 {{-- emergency info --}}
@@ -151,13 +183,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <input type="text" name="emergency_name" placeholder="Nama" 
                                value="{{ old('emergency_name', $employee->emergency_name) }}" 
-                               class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                               class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                         <input type="text" name="emergency_relation" placeholder="Hubungan" 
                                value="{{ old('emergency_relation', $employee->emergency_relation) }}" 
-                               class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                               class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                         <input type="text" name="emergency_phone" placeholder="Telepon" 
                                value="{{ old('emergency_phone', $employee->emergency_phone) }}" 
-                               class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                               class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                     </div>
                 </div>
                 
@@ -167,23 +199,31 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama Pasangan</label>
                     <input type="text" name="spouse_name"
                            value="{{ old('spouse_name', $spouse->name ?? '') }}"
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
 
                 {{-- spouse_birth_date --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir Pasangan</label>
                     <input type="date" name="spouse_birth_date"
-                           value="{{ old('spouse_birth_date', $spouse->birth_date ?? '') }}"
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                           value="{{ old('spouse_birth_date', optional($spouse?->birth_date)->format('Y-m-d') ?? '') }}"
+                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
 
                 {{-- spouse_education --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Pendidikan Pasangan</label>
-                    <input type="text" name="spouse_education"
-                           value="{{ old('spouse_education', $spouse->last_education ?? '') }}"
-                           class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <select name="spouse_education" 
+                            class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition 
+                                   @error('spouse_education') border-red-500 @else border-gray-300 @enderror">
+                        <option value="">Pilih...</option>
+                        <option value="SMA/SMK" {{ old('spouse_education', $spouse->last_education ?? '')=='SMA/SMK'?'selected':'' }}>SMA/SMK</option>
+                        <option value="D3" {{ old('spouse_education', $spouse->last_education ?? '')=='D3'?'selected':'' }}>D3</option>
+                        <option value="S1" {{ old('spouse_education', $spouse->last_education ?? '')=='S1'?'selected':'' }}>S1</option>
+                        <option value="S2" {{ old('spouse_education', $spouse->last_education ?? '')=='S2'?'selected':'' }}>S2</option>
+                        <option value="S3" {{ old('spouse_education', $spouse->last_education ?? '')=='S3'?'selected':'' }}>S3</option>
+                    </select>
+                    @error('spouse_education')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
             </div>
         </div>
@@ -196,27 +236,27 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
-                    <textarea name="ktp_address" rows="2" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">{{ old('ktp_address', optional($ktpAddress)->address_line) }}</textarea>
+                    <textarea name="ktp_address" rows="2" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">{{ old('ktp_address', optional($ktpAddress)->address_line) }}</textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                    <input type="text" name="ktp_province" value="{{ old('ktp_province', optional($ktpAddress)->province) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="ktp_province" value="{{ old('ktp_province', optional($ktpAddress)->province) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kota</label>
-                    <input type="text" name="ktp_city" value="{{ old('ktp_city', optional($ktpAddress)->city) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="ktp_city" value="{{ old('ktp_city', optional($ktpAddress)->city) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kecamatan</label>
-                    <input type="text" name="ktp_district" value="{{ old('ktp_district', optional($ktpAddress)->district) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="ktp_district" value="{{ old('ktp_district', optional($ktpAddress)->district) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kelurahan</label>
-                    <input type="text" name="ktp_village" value="{{ old('ktp_village', optional($ktpAddress)->village) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="ktp_village" value="{{ old('ktp_village', optional($ktpAddress)->village) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kode Pos</label>
-                    <input type="text" name="ktp_postal" value="{{ old('ktp_postal', optional($ktpAddress)->postal_code) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="ktp_postal" value="{{ old('ktp_postal', optional($ktpAddress)->postal_code) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
             </div>
 
@@ -224,27 +264,27 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Alamat</label>
-                    <textarea name="dom_address" rows="2" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">{{ old('dom_address', optional($currentAddress)->address_line) }}</textarea>
+                    <textarea name="dom_address" rows="2" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">{{ old('dom_address', optional($currentAddress)->address_line) }}</textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Provinsi</label>
-                    <input type="text" name="dom_province" value="{{ old('dom_province', optional($currentAddress)->province) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="dom_province" value="{{ old('dom_province', optional($currentAddress)->province) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kota</label>
-                    <input type="text" name="dom_city" value="{{ old('dom_city', optional($currentAddress)->city) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="dom_city" value="{{ old('dom_city', optional($currentAddress)->city) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kecamatan</label>
-                    <input type="text" name="dom_district" value="{{ old('dom_district', optional($currentAddress)->district) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="dom_district" value="{{ old('dom_district', optional($currentAddress)->district) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kelurahan</label>
-                    <input type="text" name="dom_village" value="{{ old('dom_village', optional($currentAddress)->village) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="dom_village" value="{{ old('dom_village', optional($currentAddress)->village) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Kode Pos</label>
-                    <input type="text" name="dom_postal" value="{{ old('dom_postal', optional($currentAddress)->postal_code) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" name="dom_postal" value="{{ old('dom_postal', optional($currentAddress)->postal_code) }}" class="w-full px-4 py-3 bg-gray-50 rounded-lg focus:ring-2 focus:ring-blue-600 transition border-gray-300">
                 </div>
             </div>
         </div>
@@ -436,7 +476,7 @@
             <h3 class="text-xl font-semibold mb-4">Dokumen Karyawan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 @php
-                    $file = $employee->file ?? null;
+                    $file = $employee->employeeFile ?? null;
                 @endphp
 
                 @foreach ([

@@ -1,5 +1,6 @@
 @php
     $i = $index ?? 0;
+    $existing_certificate = $existing_certificate ?? old("existing_certificate.$i", '');
 
     $training_name     = $training_name     ?? old("training_name.$i", '');
     $training_provider = $training_provider ?? old("training_provider.$i", '');
@@ -61,8 +62,15 @@
 <!-- SERTIFIKAT (opsional) → 1 kolom sendiri -->
 <div>
     <label class="block text-sm font-medium text-gray-700 mb-1">Sertifikat (Opsional)</label>
+    @if($existing_certificate)
+        <div class="text-xs text-gray-600 mb-1">
+            <div><a href="{{ asset('storage/'.$existing_certificate) }}" target="_blank" class="text-blue-600 hover:underline">📄 Lihat Sertifikat</a></div>
+            <div>Path: <span class="font-mono">{{ $existing_certificate }}</span></div>
+        </div>
+    @endif
     <input type="file" name="training_certificate[]"
            class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg">
+    <input type="hidden" name="existing_certificate[]" value="{{ $existing_certificate }}" />
 </div>
 
 </div>
