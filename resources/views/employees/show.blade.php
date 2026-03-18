@@ -465,48 +465,44 @@
 </div>
 
 <!-- dokumen section -->
-<div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
+@php
+    $file = $employee->employeeFile ?? null;
+@endphp
 
+<div class="bg-white shadow-md border border-gray-200 rounded-xl p-8 mb-8">
     <h3 class="text-xl font-semibold mb-6">Dokumen Karyawan</h3>
 
     <div class="p-8 border border-gray-200 rounded-xl bg-gray-50 shadow-sm">
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            @php
-                $files = [
-                    'CV' => $employee->file->cv ?? null,
-                    'Pas Foto' => $employee->file->pas_foto ?? null,
-                    'KTP' => $employee->file->ktp ?? null,
-                    'Ijazah' => $employee->file->ijazah ?? null,
-                    'Transkrip Nilai' => $employee->file->transkrip_nilai ?? null,
-                    'Kartu BPJS' => $employee->file->kartu_bpjs ?? null,
-                    'Surat Pengalaman Kerja' => $employee->file->suket_pengalaman_kerja ?? null,
-                    'Daftar Riwayat Hidup' => $employee->file->daftar_riwayat_hidup ?? null,
-                ];
-            @endphp
-
-            @foreach($files as $label => $path)
+            @foreach ([
+                ['name' => 'ijazah', 'label' => 'Ijazah'],
+                ['name' => 'cv', 'label' => 'CV'],
+                ['name' => 'pas_foto', 'label' => 'Pas Foto'],
+                ['name' => 'transkrip_nilai', 'label' => 'Transkrip Nilai'],
+                ['name' => 'ktp', 'label' => 'KTP'],
+                ['name' => 'kartu_bpjs', 'label' => 'Kartu BPJS'],
+                ['name' => 'suket_pengalaman_kerja', 'label' => 'Surat Keterangan Pengalaman Kerja'],
+                ['name' => 'daftar_riwayat_hidup', 'label' => 'Daftar Riwayat Hidup'],
+            ] as $doc)
 
                 <div>
-                    <p class="text-sm font-medium text-gray-700 mb-2">{{ $label }}</p>
+                    <p class="text-sm font-medium text-gray-700 mb-2">
+                        {{ $doc['label'] }}
+                    </p>
 
-                    @if($path)
-
-                        <a href="{{ asset('storage/'.$path) }}"
+                    @if($file && $file->{$doc['name']})
+                        <a href="{{ asset('storage/'.$file->{$doc['name']}) }}"
                            target="_blank"
                            class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg shadow-sm hover:bg-blue-100 transition text-sm">
-
-                            📄 Lihat Dokumen
-
+                            
+                            📄 Lihat {{ $doc['label'] }}
+                        
                         </a>
-
                     @else
-
                         <p class="text-gray-400 italic text-sm">
                             Tidak tersedia
                         </p>
-
                     @endif
 
                 </div>
@@ -514,9 +510,7 @@
             @endforeach
 
         </div>
-
     </div>
-
 </div>
 
     </form>

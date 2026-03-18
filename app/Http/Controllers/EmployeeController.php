@@ -7,7 +7,7 @@ use App\Models\EmployeeEducation;
 use App\Models\EmployeeChild;
 use App\Models\JobHistory;
 use App\Models\EmployeeTraining;
-use App\Models\File;
+use App\Models\EmployeeFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -158,7 +158,7 @@ class EmployeeController extends Controller
             'birth_place'   => 'required|string',
             'birth_date'    => 'required|date',
             'gender'        => 'required|string',
-            'marital_status'=> 'required|string',
+            'marital_status'=> 'required|string|in:BELUM_MENIKAH,MENIKAH,DUDA,JANDA',
             'last_education'=> 'required|string',
             'religion'      => 'required|string',
             'blood_type'    => 'required|string',
@@ -244,17 +244,18 @@ class EmployeeController extends Controller
         $employee->update($validated);
 
         // update or create spouse
-        if ($request->filled('spouse_name')) {
+        $spouseData = [
+            'name'           => $validated['spouse_name'],
+            'birth_date'     => $validated['spouse_birth_date'],
+            'last_education' => $validated['spouse_education'],
+        ];
+
+        if ($request->filled('spouse_name') || $request->filled('spouse_birth_date') || $request->filled('spouse_education')) {
             $employee->spouse()->updateOrCreate(
-                [], // empty condition since there's only one spouse per employee
-                [
-                    'name'           => $validated['spouse_name'],
-                    'birth_date'     => $validated['spouse_birth_date'],
-                    'last_education' => $validated['spouse_education'],
-                ]
+                ['employee_id' => $employee->id],
+                $spouseData
             );
         } else {
-            // if spouse_name is empty, delete existing spouse
             $employee->spouse()->delete();
         }
 
@@ -372,8 +373,8 @@ class EmployeeController extends Controller
                 $upload = $request->file($attr);
                 if ($upload && $upload->isValid()) {
                     // delete old file first if exists
-                    if ($employee->file && $employee->file->$attr) {
-                        Storage::disk('public')->delete($employee->file->$attr);
+                    if ($employee->employeeFile && $employee->employeeFile->$attr) {
+                        Storage::disk('public')->delete($employee->employeeFile->$attr);
                     }
                     $fileData[$attr] = $upload->store("dokumen/$attr", 'public');
                 }
@@ -381,9 +382,9 @@ class EmployeeController extends Controller
         }
 
         if (!empty($fileData)) {
-            $file = $employee->file;
+            $file = $employee->employeeFile;
             if (!$file) {
-                $file = new File(['employee_id' => $employee->id]);
+                $file = new EmployeeFile(['employee_id' => $employee->id]);
             }
             $file->fill($fileData);
             $file->employee_id = $employee->id;
